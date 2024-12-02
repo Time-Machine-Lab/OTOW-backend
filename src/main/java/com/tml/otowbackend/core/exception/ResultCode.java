@@ -25,19 +25,7 @@ public enum ResultCode {
      */
     PARAMS_ERROR(20001, "参数异常或者格式错误"),
 
-    /**
-     * 用户权限
-     */
-    VERIFICATION_FAILURE(30001, "验证失败"),
-    FAILED_TO_CREATE_USER(30002, "创建用户失败"),
-    MISSING_VERIFICATION_CODE(30003, "缺少验证码"),
-    USER_DOES_NOT_EXIST(30004, "用户不存在"),
-    SHARE_FAILED(30005, "共享账号失败"),
-    CANCEL_SHARE_FAILED(30006, "取消共享失败"),
-    ROBOT_IN_SHARED(30007, "账号处于共享状态，不可操作"),
-    ROBOT_TYPE_ERROR(30008, "账号职业错误，无法添加"),
-    PROXY_ERROR(40001, "代理失效"),
-    PROXY_BALANCE_ERROR(40002, "代理策略错误");
+    NOT_EXITS_LANGUAGE(1001,"错误的语言");
 
     /**
      * 自定义状态码

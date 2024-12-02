@@ -1,4 +1,4 @@
-package com.tml.otowbackend.config;
+package com.tml.otowbackend.core.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

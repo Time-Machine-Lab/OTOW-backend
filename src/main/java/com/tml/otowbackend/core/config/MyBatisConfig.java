@@ -1,17 +1,21 @@
-package com.tml.otowbackend.config;
+package com.tml.otowbackend.core.config;
 
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 /**
  * @Description
  * @Author welsir
  * @Date 2024/11/20 11:14
  */
-@Configuration
-public class MyBatisConfig {
+@Component
+public class MyBatisConfig implements com.baomidou.mybatisplus.core.handlers.MetaObjectHandler{
 
     @Bean
     public MybatisPlusInterceptor paginationInterceptor(){
@@ -26,5 +30,17 @@ public class MyBatisConfig {
         mybatisPlusInterceptor.addInnerInterceptor(paginationInnerInterceptor);
         //添加组件，大功告成！
         return mybatisPlusInterceptor;
+    }
+
+    @Override
+    public void insertFill(MetaObject metaObject) {
+        this.strictInsertFill(metaObject, "view_num", Integer.class, 0);
+        this.strictInsertFill(metaObject, "download_num", Integer.class, 0);
+        this.strictInsertFill(metaObject, "createTime", Date.class, new Date());
+    }
+
+    @Override
+    public void updateFill(MetaObject metaObject) {
+        this.strictUpdateFill(metaObject, "updateTime", Date.class, new Date());
     }
 }

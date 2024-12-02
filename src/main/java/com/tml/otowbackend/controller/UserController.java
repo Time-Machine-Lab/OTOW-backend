@@ -49,7 +49,7 @@ public class UserController {
         return userService.getUserInfo();
     }
 
-    @PostMapping("/sendCaptcha")
+    @GetMapping("/sendCaptcha")
     public Result<?> preEmail(        @Valid
                                       @NotNull(message = "邮箱不能为空")
                                       String email,
