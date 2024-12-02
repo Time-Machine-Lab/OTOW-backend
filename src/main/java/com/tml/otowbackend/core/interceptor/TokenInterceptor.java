@@ -34,7 +34,6 @@ public class TokenInterceptor implements HandlerInterceptor, Ordered {
                 String[] strs = tokenObject.split("\\|");
                 ThreadUtil.set("uid",strs[0]);
                 ThreadUtil.set("email",strs[1]);
-                ThreadUtil.set("nickname",strs[2]);
                 return true;
             }
         }

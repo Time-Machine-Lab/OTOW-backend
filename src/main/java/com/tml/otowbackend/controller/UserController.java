@@ -34,13 +34,13 @@ public class UserController {
     public Result<?> login(@RequestBody
                                @Valid
                            LoginRequestDTO req){
-        return Result.success(userService.login(req));
+        return userService.login(req);
     }
 
     @PostMapping("/logout")
+    @TokenRequire
     public Result<?> logout(){
-        userService.logout();
-        return Result.success();
+        return userService.logout();
     }
 
     @GetMapping("/getInfo")

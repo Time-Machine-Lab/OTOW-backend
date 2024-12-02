@@ -32,6 +32,5 @@ public class CreateProjectRequestDTO {
     @NotBlank(message = "项目封面不能为空")
     private String cover;
     @NotBlank(message = "项目下载链接不能为空")
-    private String url;
-
+    private String downloadUrl;
 }

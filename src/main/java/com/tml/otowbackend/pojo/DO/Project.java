@@ -29,6 +29,7 @@ public class Project {
     private String description;
     private String introduce;
     private String shareUid;
+    private String url;
     private Integer codeLanguage;
     private Integer downloadNums;
     private Integer viewNums;

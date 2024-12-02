@@ -74,7 +74,7 @@ public class IProjectServiceImpl implements ProjectService {
         List<QueryProjectsResponseDTO> resLists = null;
         limit = Math.min(limit,DEFAULT_MAX_LIMIT);
         Page<Project> projectPage;
-        page = page-1>0?page:0;
+        page = page-1>=0?page:0;
         switch (cmd){
             case 2:{
                 projectPage = projectMapper.selectPage(new Page<>(page, limit), new LambdaQueryWrapper<Project>()
@@ -90,8 +90,8 @@ public class IProjectServiceImpl implements ProjectService {
                 projectPage = projectMapper.selectPage(new Page<>(page - 1, limit), new LambdaQueryWrapper<Project>()
                         .orderByDesc(Project::getCreateTime));
             }
-            resLists = projectPage.getRecords().stream().map((QueryProjectsResponseDTO::convert)).collect(Collectors.toList());
         }
+        resLists = projectPage.getRecords().stream().map((QueryProjectsResponseDTO::convert)).collect(Collectors.toList());
         return resLists;
     }
 }
