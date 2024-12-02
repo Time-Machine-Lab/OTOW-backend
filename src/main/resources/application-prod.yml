@@ -1,0 +1,43 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ENC(AYl7osLKcgeBrKHgXofs1zK7DHy7bHt9iImzH92N6510tZOUt0ZJVp2KnNm0t0u91N+5GruBPOhrziW6FVO5xET/hOXzMffdGK2N8O+VDEcMILQbrnjC7wcqYFcgh4DNoM8POnVg4gis7S/VPYiUVUzN23CClYiBZMKS9/mX9M6968ohgQ+kuw==)
+    username: ENC(yXBx5wdwZUEE3wx0VS/dA22j7rb/w5GU)
+    password: ENC(1H43h5CI+yrGgD1ndOjPi1EG+qs5NmNpIHKGrlWveoY=)
+    type: com.zaxxer.hikari.HikariDataSource # 使用 HikariCP 连接池
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      idle-timeout: 30000
+      pool-name: DatebookHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+  mail:
+    host: ${EMIAL_HOST:ENC(qMKUwBybaAKewuGZCDYjQw6tCfRVAO5aIQUolS8L06U=)}
+    port: ${EMAIL_PORT:ENC(7RRjEe4cBjcETAkyZ6TBh5zwIw6KrEaz)}
+    username: ${EMAIL_USERNAME:ENC(Ndpes2aPfHdQQLG2Ds47yIxEh5/YB2ywTbf7UZ8Re7JgCTjwemDMQw==)}
+    password: ${EMAIL_PASSWORD:ENC(IFKjNrj7WUsXTiTldZ8TDgHxBxgkYHXBD5RrrjZ2SlGFXMCaObgqgA==)}
+    test-connection: false
+  redis:
+    host: ${REDIS_HOST:ENC(PdqjmmqM9psXlLIs0m89p7RXZ3mVWQPQ1BYdoHlK1mc=)}
+    port: ${REDIS_PORT:ENC(rgpyHtYj/fQOniBDQYFY/V5spo5n01Nb)}
+    database: 8
+    password: ${REDIS_PASSWORD:ENC(w3YMEo8SvokoWSpmfutV70AO7TBsYuChGTdmc1kzeLiq0+kTllBLdw==)}
+
+  application:
+    name: genius-blog-main
+
+assistant:
+  service:
+    exception:
+      handler:
+        disables: springWebExceptionHandler
+
+captcha:
+  mail:
+    code-length: 4
+  image-code:
+    width: 180
+    height: 40
+    dot-size: 50
