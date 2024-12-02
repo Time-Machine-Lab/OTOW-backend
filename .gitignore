@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+/src/main/resources/you-cant-see-that.yml
+/src/main/java/com/tml/otowbackend/core/deploy/JasyptUtil.java
