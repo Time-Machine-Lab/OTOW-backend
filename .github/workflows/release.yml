@@ -110,8 +110,8 @@ jobs:
 
       - name: Choose the Server Host
         run: |
-          pwd="${{ secrets.SERVER_PWD }}"
-          host="${{ secrets.SERVER_ADDRESS }}"
+          pwd="${{ secrets.PROD_PWD }}"
+          host="${{ secrets.PROD_ADDRESS }}"
           port="${{ secrets.SERVER_PORT }}"
           echo "PWD=$pwd" >> $GITHUB_ENV
           echo "HOST=$host" >> $GITHUB_ENV
