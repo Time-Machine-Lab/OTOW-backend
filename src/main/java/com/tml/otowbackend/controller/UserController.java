@@ -27,7 +27,7 @@ public class UserController {
 
     @PostMapping("/captcha")
     public Result<?> queryCaptcha(){
-        return Result.success(userService.generateCaptcha());
+        return userService.generateCaptcha();
     }
 
     @PostMapping("/login")
