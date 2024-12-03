@@ -34,7 +34,7 @@ public enum CodeLanguage {
 
     public static String queryLanguageByCode(Integer code){
         for (CodeLanguage codeLanguage : CodeLanguage.values()) {
-            if (!codeLanguage.getCode().equals(code)) {
+            if (codeLanguage.getCode().equals(code)) {
                 return codeLanguage.getLanguage();
             }
         }

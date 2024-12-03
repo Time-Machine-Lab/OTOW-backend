@@ -78,7 +78,7 @@ public class IProjectServiceImpl implements ProjectService {
         switch (cmd){
             case 2:{
                 projectPage = projectMapper.selectPage(new Page<>(page, limit), new LambdaQueryWrapper<Project>()
-                        .orderByAsc(Project::getDownloadNums));
+                        .orderByAsc(Project::getDownloadNum));
                 break;
             }
             case 3:{
@@ -87,7 +87,7 @@ public class IProjectServiceImpl implements ProjectService {
                 break;
             }
             default:{
-                projectPage = projectMapper.selectPage(new Page<>(page - 1, limit), new LambdaQueryWrapper<Project>()
+                projectPage = projectMapper.selectPage(new Page<>(page, limit), new LambdaQueryWrapper<Project>()
                         .orderByDesc(Project::getCreateTime));
             }
         }

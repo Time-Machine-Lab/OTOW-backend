@@ -38,8 +38,8 @@ public class QueryProjectsResponseDTO {
                 .cover(project.getCover())
                 .description(project.getDescription())
                 .introduce(project.getIntroduce())
-                .downloadNums(project.getDownloadNums())
-                .viewNums(project.getViewNums())
+                .downloadNums(project.getDownloadNum())
+                .viewNums(project.getViewNum())
                 .price(project.getPrice())
                 .nickname("otow管理员")
                 .build();

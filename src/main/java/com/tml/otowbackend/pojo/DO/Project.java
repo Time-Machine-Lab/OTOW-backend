@@ -23,16 +23,16 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Project {
 
-    private Integer id;
+    private Long id;
     private String name;
     private String cover;
     private String description;
     private String introduce;
     private String shareUid;
-    private String url;
+    private String downloadUrl;
     private Integer codeLanguage;
-    private Integer downloadNums;
-    private Integer viewNums;
+    private Integer downloadNum;
+    private Integer viewNum;
     private Integer price;
     @TableField(fill = FieldFill.INSERT)
     private LocalDate createTime;
