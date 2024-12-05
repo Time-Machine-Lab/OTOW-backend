@@ -15,12 +15,9 @@ import java.util.Map;
  */
 public interface UserService {
     Result<?> getUserInfo();
-
     Result<?> login(LoginRequestDTO req);
-
     Result<?> logout();
-
     Result<?> generateCaptcha();
-
     Result<?> generateEmailCode(String email,String pid,String code);
+    Result<?> purchase(String projectId);
 }

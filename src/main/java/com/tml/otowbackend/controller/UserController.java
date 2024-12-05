@@ -61,4 +61,10 @@ public class UserController {
                                       String code){
         return userService.generateEmailCode(email,pid,code);
     }
+
+    @GetMapping("/purchase")
+    @TokenRequire
+    public Result<?> purchaseProject(@RequestParam("projectId") String projectId){
+        return userService.purchase(projectId);
+    }
 }

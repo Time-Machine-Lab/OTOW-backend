@@ -113,4 +113,11 @@ public class IUserService implements UserService {
                 Map.of("email", email, "coolDown",EMAIL_COOL_DOWN)
         );
     }
+
+    @Override
+    public Result<?> purchase(String projectId) {
+        String uid = ThreadUtil.getUid();
+        Integer integer = userMapper.insertPurchase(uid, projectId);
+        return Result.success(integer==1);
+    }
 }

@@ -1,5 +1,8 @@
 package com.tml.otowbackend.util;
 
+import com.tml.otowbackend.core.exception.ResultCode;
+import com.tml.otowbackend.core.exception.ServerException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +25,7 @@ public class ThreadUtil {
 
     public static String getUid(){
         String uid = threadLocal.get().get("uid");
-        if(uid == null) throw new RuntimeException("uid为null");
+        if(uid == null) throw new ServerException(ResultCode.NOT_USER_EXITS);
         return uid;
     }
 

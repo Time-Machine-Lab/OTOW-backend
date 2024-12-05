@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class QueryProjectsResponseDTO {
+public class QueryProjectResponseDTO {
 
     private String id;
     private String name;
@@ -29,15 +29,27 @@ public class QueryProjectsResponseDTO {
     private Integer viewNums;
     private Integer price;
 
-    public static QueryProjectsResponseDTO convert(Project project){
-
-        return QueryProjectsResponseDTO.builder()
+    public static QueryProjectResponseDTO convert(Project project){
+        return QueryProjectResponseDTO.builder()
                 .id(String.valueOf(project.getId()))
                 .name(project.getName())
                 .codeLanguage(CodeLanguage.queryLanguageByCode(project.getCodeLanguage()))
                 .cover(project.getCover())
                 .description(project.getDescription())
                 .introduce(project.getIntroduce())
+                .downloadNums(project.getDownloadNum())
+                .viewNums(project.getViewNum())
+                .price(project.getPrice())
+                .nickname("otow管理员")
+                .build();
+    }
+
+    public static QueryProjectResponseDTO convertWithoutDetail(Project project){
+        return QueryProjectResponseDTO.builder()
+                .id(String.valueOf(project.getId()))
+                .name(project.getName())
+                .codeLanguage(CodeLanguage.queryLanguageByCode(project.getCodeLanguage()))
+                .cover(project.getCover())
                 .downloadNums(project.getDownloadNum())
                 .viewNums(project.getViewNum())
                 .price(project.getPrice())
