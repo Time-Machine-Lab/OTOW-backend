@@ -25,7 +25,10 @@ public enum ResultCode {
      */
     PARAMS_ERROR(20001, "参数异常或者格式错误"),
 
-    NOT_EXITS_LANGUAGE(1001,"错误的语言");
+    NOT_EXITS_LANGUAGE(1001,"错误的语言"),
+    NOT_PURCHASE_RECORD(1002,"未查询到购买记录"),
+    NOT_USER_EXITS(1003,"用户未登录"),
+    GET_OSS_OBJECT_URL_FAIL(1004,"获取OSS资源失败");
 
     /**
      * 自定义状态码

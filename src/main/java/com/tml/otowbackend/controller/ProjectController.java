@@ -53,4 +53,14 @@ public class ProjectController {
         return Result.success(projectService.queryProject(requestDTO));
     }
 
+    @GetMapping("/searchOne")
+    public Result<?> queryProject(@RequestParam("id")String id){
+        return Result.success(projectService.queryOne(id));
+    }
+
+    @GetMapping("/download")
+    @TokenRequire
+    public Result<?> downloadProject(@RequestParam("id") String id){
+        return Result.success(projectService.download(id));
+    }
 }
