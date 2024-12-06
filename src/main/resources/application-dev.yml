@@ -34,7 +34,7 @@ spring:
     connect-timeout: 10000
 
   application:
-    name: genius-blog-main
+    name: otow-server
 
 assistant:
   service:
@@ -50,3 +50,14 @@ captcha:
     width: 180
     height: 40
     dot-size: 50
+
+
+oss:
+  stsEndPoint: ENC(BScywrt4LG0IHIHqAZLDPm+UTkKuKNjXvk1y+61Aur6GfiSVpEWtB9Gk53SW/z0d)
+  bucket: ENC(w0nA1+mA/gEoY2I2ZLR5243/vTc9GnrpMZnNAUUZyUT03xo+6sjfag==)
+  accesskeyId: ENC(I1PO+9SO6ViISeGmDVDCG+/V556TmMobZmGpyJDpqfNM5UE3Ulnms7/j++nedhEp)
+  accesskeySecret: ENC(DN+VZTq1uSd6zdncmCEvWGqzXr2Xe7I4/fZ701vn6O/eRZp3A/9gvYH3uo4nylcP)
+  roleArn: ENC(WL5QvEx60pvQPw/lMQ1aeHuDPoywvVILw1nB2GBP/neachjlb9l+obDBwiS/TBz8TDgYOTygt86LDUBULz/ePA==)
+  endpoint: ENC(hyEPeqCP7bT1bpoGaHsUuVI++mkbIKHNGG69MxjAjg9WpTYg9rPLjj57Hw9KmDLNQgOCt3Q/4yo=)
+  stsExpire: 3600
+  signedExpire: 5
