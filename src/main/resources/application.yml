@@ -16,3 +16,4 @@ sa-token:
   token-style: uuid
   is-log: true
   is-read-cookie: false
+
