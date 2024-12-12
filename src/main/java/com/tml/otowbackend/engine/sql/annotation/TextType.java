@@ -4,7 +4,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * 标记字段为长文本类型
+ * 描述: 标记字段为长文本类型
+ * @author suifeng
+ * 日期: 2024/12/12
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface TextType {

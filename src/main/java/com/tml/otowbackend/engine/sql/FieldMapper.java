@@ -1,12 +1,17 @@
 package com.tml.otowbackend.engine.sql;
 
-import io.github.geniusay.template.sql.annotation.ColumnLength;
-import io.github.geniusay.template.sql.annotation.TextType;
+import com.tml.otowbackend.engine.sql.annotation.ColumnLength;
+import com.tml.otowbackend.engine.sql.annotation.TextType;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 描述:
+ * @author suifeng
+ * 日期: 2024/12/12
+ */
 public class FieldMapper {
 
     // Java 类型到 SQL 类型的映射

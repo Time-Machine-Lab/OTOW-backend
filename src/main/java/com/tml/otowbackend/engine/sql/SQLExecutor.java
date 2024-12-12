@@ -8,6 +8,11 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * 描述:
+ * @author suifeng
+ * 日期: 2024/12/12
+ */
 public class SQLExecutor {
 
     /**

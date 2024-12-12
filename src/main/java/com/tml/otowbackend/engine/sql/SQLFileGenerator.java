@@ -1,11 +1,14 @@
 package com.tml.otowbackend.engine.sql;
-
-import io.github.geniusay.utils.EntityScanner;
-
+import com.tml.otowbackend.util.EntityScanner;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * 描述:
+ * @author suifeng
+ * 日期: 2024/12/12
+ */
 public class SQLFileGenerator {
 
     /**

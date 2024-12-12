@@ -2,6 +2,11 @@ package com.tml.otowbackend.engine.sql;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 
+/**
+ * 描述:
+ * @author suifeng
+ * 日期: 2024/12/12
+ */
 public class NameConverter {
 
     /**

@@ -1,5 +1,10 @@
 package com.tml.otowbackend.engine.sql;
 
+/**
+ * 描述:
+ * @author suifeng
+ * 日期: 2024/12/12
+ */
 public class SQLManager {
 
     /**

@@ -3,13 +3,18 @@ package com.tml.otowbackend.engine.sql;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
-import io.github.geniusay.template.sql.annotation.DefaultValue;
-import io.github.geniusay.template.sql.annotation.TransientField;
+import com.tml.otowbackend.engine.sql.annotation.DefaultValue;
+import com.tml.otowbackend.engine.sql.annotation.TransientField;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 描述:
+ * @author suifeng
+ * 日期: 2024/12/12
+ */
 public class EntityProcessor {
 
     /**

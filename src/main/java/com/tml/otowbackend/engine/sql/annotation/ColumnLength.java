@@ -4,7 +4,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * 指定字段的长度
+ * 描述: 指定字段的长度
+ * @author suifeng
+ * 日期: 2024/12/12
  */
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ColumnLength {
