@@ -1,0 +1,4 @@
+// Delete method
+public void delete(Long id) {
+    ${entityClassName}Mapper.deleteById(id);
+}
