@@ -28,16 +28,42 @@ public abstract class AbstractVirtualTreeTemplate implements VirtualTreeTemplate
     @Override
     public void initializeTemplate() {
         log.info("初始化虚拟文件模板...");
-        List<NodeVO> rootNodes = virtualFileService.getChildrenNodes(treeId, null);
-        buildFolderMappings(rootNodes);
+
+        // 获取目标层级
+        int targetDepth = getTargetDepth();
+
+        // 从根节点开始逐层往下获取目标层级的文件夹节点
+        List<NodeVO> currentNodes = virtualFileService.getChildrenNodes(treeId, null);
+        for (int depth = 1; depth <= targetDepth; depth++) {
+            if (currentNodes == null || currentNodes.isEmpty()) {
+                throw new IllegalStateException("无法找到目标层级的文件夹，请检查虚拟文件树结构。");
+            }
+            if (depth == targetDepth) {
+                break;
+            }
+            List<NodeVO> nextLevelNodes = new java.util.ArrayList<>();
+            for (NodeVO node : currentNodes) {
+                if ("folder".equals(node.getType())) {
+                    nextLevelNodes.addAll(virtualFileService.getChildrenNodes(treeId, node.getId()));
+                }
+            }
+            currentNodes = nextLevelNodes;
+        }
+
+        buildFolderMappings(currentNodes);
     }
 
     /**
      * 获取文件夹ID
      */
-    protected String getFolderId(String folderName) {
+    public String getFolderId(String folderName) {
         return folderMappings.get(folderName);
     }
+
+    /**
+     * 获取目标层级
+     */
+    public abstract int getTargetDepth();
 
     /**
      * 建立文件夹名称到ID的映射关系

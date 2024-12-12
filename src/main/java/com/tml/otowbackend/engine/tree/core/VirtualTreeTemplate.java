@@ -8,7 +8,7 @@ package com.tml.otowbackend.engine.tree.core;
 public interface VirtualTreeTemplate {
 
     /**
-     * 初始化模板（建立文件夹名称到ID的映射关系）
+     * 初始化模板
      */
     void initializeTemplate();
 }
