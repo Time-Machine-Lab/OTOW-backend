@@ -17,9 +17,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        #foreach($propertie in $properties)
-            <${propertie.name}>${propertie.value}</${propertie.name}>
-        #end
+    #foreach($propertie in $properties)
+        <${propertie.name}>${propertie.value}</${propertie.name}>
+    #end
     </properties>
 
     <dependencies>
@@ -41,13 +41,13 @@
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.4.1</version>
         </dependency>
-        #foreach($dependency in $dependencies)
-            <dependency>
-                <groupId>${dependency.groupId}</groupId>
-                <artifactId>${dependency.artifactId}</artifactId>
-                <version>${dependency.version}</version>
-            </dependency>
-        #end
+    #foreach($dependency in $dependencies)
+        <dependency>
+            <groupId>${dependency.groupId}</groupId>
+            <artifactId>${dependency.artifactId}</artifactId>
+            <version>${dependency.version}</version>
+        </dependency>
+    #end
     </dependencies>
 
     <build>

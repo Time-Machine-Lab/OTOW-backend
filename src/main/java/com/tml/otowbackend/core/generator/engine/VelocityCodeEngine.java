@@ -18,7 +18,7 @@ public class VelocityCodeEngine extends Engine<VelocityOTOWTemplate, String> {
 
     static{
         props = new Properties();
-        String resourcePath = Objects.requireNonNull(VelocityCodeEngine.class.getClassLoader().getResource("template")).getPath();
+        String resourcePath = Objects.requireNonNull(VelocityCodeEngine.class.getClassLoader().getResource("template")).getPath().replaceAll("%20", " ");
         props.setProperty("file.resource.loader.path", resourcePath); // 设置模板路径
         props.setProperty("input.encoding", "UTF-8"); // 设置输入文件的编码
         props.setProperty("output.encoding", "UTF-8"); // 设置输出文件的编码
