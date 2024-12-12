@@ -1,5 +1,6 @@
 package com.tml.otowbackend.engine.tree.entity.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -11,6 +12,7 @@ import java.util.List;
  * @author suifeng
  * 日期: 2024/12/12
  */
+@AllArgsConstructor
 @Data
 public class AddFileDTO {
     
