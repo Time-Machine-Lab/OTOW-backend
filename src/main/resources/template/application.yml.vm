@@ -1,0 +1,14 @@
+server:
+  port: ${config.port}
+
+spring:
+#if(${config.mysql.enable})
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${config.mysql.url}
+    username: ${config.mysql.username}
+    password: ${config.mysql.password}
+#end
+  application:
+    name: ${applicationName}
+

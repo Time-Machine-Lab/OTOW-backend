@@ -1,0 +1,23 @@
+#macro(renderAnnotations $annotations)
+#foreach($anno in $annotations)
+@${anno.clazz}#if($anno.params && !$anno.params.isEmpty())(#foreach($entry in $!anno.params.entrySet())#if($entry.key!="")$entry.key=#end$entry.value#if($foreach.hasNext),#end#end)#end
+#end
+#end
+
+package ${package};
+
+## 类引入的包
+#foreach($import in $imports)
+import $import;
+#end
+
+## 类注解
+#renderAnnotations($annotations)
+public interface ${className}#if($fatherClazz!="") extends ${fatherClazz}#end{
+
+#foreach($method in $methods)
+
+    #renderAnnotations($!method.annotations)
+    #if($method.isStatic)static#end $!method.returnRes ${method.methodName}(#foreach($entry in $!method.methodParams.entrySet())}$entry.value $entry.key#if($foreach.hasNext),#end#end);
+#end
+}
