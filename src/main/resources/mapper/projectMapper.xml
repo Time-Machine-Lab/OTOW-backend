@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tml.otowbackend.mapper.ProjectMapper">
+    <select id="queryProjectPage" resultType="com.tml.otowbackend.pojo.DO.Project" parameterType="com.tml.otowbackend.pojo.DTO.QueryProjectRequestDTO">
+        SELECT * FROM project
+        WHERE 1=1
+        <if test="name != null">
+            AND name LIKE CONCAT('%', #{name}, '%')
+        </if>
+        <if test="language != null">
+            AND code_language = #{language}
+        </if>
+        <if test="min != null and max != null">
+            AND price BETWEEN #{min} AND #{max}
+        </if>
+        <if test="min != null and max == null">
+            AND price &gt;= #{min}
+        </if>
+        <if test="max != null and min == null">
+            AND price &lt;= #{max}
+        </if>
+        ORDER BY create_time DESC
+        LIMIT #{limit} OFFSET #{page}
+    </select>
+</mapper>

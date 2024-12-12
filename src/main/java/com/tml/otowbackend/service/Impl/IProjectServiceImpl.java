@@ -18,9 +18,12 @@ import com.tml.otowbackend.util.OSSUtil;
 import com.tml.otowbackend.util.ThreadUtil;
 
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -29,7 +32,7 @@ import java.util.stream.Collectors;
  * @Author welsir
  * @Date 2024/12/2 19:37
  */
-@Component
+@Service
 public class IProjectServiceImpl implements ProjectService {
     final int DEFAULT_MAX_LIMIT = 20;
     @Resource
@@ -74,29 +77,16 @@ public class IProjectServiceImpl implements ProjectService {
     public List<QueryProjectResponseDTO> queryProject(QueryProjectRequestDTO requestDTO) {
         int limit = requestDTO.getLimit();
         int page = requestDTO.getPage();
-        int cmd = requestDTO.getCmd();
         List<QueryProjectResponseDTO> resLists;
-        limit = Math.min(limit,DEFAULT_MAX_LIMIT);
-        Page<Project> projectPage;
-        page = page-1>=0?page:0;
-        switch (cmd){
-            case 2:{
-                projectPage = projectMapper.selectPage(new Page<>(page, limit), new LambdaQueryWrapper<Project>()
-                        .orderByAsc(Project::getDownloadNum));
-                break;
-            }
-            case 3:{
-                projectPage = projectMapper.selectPage(new Page<>(page, limit), new LambdaQueryWrapper<Project>()
-                        .like(Project::getName,requestDTO.getName()));
-                break;
-            }
-            default:{
-                projectPage = projectMapper.selectPage(new Page<>(page - 1, limit), new LambdaQueryWrapper<Project>()
-                        .orderByDesc(Project::getCreateTime));
-            }
+        requestDTO.setLimit(Math.min(limit,DEFAULT_MAX_LIMIT));
+        requestDTO.setPage(page-1>=0?page:0);
+        try {
+            List<Project> projectPage = projectMapper.queryProjectPage(requestDTO);
+            resLists = projectPage.stream().map((QueryProjectResponseDTO::convertWithoutDetail)).collect(Collectors.toList());
+            return resLists;
+        }catch (RuntimeException e){
+            throw new ServerException(ResultCode.QUERY_PROJECT_FAIL);
         }
-        resLists = projectPage.getRecords().stream().map((QueryProjectResponseDTO::convertWithoutDetail)).collect(Collectors.toList());
-        return resLists;
     }
 
     @Override
@@ -115,4 +105,5 @@ public class IProjectServiceImpl implements ProjectService {
         }
         throw new ServerException(ResultCode.NOT_PURCHASE_RECORD);
     }
+
 }

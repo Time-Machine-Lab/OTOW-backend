@@ -16,9 +16,10 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class QueryProjectRequestDTO {
-    @NotNull
-    private Integer cmd;
     private String name;
+    private String language;
+    private Integer max;
+    private Integer min;
     @NonNull
     private Integer limit;
     @NonNull
