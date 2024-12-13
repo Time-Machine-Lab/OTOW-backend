@@ -56,6 +56,7 @@ public class MetaMethod extends ImportChecker{
     }
 
     protected void addParams(List<MetaMethodParam> params){
+//        System.out.println("111111111111111111111============"+params);
         addImportCheckers(params);
         this.methodParams.addAll(params);
     }

@@ -62,12 +62,6 @@ public class InitTemplate {
     private Boolean delete;
     private Boolean select;
 
-/*    public InitTemplate(String className, String tableName, List<MetalField> fields){
-        this.className = className;
-        this.tableName = tableName;
-        this.fields = fields;
-
-    }*/
 
     // 加强判断
     private static List<MetalField> judgeMetalField(List<MetalField> fields){
@@ -115,21 +109,28 @@ public class InitTemplate {
     // 生成 ServiceTemplate
     private ServiceTemplate getServiceTemplate() {
         ServiceTemplate userService = new ServiceTemplate(servicePackagePath, className);
-        EntityTemplate entityTemplate = getEntityTemplate();
-        String className = entityTemplate.getClassName();
+//        EntityTemplate entityTemplate = getEntityTemplate();
+//        String className = entityTemplate.getClassName();
 
         MetaMethodParam metaMethodParam = new MetaMethodParam(className, userService.getAllPackagePath(), className.toLowerCase());
 
         if (add){
+            System.out.println("add============"+metaMethodParam);
             userService.addMethod(addServiceMethod,List.of(metaMethodParam));
         }
         if (update){
+            System.out.println("update============"+metaMethodParam);
+//            userService.addMethod(updateServiceMethod,List.of(metaMethodParam));
             userService.addMethod(updateServiceMethod,List.of(metaMethodParam));
         }
         if (delete){
+            metaMethodParam = new MetaMethodParam("Integer", userService.getAllPackagePath(), "id");
+            System.out.println("delete============"+metaMethodParam);
             userService.addMethod(deleteServiceMethod,List.of(metaMethodParam));
         }
         if (select){
+            metaMethodParam = new MetaMethodParam("Integer", userService.getAllPackagePath(), "id");
+            System.out.println("select============"+metaMethodParam);
             userService.addMethod(selectServiceMethod,List.of(metaMethodParam));
         }
 
@@ -267,12 +268,12 @@ public class InitTemplate {
         return generate;
     }
 
+    // 生成ServiceImpl模板 返回
     public String getGenerateServiceImpl(){
         return generateServiceImpl();
     }
 
-
-    // service 的增加方法
+    // serviceImpl 的增加方法
     private String generateAddService(){
         AddServiceMethodTemplate addServiceMethodTemplate = new AddServiceMethodTemplate(saveTemplateFilePath,className);
 
@@ -285,7 +286,7 @@ public class InitTemplate {
         return new MetaMethod(generateAddService());
     }
 
-    // service的删除方法
+    // serviceImpl 的删除方法
     private String generateDeleteService(){
         DeleteServiceMethodTemplate deleteServiceMethodTemplate = new DeleteServiceMethodTemplate(deleteTemplateFilePath,className);
 
@@ -298,7 +299,7 @@ public class InitTemplate {
         return new MetaMethod(generateDeleteService());
     }
 
-    // service的查找方法
+    // serviceImpl的查找方法
     private String generateSelectService(){
         SelectServiceMethodTemplate selectServiceMethodTemplate = new SelectServiceMethodTemplate(selectTemplateFilePath,className);
 
@@ -310,7 +311,7 @@ public class InitTemplate {
         return new MetaMethod(generateSelectService());
     }
 
-    // service的更新方法
+    // serviceImpl的更新方法
     private String generateUpdateService(){
         UpdateServiceMethodTemplate updateServiceMethodTemplate = new UpdateServiceMethodTemplate(updateTemplateFilePath,className);
 

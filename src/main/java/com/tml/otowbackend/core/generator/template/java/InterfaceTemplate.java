@@ -120,7 +120,9 @@ public abstract class InterfaceTemplate extends JavaOTOWTemplate{
     }
 
     public void addMethod(String methodName, List<MetaMethodParam> params){
+//        System.out.println(params);
         MetaMethod metaMethod = new MetaMethod(methodName, params, "");
+//        System.out.println(metaMethod);
         addMethod(metaMethod);
     }
 
@@ -134,6 +136,7 @@ public abstract class InterfaceTemplate extends JavaOTOWTemplate{
         context.put("fatherClazz", fatherClazz);
         context.put("annotations", annotations);
         context.put("methods", methods);
+//        System.out.println(methods);
         return context;
     }
 

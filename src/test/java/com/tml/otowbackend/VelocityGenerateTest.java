@@ -227,25 +227,25 @@ public class VelocityGenerateTest {
         System.out.println(generateApplication);
         System.out.println("==================================================================================");
         String generateApplicationConfig = initConfigTemplate.getGenerateApplicationConfig();
-        System.out.println(generateApplicationConfig);
+//        System.out.println(generateApplicationConfig);
         System.out.println("====================================================================================");
         String generatePomConfig = initConfigTemplate.getGeneratePomConfig();
-        System.out.println(generatePomConfig);
+//        System.out.println(generatePomConfig);
         System.out.println("================================================================================");
-        Boolean add = false;
+        Boolean add = true;
         Boolean update = true;
-        Boolean delete = false;
+        Boolean delete = true;
         Boolean select = true;
         InitTemplate initTemplate = new InitTemplate(className,tableName,fields,add,update,delete,select);
-        System.out.println(initTemplate.getGenerateMapper());
+//        System.out.println(initTemplate.getGenerateMapper());
         System.out.println("================================================================================");
-        System.out.println(initTemplate.getGenerateEntityTemplate());
+//        System.out.println(initTemplate.getGenerateEntityTemplate());
         System.out.println("================================================================================");
         System.out.println(initTemplate.getGenerateService());
         System.out.println("================================================================================");
-        System.out.println(initTemplate.getGenerateController());
+//        System.out.println(initTemplate.getGenerateController());
         System.out.println("================================================================================");
-        System.out.println(initTemplate.getGenerateServiceImpl());
+//        System.out.println(initTemplate.getGenerateServiceImpl());
     }
 
 }

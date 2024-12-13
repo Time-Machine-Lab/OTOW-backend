@@ -45,6 +45,7 @@ public class ServiceImplTemplate extends ClassTemplate {
     }
 
     public void addMethod(MetaMethod method){
+//        System.out.println(method);
         this.methods.add(method);
         super.addMethod(method);
     }
