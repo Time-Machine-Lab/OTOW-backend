@@ -1,0 +1,53 @@
+{
+//  上帝模块
+  "god": {
+    "projectName": "studentSystem",
+    "user": "genius",
+    "root": "./",
+    "projects": [
+      {
+        "language": "java",
+        "builder": "github",
+        // 项目配置
+        "projectConfig": {
+          "mysql": {
+            "url": "",
+            "pwd": "",
+            "user": "",
+            "tableName": "student"
+          },
+          "port": "8080",
+          // 后端代码模块
+          "module": [
+            {
+              "name": "学生",
+              "fields": [],  //成员属性
+              // 功能包
+              "function": [
+                {
+                  "name": "add" //添加功能
+                  "params": {
+                    "index": "uid" //选择字段作为唯一索引
+                  }
+                }
+              ]
+            },
+            {
+              "name": "teacher",
+              "fields": [],  //成员属性
+              // 功能包
+              "function": [
+                {
+                  "name": "select" //搜索功能
+                },
+                {
+                  "name": "add"   //添加功能
+                }
+                ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

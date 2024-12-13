@@ -22,7 +22,7 @@ public class DeployUtil {
     /**
      * 输入你根目录下的部署日志文件位置
      */
-    private static final String deployLogPath = "D:\\Data\\IDEA Projct\\CyberNomads\\prod_deploy.log";
+    private static final String deployLogPath = "D:\\Data\\IDEA Projct\\OTOW-backend\\prod_deploy.log";
 
     public static void main(String[] args) {
         deployInit();
