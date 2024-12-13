@@ -41,9 +41,9 @@ public class VirtualFileController {
      * @param parentId 父节点ID（可以为空表示根）
      * @return 子节点列表
      */
-    @GetMapping("/{treeId}/nodes")
+    @GetMapping("/nodes")
     public R<List<NodeVO>> getChildrenNodes(
-            @PathVariable String treeId,
+            @RequestParam String treeId,
             @RequestParam(required = false) String parentId) {
         List<NodeVO> children = virtualFileService.getChildrenNodes(treeId, parentId);
         return R.success("获取子节点成功", children);
@@ -56,10 +56,10 @@ public class VirtualFileController {
      * @param fileId 文件ID
      * @return 文件内容
      */
-    @GetMapping("/{treeId}/file/{fileId}/content")
+    @GetMapping("/fileContent")
     public R<List<String>> getFileContent(
-            @PathVariable String treeId,
-            @PathVariable String fileId) {
+            @RequestParam String treeId,
+            @RequestParam String fileId) {
         List<String> content = virtualFileService.getFileContent(treeId, fileId);
         return R.success("获取文件内容成功", content);
     }
@@ -67,7 +67,7 @@ public class VirtualFileController {
     /**
      * 添加文件夹
      */
-    @PostMapping("/{treeId}/folder")
+    @PostMapping("/folder")
     public R<String> addFolder(
             @PathVariable String treeId,
             @Validated @RequestBody AddFolderDTO request) {

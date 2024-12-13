@@ -28,8 +28,8 @@ public class TreeTest {
         SpringBootTreeTemplate template = new SpringBootTreeTemplate(virtualFileService, treeId);
         template.initializeTemplate();
 
-        template.addFileToController("TestController.java", list1);
-        template.addFileToServiceImpl("TestServiceImpl.java", list2);
+        template.controller("TestController.java", list1);
+        template.serviceImpl("TestServiceImpl.java", list2);
         virtualFileService.exportVirtualTree(treeId, "D:\\test");
     }
 

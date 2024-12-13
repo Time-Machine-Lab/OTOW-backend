@@ -33,28 +33,48 @@ public class SpringBootTreeTemplate extends AbstractVirtualTreeTemplate {
         virtualFileService.addFile(treeId, new AddFileDTO(folderId, fileName, content));
     }
 
-    public void addFileToController(String fileName, List<String> content) {
+    public void controller(String fileName, List<String> content) {
         addFile("controller", fileName, content);
     }
 
-    public void addFileToService(String fileName, List<String> content) {
+    public void service(String fileName, List<String> content) {
         addFile("service", fileName, content);
     }
 
-    public void addFileToServiceImpl(String fileName, List<String> content) {
+    public void serviceImpl(String fileName, List<String> content) {
         addFile("service/impl", fileName, content);
     }
 
-    public void addFileToMapper(String fileName, List<String> content) {
+    public void mapper(String fileName, List<String> content) {
         addFile("mapper", fileName, content);
     }
 
-    public void addFileToUtils(String fileName, List<String> content) {
+    public void utils(String fileName, List<String> content) {
         addFile("utils", fileName, content);
     }
 
-    public void addFileToConfig(String fileName, List<String> content) {
+    public void config(String fileName, List<String> content) {
         addFile("config", fileName, content);
+    }
+
+    public void dto(String fileName, List<String> content) {
+        addFile("model/dto", fileName, content);
+    }
+
+    public void entity(String fileName, List<String> content) {
+        addFile("model/entity", fileName, content);
+    }
+
+    public void enums(String fileName, List<String> content) {
+        addFile("model/enums", fileName, content);
+    }
+
+    public void req(String fileName, List<String> content) {
+        addFile("model/req", fileName, content);
+    }
+
+    public void vo(String fileName, List<String> content) {
+        addFile("model/vo", fileName, content);
     }
 
     @Override

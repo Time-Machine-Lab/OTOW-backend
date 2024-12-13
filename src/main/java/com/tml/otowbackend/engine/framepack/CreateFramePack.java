@@ -103,7 +103,7 @@ public class CreateFramePack {
 
                 // 拉取下来后根据文件清单补充必要的文件夹
                 // 需要创建的目录结构
-                String newFile = localPath + "\\FramePack\\src\\main\\java\\com\\example\\framepack\\";
+                String newFile = localPath + "\\src\\main\\java\\com\\example\\";
                 // 调用 createFiles 方法来创建所需的文件夹
                 if (createFiles(newFile)) {
                     System.out.println("加载成功！");
