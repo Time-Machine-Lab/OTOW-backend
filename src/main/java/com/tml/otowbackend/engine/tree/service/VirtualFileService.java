@@ -70,7 +70,7 @@ public class VirtualFileService implements IVirtualFileService {
      */
     private VirtualFolderNode buildVirtualFolderNode(File directory, String parentId) {
         String nodeId = directory.getPath();
-        VirtualFolderNode folderNode = new VirtualFolderNode(nodeId, directory.getName(), parentId);
+        VirtualFolderNode folderNode = VirtualFolderNode.createStart(nodeId, directory.getName(), parentId);
 
         File[] children = directory.listFiles();
         if (children != null) {
@@ -123,7 +123,7 @@ public class VirtualFileService implements IVirtualFileService {
         }
 
         String folderName = request.getFolderName();
-        VirtualFolderNode newFolder = new VirtualFolderNode(parent.getId() + "\\" + folderName, request.getFolderName(), parent.getId());
+        VirtualFolderNode newFolder = VirtualFolderNode.createAdd(parent.getId() + "/" + folderName, request.getFolderName(), parent.getId());
         parent.addChild(newFolder);
         tree.addFolder(newFolder);
         return newFolder.getId();
@@ -153,7 +153,7 @@ public class VirtualFileService implements IVirtualFileService {
         }
 
         String fileName = request.getFileName();
-        VirtualFileNode newFile = new VirtualFileNode(parent.getId() + "\\" + fileName, request.getFileName(), fileType, 0, request.getContent());
+        VirtualFileNode newFile = VirtualFileNode.createAdd(parent.getId() + "/" + fileName, request.getFileName(), fileType, 0, request.getContent());
         parent.addFile(newFile);
         tree.addFile(newFile);
         return newFile.getId();

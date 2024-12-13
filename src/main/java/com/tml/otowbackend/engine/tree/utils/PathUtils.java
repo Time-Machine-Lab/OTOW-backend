@@ -1,13 +1,29 @@
 package com.tml.otowbackend.engine.tree.utils;
 
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import static com.tml.otowbackend.constants.TreeConstant.*;
 
 /**
- * 描述:
+ * 描述: 路径功能类
  * @author suifeng
  * 日期: 2024/12/12
  */
 public class PathUtils {
+
+    /**
+     * 获取springboot项目路径
+     */
+    public static String getSpringbootPath() {
+        return getFramePath(SPRINGBOOT_FRAME);
+    }
+
+    public static String getFramePath(String frameType) {
+        Path basePath = Paths.get(System.getProperty("user.dir"));
+        Path targetPath = Paths.get(basePath.toString(), FRAME_PATH + frameType + START_PATH);
+        return targetPath.toAbsolutePath().toString();
+    }
 
     // 自定义的统一路径分隔符
     private static final String CUSTOM_SEPARATOR = "/";
@@ -57,49 +73,68 @@ public class PathUtils {
      * @return 转换后的Unix风格路径（如：/Assistant/.git）
      */
     public static String toUnixStylePath(String systemPath) {
+        systemPath = extractEffectivePath(systemPath, START_PATH);
         if (systemPath == null || systemPath.isEmpty()) {
             throw new IllegalArgumentException("路径不能为空");
         }
-
         // 将反斜杠替换为正斜杠
         String unixPath = systemPath.replace("\\", "/");
-
         // 如果路径是Windows绝对路径（例如 D:/ 或 C:/），去掉盘符并确保以 / 开头
         if (unixPath.matches("^[a-zA-Z]:/.*")) {
             unixPath = unixPath.substring(2); // 去掉盘符（例如 D: -> 空）
         }
-
         // 确保路径以单个斜杠开头
         if (!unixPath.startsWith("/")) {
             unixPath = "/" + unixPath;
         }
-
-        return unixPath;
+        return removeFirstPathSegment(unixPath);
     }
 
     /**
-     * 将通用的Unix风格路径转换为系统特定格式的路径
-     *
-     * @param unixPath 通用的Unix风格路径（如：/Assistant/.git）
-     * @return 转换后的系统特定格式路径（如Windows路径：D:\\Assistant\\.git）
+     * 去除路径中的第一个部分
      */
-    public static String toSystemStylePath(String unixPath) {
-        if (unixPath == null || unixPath.isEmpty()) {
+    public static String removeFirstPathSegment(String path) {
+        if (path == null || path.isEmpty()) {
             throw new IllegalArgumentException("路径不能为空");
         }
-
-        // 将正斜杠替换为系统默认的文件分隔符
-        String systemPath = unixPath.replace("/", File.separator);
-
-        // 如果是绝对路径（以 / 开头），根据操作系统处理
-        if (systemPath.startsWith(File.separator)) {
-            String osName = System.getProperty("os.name").toLowerCase();
-            if (osName.contains("win")) {
-                // Windows系统：假设默认盘符为C:，可以根据实际需求调整
-                systemPath = "C:" + systemPath;
-            }
+        if (!path.startsWith("/")) {
+            throw new IllegalArgumentException("路径必须以 '/' 开头");
+        }
+        String[] segments = path.substring(1).split("/");
+        if (segments.length <= 1) {
+            return "/";
+        }
+        StringBuilder result = new StringBuilder();
+        for (int i = 1; i < segments.length; i++) {
+            result.append("/").append(segments[i]);
         }
 
-        return systemPath;
+        return result.toString();
+    }
+
+    /**
+     * 从完整路径中提取有效部分路径
+     *
+     * @param fullPath 完整路径（如：D:\HandRub\Tomcat\easy-tomcat\src\main\java\com\tomcat）
+     * @param startSegment 有效路径的起始部分（如：src）
+     * @return 提取后的有效路径（如：\src\main\java\com\tomcat）
+     */
+    public static String extractEffectivePath(String fullPath, String startSegment) {
+        if (fullPath == null || fullPath.isEmpty() || startSegment == null || startSegment.isEmpty()) {
+            throw new IllegalArgumentException("完整路径和起始部分不能为空");
+        }
+        // 统一路径分隔符为正斜杠，便于处理
+        String normalizedPath = fullPath.replace("\\", "/");
+        String normalizedStartSegment = startSegment.replace("\\", "/");
+        // 查找起始部分的位置
+        int startIndex = normalizedPath.indexOf("/" + normalizedStartSegment);
+        if (startIndex == -1) {
+            System.out.println(fullPath);
+            throw new IllegalArgumentException("起始部分未在完整路径中找到");
+        }
+        // 提取有效路径部分
+        String effectivePath = normalizedPath.substring(startIndex);
+        // 将路径分隔符还原为系统默认的分隔符
+        return effectivePath.replace("/", System.getProperty("file.separator"));
     }
 }

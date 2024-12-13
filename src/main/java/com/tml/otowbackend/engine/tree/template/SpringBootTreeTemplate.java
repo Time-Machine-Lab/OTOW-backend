@@ -19,11 +19,6 @@ public class SpringBootTreeTemplate extends AbstractVirtualTreeTemplate {
         super(virtualFileService, treeId);
     }
 
-    @Override
-    public int getTargetDepth() {
-        return 7;
-    }
-
     /**
      * 添加文件到指定文件夹
      */
@@ -32,6 +27,11 @@ public class SpringBootTreeTemplate extends AbstractVirtualTreeTemplate {
         if (folderId == null) throw new IllegalStateException(folderName + " 文件夹未初始化");
         virtualFileService.addFile(treeId, new AddFileDTO(folderId, fileName, content));
     }
+
+    public void master(String fileName, List<String> content) {
+        addFile("/", fileName, content);
+    }
+
 
     public void controller(String fileName, List<String> content) {
         addFile("controller", fileName, content);
@@ -77,8 +77,15 @@ public class SpringBootTreeTemplate extends AbstractVirtualTreeTemplate {
         addFile("model/vo", fileName, content);
     }
 
+    public void resources(String fileName, List<String> content) {
+        addFile("resources", fileName, content);
+    }
+
     @Override
-    public void buildFolderMappings(List<NodeVO> rootNodes) {
+    public void buildFolderMappings() {
+        folderMappings.put("resources", "/src/main/java/resources");
+        folderMappings.put("/", "");
+        List<NodeVO> rootNodes  = virtualFileService.getChildrenNodes(treeId, "/src/main/java/com/example");
         // 遍历 rootNodes，逐一建立文件夹名称到 ID 的映射关系
         for (NodeVO node : rootNodes) {
             if ("folder".equals(node.getType())) {

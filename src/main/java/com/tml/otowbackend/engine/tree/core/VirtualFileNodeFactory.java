@@ -35,7 +35,7 @@ public class VirtualFileNodeFactory {
             rawLines = FileContentReader.readFileContent(file, size);
         }
 
-        return new VirtualFileNode(id, file.getName(), fileType, size, rawLines);
+        return VirtualFileNode.createStart(id, file.getName(), fileType, size, rawLines);
     }
 
     /**

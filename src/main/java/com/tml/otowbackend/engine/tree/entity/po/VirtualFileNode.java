@@ -19,8 +19,16 @@ public class VirtualFileNode {
     private long size; // 文件大小（字节）
     private List<String> rawLines; // 文件内容（按行分割）
 
+    public static VirtualFileNode createStart(String id, String name, String parentId, long size, List<String> rawLines) {
+        return new VirtualFileNode(PathUtils.toUnixStylePath(id), name, parentId, size, rawLines);
+    }
+
+    public static VirtualFileNode createAdd(String id, String name, String parentId, long size, List<String> rawLines) {
+        return new VirtualFileNode(id, name, parentId, size, rawLines);
+    }
+
     public VirtualFileNode(String id, String name, String type, long size, List<String> rawLines) {
-        this.id = PathUtils.toUnixStylePath(id);
+        this.id = id;
         this.name = name;
         this.type = type;
         this.size = size;

@@ -20,8 +20,16 @@ public class VirtualFolderNode {
     private List<VirtualFolderNode> children; // 子文件夹节点
     private List<VirtualFileNode> files; // 文件节点列表
 
+    public static VirtualFolderNode createStart(String id, String name, String parentId) {
+        return new VirtualFolderNode(PathUtils.toUnixStylePath(id), name, parentId);
+    }
+
+    public static VirtualFolderNode createAdd(String id, String name, String parentId) {
+        return new VirtualFolderNode(id, name, parentId);
+    }
+
     public VirtualFolderNode(String id, String name, String parentId) {
-        this.id = PathUtils.toUnixStylePath(id);
+        this.id = id;
         this.name = name;
         this.parentId = parentId;
         this.children = new ArrayList<>();
