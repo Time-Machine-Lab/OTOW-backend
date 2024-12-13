@@ -12,6 +12,7 @@ public class ReqTemplate extends ClassTemplate {
         super(packagePath, className+"Req");
     }
 
+
     @Override
     public void initAnnotations(){
         addAnnotations(MetaAnnotation.convertByClazz(REQ_ANNOTATION));

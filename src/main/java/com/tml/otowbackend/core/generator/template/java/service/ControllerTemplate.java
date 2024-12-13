@@ -3,6 +3,8 @@ import com.tml.otowbackend.core.generator.template.java.ClassTemplate;
 import com.tml.otowbackend.core.generator.template.meta.MetaAnnotation;
 import com.tml.otowbackend.core.generator.template.meta.MetaMethod;
 import com.tml.otowbackend.core.generator.template.meta.MetalField;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -55,6 +57,16 @@ public class ControllerTemplate extends ClassTemplate {
 
     public void addPostMethod(MetaMethod method, String path){
         method.addAnnotations(List.of(new MetaAnnotation(PostMapping.class, path)));
+        this.addMethod(method);
+    }
+
+    public void addGetMethod(MetaMethod method, String path){
+        method.addAnnotations(List.of(new MetaAnnotation(GetMapping.class, path)));
+        this.addMethod(method);
+    }
+
+    public void addDeleteMethod(MetaMethod method, String path){
+        method.addAnnotations(List.of(new MetaAnnotation(DeleteMapping.class, path)));
         this.addMethod(method);
     }
 
