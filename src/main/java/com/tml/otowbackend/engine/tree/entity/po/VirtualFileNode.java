@@ -1,5 +1,6 @@
 package com.tml.otowbackend.engine.tree.entity.po;
 
+import com.tml.otowbackend.engine.tree.utils.PathUtils;
 import lombok.Data;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class VirtualFileNode {
     private List<String> rawLines; // 文件内容（按行分割）
 
     public VirtualFileNode(String id, String name, String type, long size, List<String> rawLines) {
-        this.id = id;
+        this.id = PathUtils.toUnixStylePath(id);
         this.name = name;
         this.type = type;
         this.size = size;

@@ -1,5 +1,6 @@
 package com.tml.otowbackend.engine.tree.entity.po;
 
+import com.tml.otowbackend.engine.tree.utils.PathUtils;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class VirtualFolderNode {
     private List<VirtualFileNode> files; // 文件节点列表
 
     public VirtualFolderNode(String id, String name, String parentId) {
-        this.id = id;
+        this.id = PathUtils.toUnixStylePath(id);
         this.name = name;
         this.parentId = parentId;
         this.children = new ArrayList<>();
