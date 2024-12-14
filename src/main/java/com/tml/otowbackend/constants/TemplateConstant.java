@@ -1,6 +1,6 @@
 package com.tml.otowbackend.constants;
 
-import com.tml.otowbackend.core.generator.template.meta.MetaAnnotation;
+import com.tml.otowbackend.engine.generator.template.meta.MetaAnnotation;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
