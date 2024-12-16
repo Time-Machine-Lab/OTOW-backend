@@ -11,7 +11,7 @@ public class AiResultProcessor implements Processor<String> {
     private WebSocketManager webSocketManager;
     @Override
     public void process(String key, String message) {
-        if(!(message != null && message.isBlank())){
+        if(message != null && !message.isBlank()){
             webSocketManager.sendStringMessage(key, message);
         }
     }
