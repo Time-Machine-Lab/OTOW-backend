@@ -41,12 +41,4 @@ public interface OTOWProjectService {
      * @return 项目详情
      */
     R<ProjectDetailsVO> getProjectDetails(Long projectId);
-
-    /**
-     * AI 生成项目大纲描述
-     *
-     * @param projectId 项目ID
-     * @return 生成的项目描述
-     */
-    R<String> generateProjectOutline(Long projectId);
 }

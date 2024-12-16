@@ -2,9 +2,6 @@ package com.tml.otowbackend.service.Impl;
 
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.tml.otowbackend.engine.ai.core.AIModel;
-import com.tml.otowbackend.engine.ai.core.AIOperation;
-import com.tml.otowbackend.engine.ai.core.AIOperationFactory;
-import com.tml.otowbackend.engine.ai.core.ParseResult;
 import com.tml.otowbackend.engine.otow.OTOWCacheService;
 import com.tml.otowbackend.engine.otow.ProjectValidator;
 import com.tml.otowbackend.engine.tree.common.R;
@@ -17,12 +14,10 @@ import com.tml.otowbackend.service.OTOWProjectService;
 import com.tml.otowbackend.util.UserThread;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.tml.otowbackend.constants.AIConstant.GENERATE_DESC;
 import static com.tml.otowbackend.constants.ProjectConstants.*;
 import static com.tml.otowbackend.pojo.DO.OTOWProject.deserializeMetadata;
 import static com.tml.otowbackend.pojo.DO.OTOWProject.serializeMetadata;
@@ -190,49 +185,5 @@ public class IOTOWProjectService implements OTOWProjectService {
         // 构造 VO 对象返回
         ProjectDetailsVO vo = ProjectDetailsVO.fromEntity(project);
         return R.success("获取项目详情成功", vo);
-    }
-
-    @Override
-    public R<String> generateProjectOutline(Long projectId) {
-        // 从缓存中获取项目参数
-        Map<String, Object> cachedParams = cacheService.getAll(projectId);
-        if (cachedParams.isEmpty()) {
-            throw new ServeException("项目不存在或未初始化，ID: " + projectId);
-        }
-
-        // 获取标题（title），如果不存在则抛出异常
-        String title = (String) cachedParams.get(TITLE);
-        if (title == null || title.isBlank()) {
-            throw new ServeException("项目标题不存在，无法生成项目大纲描述");
-        }
-
-        // 获取复杂度（complexity），如果不存在则使用默认值
-        String complexity = (String) cachedParams.getOrDefault(COMPLEXITY, "一般");
-
-        // 构造 AI 生成描述的输入
-        Map<String, Object> projectOutline = new HashMap<>();
-        projectOutline.put(TITLE, title);
-        projectOutline.put(COMPLEXITY, complexity);
-
-        // 调用 AI 操作类生成提示词
-        AIOperation<String> operation = (AIOperation<String>) AIOperationFactory.getOperation(GENERATE_DESC);
-        String prompt = operation.generatePrompt(projectOutline);
-
-        // 调用 AI 模型生成项目描述
-        String generatedDescription = aiModel.generate(prompt);
-
-        // 解析 AI 返回结果
-        ParseResult<String> parseResult = operation.parseResponse(generatedDescription);
-        String description = parseResult.getData();
-
-        if (description == null || description.isBlank()) {
-            throw new ServeException("AI 生成项目描述失败，请稍后重试");
-        }
-
-        // 更新缓存中的 description 字段
-        cacheService.put(projectId, DESCRIPTION, description);
-
-        // 返回生成的项目描述
-        return R.success("生成项目描述成功", description);
     }
 }

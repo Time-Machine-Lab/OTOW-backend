@@ -14,6 +14,9 @@ public class ProjectConstants {
     public static final String TYPE = "type";
     public static final String COMPLEXITY = "complexity";
 
+    // 实体类列表字段
+    public static final String ENTITY_CLASSES = "entityClasses";
+
     // 参数最大长度
     public static final int MAX_TITLE_LENGTH = 50;
     public static final int MAX_DESCRIPTION_LENGTH = 500;

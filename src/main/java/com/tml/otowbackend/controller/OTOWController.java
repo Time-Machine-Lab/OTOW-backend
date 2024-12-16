@@ -1,16 +1,19 @@
 package com.tml.otowbackend.controller;
 
 import com.tml.otowbackend.core.anno.TokenRequire;
+import com.tml.otowbackend.engine.ai.result.EntityClassDefinition;
 import com.tml.otowbackend.engine.otow.SupportedLanguages;
 import com.tml.otowbackend.engine.tree.common.R;
 import com.tml.otowbackend.pojo.VO.ProjectDetailsVO;
 import com.tml.otowbackend.pojo.VO.UserProjectVO;
+import com.tml.otowbackend.service.AIService;
+import com.tml.otowbackend.service.EntityClassService;
 import com.tml.otowbackend.service.OTOWProjectService;
 import com.tml.otowbackend.util.UserThread;
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
@@ -19,13 +22,15 @@ import java.util.Map;
  * @author suifeng
  * 日期: 2024/12/16
  */
+@RequiredArgsConstructor
 @RequestMapping("/otow")
 @RestController
 @Validated
 public class OTOWController {
 
-    @Resource
-    private OTOWProjectService projectService;
+    private final OTOWProjectService projectService;
+    private final EntityClassService entityClassService;
+    private final AIService aiService;
 
     /**
      * 初始化或更新项目
@@ -96,6 +101,30 @@ public class OTOWController {
     @PostMapping("/generateProjectOutline")
     @TokenRequire
     public R<String> generateProjectOutline(@RequestParam Long projectId) {
-        return projectService.generateProjectOutline(projectId);
+        return aiService.generateProjectOutline(projectId);
+    }
+
+    @PostMapping("/addEntityClass")
+    @TokenRequire
+    public R<Void> addEntityClass(@RequestParam Long projectId, @RequestBody EntityClassDefinition entity) {
+        return entityClassService.addEntityClass(projectId, entity);
+    }
+
+    @PutMapping("/updateEntityClass")
+    @TokenRequire
+    public R<Void> updateEntityClass(@RequestParam Long projectId, @RequestParam String className, @RequestBody EntityClassDefinition entity) {
+        return entityClassService.updateEntityClass(projectId, className, entity);
+    }
+
+    @DeleteMapping("/deleteEntityClass")
+    @TokenRequire
+    public R<Void> deleteEntityClass(@RequestParam Long projectId, @RequestParam String className) {
+        return entityClassService.deleteEntityClass(projectId, className);
+    }
+
+    @GetMapping("/getEntityClasses")
+    @TokenRequire
+    public R<List<EntityClassDefinition>> getEntityClasses(@RequestParam Long projectId) {
+        return entityClassService.getEntityClasses(projectId);
     }
 }
