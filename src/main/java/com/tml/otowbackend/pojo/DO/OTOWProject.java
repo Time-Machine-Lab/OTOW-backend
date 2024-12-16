@@ -3,7 +3,6 @@ package com.tml.otowbackend.pojo.DO;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.tml.otowbackend.util.UserThread;
 import lombok.Data;
 
 import java.util.Date;
@@ -38,15 +37,4 @@ public class OTOWProject {
 
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
-
-    public static OTOWProject getOtowProject(Long projectId, String title, String description) {
-        OTOWProject project = new OTOWProject();
-        project.setId(projectId);
-        project.setUid(UserThread.getUid());
-        project.setTitle(title);
-        project.setDescription(description);
-        project.setStatus("INIT"); // 初始状态
-        project.setMetadata("{}"); // 初始化metadata为空JSON
-        return project;
-    }
 }
