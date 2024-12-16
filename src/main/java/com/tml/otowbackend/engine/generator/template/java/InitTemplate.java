@@ -12,7 +12,6 @@ import com.tml.otowbackend.engine.generator.template.java.method.SelectServiceMe
 import com.tml.otowbackend.engine.generator.template.java.method.UpdateServiceMethodTemplate;
 import com.tml.otowbackend.engine.generator.template.java.model.EntityTemplate;
 import com.tml.otowbackend.engine.generator.template.java.model.ReqTemplate;
-import com.tml.otowbackend.core.generator.template.java.service.*;
 import com.tml.otowbackend.engine.generator.template.java.service.ControllerTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.MapperTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.ServiceImplTemplate;

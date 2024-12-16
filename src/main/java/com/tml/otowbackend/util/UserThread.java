@@ -11,7 +11,7 @@ import java.util.Map;
  * @Author welsir
  * @Date 2024/10/28 20:12
  */
-public class ThreadUtil {
+public class UserThread {
 
     private static ThreadLocal<Map<String, String>> threadLocal = ThreadLocal.withInitial(HashMap::new);
 

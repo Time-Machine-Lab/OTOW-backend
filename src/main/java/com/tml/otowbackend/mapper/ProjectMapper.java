@@ -14,6 +14,7 @@ import java.util.List;
  * @Author welsir
  * @Date 2024/12/2 19:39
  */
+@Mapper
 public interface ProjectMapper extends BaseMapper<Project> {
 
     @Select("SELECT COUNT(1)\n" +
