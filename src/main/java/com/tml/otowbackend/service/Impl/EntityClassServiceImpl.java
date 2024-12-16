@@ -7,6 +7,7 @@ import com.tml.otowbackend.engine.otow.OTOWCacheService;
 import com.tml.otowbackend.engine.tree.common.R;
 import com.tml.otowbackend.engine.tree.common.ServeException;
 import com.tml.otowbackend.service.EntityClassService;
+import com.tml.otowbackend.service.FeaturePackageService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -20,6 +21,9 @@ public class EntityClassServiceImpl implements EntityClassService {
 
     @Resource
     private OTOWCacheService cacheService;
+
+    @Resource
+    private FeaturePackageService featurePackageService;
 
     @Override
     public R<Void> addEntityClass(Long projectId, EntityClassDefinition entity) {
@@ -135,6 +139,9 @@ public class EntityClassServiceImpl implements EntityClassService {
                 throw new ServeException("字段描述不能为空，字段：" + field.getFname());
             }
         }
+
+        // 校验功能包列表是否合法
+        featurePackageService.validateFeaturePackages(entity.getFeatureIds());
     }
 
     /**

@@ -2,12 +2,14 @@ package com.tml.otowbackend.controller;
 
 import com.tml.otowbackend.core.anno.TokenRequire;
 import com.tml.otowbackend.engine.ai.result.EntityClassDefinition;
+import com.tml.otowbackend.engine.ai.result.FeaturePackage;
 import com.tml.otowbackend.engine.otow.SupportedLanguages;
 import com.tml.otowbackend.engine.tree.common.R;
 import com.tml.otowbackend.pojo.VO.ProjectDetailsVO;
 import com.tml.otowbackend.pojo.VO.UserProjectVO;
 import com.tml.otowbackend.service.AIService;
 import com.tml.otowbackend.service.EntityClassService;
+import com.tml.otowbackend.service.FeaturePackageService;
 import com.tml.otowbackend.service.OTOWProjectService;
 import com.tml.otowbackend.util.UserThread;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,7 @@ public class OTOWController {
     private final OTOWProjectService projectService;
     private final EntityClassService entityClassService;
     private final AIService aiService;
+    private final FeaturePackageService featurePackageService;
 
     /**
      * 初始化或更新项目
@@ -126,5 +129,16 @@ public class OTOWController {
     @TokenRequire
     public R<List<EntityClassDefinition>> getEntityClasses(@RequestParam Long projectId) {
         return entityClassService.getEntityClasses(projectId);
+    }
+
+    /**
+     * 获取支持的功能包列表
+     *
+     * @return 功能包列表
+     */
+    @GetMapping("/getSupportedFeaturePackages")
+    @TokenRequire
+    public R<List<FeaturePackage>> getSupportedFeaturePackages() {
+        return featurePackageService.getSupportedFeaturePackages();
     }
 }
