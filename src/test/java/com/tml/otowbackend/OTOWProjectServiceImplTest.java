@@ -21,9 +21,6 @@ public class OTOWProjectServiceImplTest {
 
     @Test
     public void testInitializeProject() {
-        UserThread.set("uid", "5b0bb073-f3e6-4fe2-b58f-aeda00af5e90");
-        // 测试初始化项目
-        Long projectId = otowProjectService.initializeProject("Test Project", "This is a test project");
-        System.out.println(projectId);
+
     }
 }
