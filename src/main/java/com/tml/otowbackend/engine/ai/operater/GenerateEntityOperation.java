@@ -54,7 +54,7 @@ public class GenerateEntityOperation implements AIOperation<List<EntityClassDefi
                         "    \"className\": \"实体类名\",\n" +
                         "    \"cdesc\": \"实体类中文名\",\n" +
                         "    \"fields\": [\n" +
-                        "      {\"fname\": \"字段名\", \"ftype\": \"字段类型\", \"fdesc\": \"字段中文名\"}\n" +
+                        "      {\"fname\": \"字段名\", \"ftype\": \"字段类型（例如：String/int/Boolean）\", \"fdesc\": \"字段中文名\"}\n" +
                         "    ],\n" +
                         "    \"featureIds\": [\"功能包ID1\", \"功能包ID2\"]\n" +
                         "  }\n" +
