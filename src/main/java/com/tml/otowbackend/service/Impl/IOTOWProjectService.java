@@ -1,7 +1,10 @@
 package com.tml.otowbackend.service.Impl;
 
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
-import com.tml.otowbackend.constants.ProjectConstants;
+import com.tml.otowbackend.engine.ai.core.AIModel;
+import com.tml.otowbackend.engine.ai.core.AIOperation;
+import com.tml.otowbackend.engine.ai.core.AIOperationFactory;
+import com.tml.otowbackend.engine.ai.core.ParseResult;
 import com.tml.otowbackend.engine.otow.OTOWCacheService;
 import com.tml.otowbackend.engine.otow.ProjectValidator;
 import com.tml.otowbackend.engine.tree.common.R;
@@ -14,10 +17,15 @@ import com.tml.otowbackend.service.OTOWProjectService;
 import com.tml.otowbackend.util.UserThread;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import static com.tml.otowbackend.constants.AIConstant.GENERATE_DESC;
 import static com.tml.otowbackend.constants.ProjectConstants.*;
+import static com.tml.otowbackend.pojo.DO.OTOWProject.deserializeMetadata;
+import static com.tml.otowbackend.pojo.DO.OTOWProject.serializeMetadata;
 
 @Service
 public class IOTOWProjectService implements OTOWProjectService {
@@ -27,6 +35,9 @@ public class IOTOWProjectService implements OTOWProjectService {
 
     @Resource
     private OTOWCacheService cacheService;
+
+    @Resource
+    private AIModel aiModel;
 
     @Override
     public R<Long> manageProject(Long projectId, Map<String, Object> params) {
@@ -52,15 +63,17 @@ public class IOTOWProjectService implements OTOWProjectService {
         // 1. 生成唯一项目ID
         Long projectId = IdWorker.getId();
 
-        // 2. 将参数存入缓存
-        params.forEach((key, value) -> cacheService.put(projectId, key, value));
-
-        // 3. 初始化默认值
+        // 2. 将核心参数存入缓存
         cacheService.put(projectId, UID, UserThread.getUid());
         cacheService.put(projectId, TITLE, params.getOrDefault(TITLE, ""));
         cacheService.put(projectId, DESCRIPTION, params.getOrDefault(DESCRIPTION, ""));
         cacheService.put(projectId, LANGUAGE, params.getOrDefault(LANGUAGE, ""));
-        cacheService.put(projectId, ProjectConstants.TYPE, params.getOrDefault(ProjectConstants.TYPE, ""));
+        cacheService.put(projectId, TYPE, params.getOrDefault(TYPE, ""));
+
+        // 3. 将非核心参数单独存入缓存
+        params.keySet().stream()
+                .filter(key -> !List.of(TITLE, DESCRIPTION, LANGUAGE, TYPE).contains(key))
+                .forEach(key -> cacheService.put(projectId, key, params.get(key)));
 
         return projectId;
     }
@@ -75,11 +88,30 @@ public class IOTOWProjectService implements OTOWProjectService {
     private Long updateProject(Long projectId, Map<String, Object> params) {
         // 检查项目是否存在
         if (cacheService.getAll(projectId).isEmpty()) {
-            throw new ServeException("项目不存在，ID: " + projectId);
+            getProjectDetails(projectId);
+            if (cacheService.getAll(projectId).isEmpty()) {
+                throw new ServeException("项目不存在，ID: " + projectId);
+            }
         }
 
-        // 更新缓存中的参数
-        params.forEach((key, value) -> cacheService.put(projectId, key, value));
+        // 更新核心字段
+        if (params.containsKey(TITLE)) {
+            cacheService.put(projectId, TITLE, params.get(TITLE));
+        }
+        if (params.containsKey(DESCRIPTION)) {
+            cacheService.put(projectId, DESCRIPTION, params.get(DESCRIPTION));
+        }
+        if (params.containsKey(LANGUAGE)) {
+            cacheService.put(projectId, LANGUAGE, params.get(LANGUAGE));
+        }
+        if (params.containsKey(TYPE)) {
+            cacheService.put(projectId, TYPE, params.get(TYPE));
+        }
+
+        // 更新非核心字段
+        params.keySet().stream()
+                .filter(key -> !List.of(TITLE, DESCRIPTION, LANGUAGE, TYPE).contains(key)) // 排除核心字段
+                .forEach(key -> cacheService.put(projectId, key, params.get(key)));
 
         return projectId;
     }
@@ -92,7 +124,7 @@ public class IOTOWProjectService implements OTOWProjectService {
             throw new ServeException("项目不存在，无法保存，ID: " + projectId);
         }
 
-        // 组装项目对象
+        // 组装核心字段
         OTOWProject project = new OTOWProject();
         project.setId(projectId);
         project.setUid(UserThread.getUid());
@@ -101,7 +133,13 @@ public class IOTOWProjectService implements OTOWProjectService {
         project.setLanguage((String) cachedParams.get(LANGUAGE));
         project.setType((String) cachedParams.get(TYPE));
         project.setStatus("SAVED");
-        project.setMetadata("{}");
+
+        // 将非核心字段合并到 metadata
+        Map<String, Object> metadata = cachedParams.entrySet().stream()
+                .filter(entry -> !List.of(TITLE, DESCRIPTION, LANGUAGE, TYPE, UID).contains(entry.getKey())) // 排除核心字段
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        project.setMetadata(serializeMetadata(metadata));
 
         // 保存到数据库
         if (otowProjectMapper.selectById(projectId) == null) {
@@ -124,35 +162,77 @@ public class IOTOWProjectService implements OTOWProjectService {
 
     @Override
     public R<ProjectDetailsVO> getProjectDetails(Long projectId) {
-        // 检查缓存中是否已有项目详情
-        Map<String, Object> cachedParams = cacheService.getAll(projectId);
-        if (!cachedParams.isEmpty()) {
-            // 从缓存中构造 VO 对象
-            ProjectDetailsVO vo = ProjectDetailsVO.fromCache(projectId, cachedParams);
-            String uid = (String) cacheService.get(projectId, UID);
-            if (!uid.equals(UserThread.getUid())) throw new ServeException("您没有此权限");
-            return R.success("从缓存中获取项目详情成功", vo);
-        }
-
-        // 如果缓存中没有，从数据库加载
+        // 从数据库加载项目详情
         OTOWProject project = otowProjectMapper.getProjectById(projectId);
         if (project == null) {
             throw new ServeException("项目不存在，ID: " + projectId);
         }
 
-        // 将项目详情存入缓存
+        // 检查用户权限
+        if (!project.getUid().equals(UserThread.getUid())) {
+            throw new ServeException("您没有此权限");
+        }
+
+        // 更新缓存：4个基础字段和 metadata
         cacheService.put(projectId, UID, project.getUid());
         cacheService.put(projectId, TITLE, project.getTitle());
         cacheService.put(projectId, DESCRIPTION, project.getDescription());
         cacheService.put(projectId, LANGUAGE, project.getLanguage());
         cacheService.put(projectId, TYPE, project.getType());
-        cacheService.put(projectId, "status", project.getStatus());
-        cacheService.put(projectId, "metadata", project.getMetadata());
-        cacheService.put(projectId, "createTime", project.getCreateTime());
-        cacheService.put(projectId, "updateTime", project.getUpdateTime());
 
-        // 使用 VO 的静态方法构造
+        // 将 metadata 反序列化并更新到缓存
+        String metadataJson = project.getMetadata();
+        if (metadataJson != null && !metadataJson.isBlank()) {
+            Map<String, Object> metadata = deserializeMetadata(metadataJson);
+            metadata.forEach((key, value) -> cacheService.put(projectId, key, value));
+        }
+
+        // 构造 VO 对象返回
         ProjectDetailsVO vo = ProjectDetailsVO.fromEntity(project);
         return R.success("获取项目详情成功", vo);
+    }
+
+    @Override
+    public R<String> generateProjectOutline(Long projectId) {
+        // 从缓存中获取项目参数
+        Map<String, Object> cachedParams = cacheService.getAll(projectId);
+        if (cachedParams.isEmpty()) {
+            throw new ServeException("项目不存在或未初始化，ID: " + projectId);
+        }
+
+        // 获取标题（title），如果不存在则抛出异常
+        String title = (String) cachedParams.get(TITLE);
+        if (title == null || title.isBlank()) {
+            throw new ServeException("项目标题不存在，无法生成项目大纲描述");
+        }
+
+        // 获取复杂度（complexity），如果不存在则使用默认值
+        String complexity = (String) cachedParams.getOrDefault(COMPLEXITY, "一般");
+
+        // 构造 AI 生成描述的输入
+        Map<String, Object> projectOutline = new HashMap<>();
+        projectOutline.put(TITLE, title);
+        projectOutline.put(COMPLEXITY, complexity);
+
+        // 调用 AI 操作类生成提示词
+        AIOperation<String> operation = (AIOperation<String>) AIOperationFactory.getOperation(GENERATE_DESC);
+        String prompt = operation.generatePrompt(projectOutline);
+
+        // 调用 AI 模型生成项目描述
+        String generatedDescription = aiModel.generate(prompt);
+
+        // 解析 AI 返回结果
+        ParseResult<String> parseResult = operation.parseResponse(generatedDescription);
+        String description = parseResult.getData();
+
+        if (description == null || description.isBlank()) {
+            throw new ServeException("AI 生成项目描述失败，请稍后重试");
+        }
+
+        // 更新缓存中的 description 字段
+        cacheService.put(projectId, DESCRIPTION, description);
+
+        // 返回生成的项目描述
+        return R.success("生成项目描述成功", description);
     }
 }

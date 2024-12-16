@@ -20,7 +20,8 @@ public class ProjectValidator {
             ProjectConstants.TITLE,
             ProjectConstants.DESCRIPTION,
             ProjectConstants.LANGUAGE,
-            ProjectConstants.TYPE
+            ProjectConstants.TYPE,
+            ProjectConstants.COMPLEXITY
     );
 
     /**
@@ -36,11 +37,20 @@ public class ProjectValidator {
             Object value = params.get(key);
             if (value instanceof String) {
                 String strValue = (String) value;
+
+                // 校验标题长度
                 if (ProjectConstants.TITLE.equals(key) && strValue.length() > ProjectConstants.MAX_TITLE_LENGTH) {
                     throw new ServeException("项目标题长度不得超过 " + ProjectConstants.MAX_TITLE_LENGTH + " 字");
                 }
+
+                // 校验描述长度
                 if (ProjectConstants.DESCRIPTION.equals(key) && strValue.length() > ProjectConstants.MAX_DESCRIPTION_LENGTH) {
                     throw new ServeException("项目描述长度不得超过 " + ProjectConstants.MAX_DESCRIPTION_LENGTH + " 字");
+                }
+
+                // 校验复杂度值是否合法
+                if (ProjectConstants.COMPLEXITY.equals(key) && !ProjectConstants.VALID_COMPLEXITY_VALUES.contains(strValue)) {
+                    throw new ServeException("非法复杂度值: " + strValue + "，合法值为: " + ProjectConstants.VALID_COMPLEXITY_VALUES);
                 }
             }
         }
@@ -48,6 +58,7 @@ public class ProjectValidator {
         // 校验语言和类型的匹配关系
         validateLanguageAndType(params);
     }
+
 
     /**
      * 校验语言和项目类型的匹配关系

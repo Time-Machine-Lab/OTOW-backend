@@ -86,4 +86,16 @@ public class OTOWController {
     public R<ProjectDetailsVO> getProjectDetails(@RequestParam Long projectId) {
         return projectService.getProjectDetails(projectId);
     }
+
+    /**
+     * AI 根据项目标题生成项目大纲描述
+     *
+     * @param projectId 项目ID
+     * @return 项目描述大纲
+     */
+    @PostMapping("/generateProjectOutline")
+    @TokenRequire
+    public R<String> generateProjectOutline(@RequestParam Long projectId) {
+        return projectService.generateProjectOutline(projectId);
+    }
 }

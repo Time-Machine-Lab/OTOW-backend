@@ -1,14 +1,13 @@
 package com.tml.otowbackend.pojo.VO;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tml.otowbackend.engine.tree.common.ServeException;
 import com.tml.otowbackend.pojo.DO.OTOWProject;
 import lombok.Data;
 
 import java.util.Date;
 import java.util.Map;
 
-/**
- * 项目详情 VO
- */
 @Data
 public class ProjectDetailsVO {
 
@@ -18,16 +17,10 @@ public class ProjectDetailsVO {
     private String language;    // 项目语言
     private String type;        // 项目类型
     private String status;      // 项目状态
-    private String metadata;    // 项目元数据
+    private Map<String, Object> metadata; // 动态参数的 Map 格式
     private Date createTime;    // 创建时间
     private Date updateTime;    // 更新时间
 
-    /**
-     * 从实体类构造 VO
-     *
-     * @param project 项目实体类
-     * @return 项目详情 VO
-     */
     public static ProjectDetailsVO fromEntity(OTOWProject project) {
         ProjectDetailsVO vo = new ProjectDetailsVO();
         vo.setId(project.getId());
@@ -36,30 +29,17 @@ public class ProjectDetailsVO {
         vo.setLanguage(project.getLanguage());
         vo.setType(project.getType());
         vo.setStatus(project.getStatus());
-        vo.setMetadata(project.getMetadata());
+        vo.setMetadata(deserializeMetadata(project.getMetadata())); // 反序列化 metadata
         vo.setCreateTime(project.getCreateTime());
         vo.setUpdateTime(project.getUpdateTime());
         return vo;
     }
 
-    /**
-     * 从缓存数据构造 VO
-     *
-     * @param projectId    项目 ID
-     * @param cachedParams 缓存数据
-     * @return 项目详情 VO
-     */
-    public static ProjectDetailsVO fromCache(Long projectId, Map<String, Object> cachedParams) {
-        ProjectDetailsVO vo = new ProjectDetailsVO();
-        vo.setId(projectId);
-        vo.setTitle((String) cachedParams.get("title"));
-        vo.setDescription((String) cachedParams.get("description"));
-        vo.setLanguage((String) cachedParams.get("language"));
-        vo.setType((String) cachedParams.get("type"));
-        vo.setStatus((String) cachedParams.get("status"));
-        vo.setMetadata((String) cachedParams.get("metadata"));
-        vo.setCreateTime((Date) cachedParams.get("createTime"));
-        vo.setUpdateTime((Date) cachedParams.get("updateTime"));
-        return vo;
+    private static Map<String, Object> deserializeMetadata(String metadataJson) {
+        try {
+            return new ObjectMapper().readValue(metadataJson, Map.class);
+        } catch (Exception e) {
+            throw new ServeException("Metadata 反序列化失败: " + e.getMessage());
+        }
     }
 }
