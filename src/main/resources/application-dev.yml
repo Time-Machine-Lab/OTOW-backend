@@ -42,9 +42,10 @@ assistant:
       handler:
         disables: springWebExceptionHandler
 
-AIGenerate:
-  API_KEY: ${"API_KEY":ENC(phw1kwvm2u+VYf3VLPHVdJ2Qd0/4+nXpR9pA2r9dvhuHwJ6jM2HbUFmwZ2IMmQPX/S7r+nnLXgE=)}
-  STRATEGY: ${"DEFAULT_STRATEGY":qw}
+ai:
+  api-key: ${"API_KEY":ENC(phw1kwvm2u+VYf3VLPHVdJ2Qd0/4+nXpR9pA2r9dvhuHwJ6jM2HbUFmwZ2IMmQPX/S7r+nnLXgE=)}
+  strategy: ${"DEFAULT_STRATEGY":TongYi}
+  stream-strategy: ${"DEFAULT_STREAM_STRATEGY":TongYiStream}
 
 captcha:
   mail:
