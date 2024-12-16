@@ -1,9 +1,7 @@
 package com.tml.otowbackend.service.Impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tml.otowbackend.constants.CodeLanguage;
 import com.tml.otowbackend.core.exception.ResultCode;
 import com.tml.otowbackend.core.exception.ServerException;
@@ -15,15 +13,12 @@ import com.tml.otowbackend.pojo.DTO.QueryProjectResponseDTO;
 import com.tml.otowbackend.pojo.DTO.UpdateProjectRequestDTO;
 import com.tml.otowbackend.service.ProjectService;
 import com.tml.otowbackend.util.OSSUtil;
-import com.tml.otowbackend.util.ThreadUtil;
+import com.tml.otowbackend.util.UserThread;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -42,7 +37,7 @@ public class IProjectServiceImpl implements ProjectService {
     @Override
     public void create(CreateProjectRequestDTO requestDTO) {
         Project project = Project.convert(requestDTO);
-        String uid = ThreadUtil.getUid();
+        String uid = UserThread.getUid();
         project.setShareUid(uid);
         projectMapper.insert(project);
     }
@@ -50,7 +45,7 @@ public class IProjectServiceImpl implements ProjectService {
     @Override
     public void update(UpdateProjectRequestDTO requestDTO) {
         LambdaUpdateWrapper<Project> wrapper = new LambdaUpdateWrapper<>();
-        String uid = ThreadUtil.getUid();
+        String uid = UserThread.getUid();
         Integer language = CodeLanguage.queryCodeByLanguage(requestDTO.getCodeLanguage());
         wrapper.eq(Project::getId,requestDTO.getId()).eq(Project::getShareUid,uid);
         Optional.ofNullable(requestDTO.getCover())
@@ -97,7 +92,7 @@ public class IProjectServiceImpl implements ProjectService {
 
     @Override
     public String download(String id) {
-        String uid = ThreadUtil.getUid();
+        String uid = UserThread.getUid();
         boolean flag = projectMapper.checkRecord(uid, Long.valueOf(id))==1;
         if(flag){
             Project one = projectMapper.selectOne(new QueryWrapper<Project>().eq("id", id));

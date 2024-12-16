@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.tml.otowbackend.constants.AIConstant.GENERATE_DESC;
 import static com.tml.otowbackend.constants.AIConstant.GENERATE_ENTITY;
 
 @RunWith(SpringRunner.class)
@@ -87,5 +88,24 @@ public class AIGenerateTest {
         for (EntityClassDefinition datum : data) {
             System.out.println(datum);
         }
+    }
+
+    @Test
+    public void generateDesc() {
+        AIOperation<String> operation = (AIOperation<String>) AIOperationFactory.getOperation(GENERATE_DESC);
+        Map<String, Object> projectOutline = new HashMap<>();
+
+        projectOutline.put("title", "社区物业管理系统");
+        projectOutline.put("complexity", "很高");
+
+        // 生成AI提示词
+        String prompt = operation.generatePrompt(projectOutline);
+
+        // 调用AI模型
+        String generate = qwModel.generate(prompt);
+
+        ParseResult<String> listParseResult = operation.parseResponse(generate);
+
+        System.out.println(listParseResult.getData());
     }
 }

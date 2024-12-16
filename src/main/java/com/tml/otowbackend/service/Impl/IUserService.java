@@ -44,7 +44,7 @@ public class IUserService implements UserService {
 
     @Override
     public Result<?> getUserInfo() {
-        String uid = ThreadUtil.getUid();
+        String uid = UserThread.getUid();
         User dto = userMapper.selectOne(new QueryWrapper<User>().eq("uid",uid));
         return Result.success(UserVO.convert(dto));
     }
@@ -69,7 +69,7 @@ public class IUserService implements UserService {
 
     @Override
     public Result<?> logout() {
-        TokenUtil.logout(ThreadUtil.getUid(), ThreadUtil.getEmail());
+        TokenUtil.logout(UserThread.getUid(), UserThread.getEmail());
         return Result.success();
     }
 
@@ -116,7 +116,7 @@ public class IUserService implements UserService {
 
     @Override
     public Result<?> purchase(String projectId) {
-        String uid = ThreadUtil.getUid();
+        String uid = UserThread.getUid();
         Integer integer = userMapper.insertPurchase(uid, projectId);
         return Result.success(integer==1);
     }
