@@ -17,7 +17,7 @@ import javax.websocket.server.ServerEndpoint;
 
 @Slf4j
 @Component
-@ServerEndpoint(value = "/ws/test")
+@ServerEndpoint(value = "/ws/connect")
 public class EchoChannel implements ApplicationContextAware {
     private Session session;
 
