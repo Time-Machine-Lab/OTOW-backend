@@ -77,7 +77,7 @@ public class TongYiStreamGenerate implements StreamGenerate{
                 "qwen-plus",
                 new TongYiMessage[]{
                         new TongYiMessage("system", "You are a helpful assistant."),
-                        new TongYiMessage("user", text+"，字数控制在"+num+"以内，同时以纯文本形式发送")
+                        new TongYiMessage("user", text)
                 },
                 true
         );
