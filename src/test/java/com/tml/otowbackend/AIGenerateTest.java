@@ -22,7 +22,7 @@ import static com.tml.otowbackend.constants.AIConstant.GENERATE_DESC;
 import static com.tml.otowbackend.constants.AIConstant.GENERATE_ENTITY;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = OtowBackendApplication.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @WebAppConfiguration
 @Slf4j
 public class AIGenerateTest {

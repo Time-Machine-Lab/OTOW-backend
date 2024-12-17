@@ -1,0 +1,59 @@
+package com.tml.otowbackend.engine.generator.funpack;
+
+
+import com.tml.otowbackend.engine.ai.result.FeaturePackage;
+import com.tml.otowbackend.engine.generator.template.java.method.DeleteServiceMethodTemplate;
+import com.tml.otowbackend.engine.generator.template.java.method.UpdateServiceMethodTemplate;
+import com.tml.otowbackend.engine.generator.template.java.model.ReqTemplate;
+import com.tml.otowbackend.engine.generator.template.java.service.ControllerTemplate;
+import com.tml.otowbackend.engine.generator.template.java.service.ServiceImplTemplate;
+import com.tml.otowbackend.engine.generator.template.java.service.ServiceTemplate;
+import com.tml.otowbackend.engine.generator.template.meta.MetaMethod;
+import com.tml.otowbackend.engine.generator.template.meta.MetaMethodParam;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+
+import static com.tml.otowbackend.constants.TemplateConstant.Path_Variable;
+import static com.tml.otowbackend.constants.TemplateConstant.REQUEST_BODY;
+import static com.tml.otowbackend.engine.generator.template.java.InitTemplate.engine;
+import static com.tml.otowbackend.engine.generator.template.java.InitTemplate.reqPackagePath;
+
+@Component
+public class DelFunctionPack extends AbstrateFunctionPack {
+    public static final String deleteTemplateFilePath = "service.method.delete.java.vm";
+    public static final String deleteServiceMethod = "delete";
+
+    @Override
+    protected FeaturePackage getFeaturePackage() {
+        return new FeaturePackage("1003", "删除实体类");
+    }
+
+    // controller的删除方法
+    @Override
+    protected void addMethodToController(ControllerTemplate controller) {
+        controller.addDeleteMethod(getDeleteMethod(), "/delete/{id}");
+    }
+
+    // controller-delete 的 删除
+    private MetaMethod getDeleteMethod(){
+        ReqTemplate reqUser = new ReqTemplate(reqPackagePath, "id");
+        MetaMethodParam metaMethodParam = new MetaMethodParam("Integer",reqUser.getAllPackagePath(), "id");
+        metaMethodParam.addAnnotations(List.of(Path_Variable));
+        String body = String.format("%s.%s(%s);", getParamString("classLower"), deleteServiceMethod, "id");
+        return new MetaMethod(deleteServiceMethod, List.of(metaMethodParam), body);
+    }
+
+    @Override
+    protected void addMethodToService(ServiceTemplate service) {
+        service.addMethod(deleteServiceMethod, List.of((MetaMethodParam) getParam("metaMethodParam")));
+    }
+
+    // serviceImpl 的删除方法
+    @Override
+    protected void addMethodToServiceImpl(ServiceImplTemplate serviceImplTemplate) {
+        DeleteServiceMethodTemplate deleteServiceMethodTemplate = new DeleteServiceMethodTemplate(deleteTemplateFilePath,getParamString("className"));
+        MetaMethod metaMethod = new MetaMethod(engine.generate(deleteServiceMethodTemplate));
+        serviceImplTemplate.addMethod(metaMethod);
+    }
+}

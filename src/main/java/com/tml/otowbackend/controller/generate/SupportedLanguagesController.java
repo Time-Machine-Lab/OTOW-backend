@@ -2,6 +2,7 @@ package com.tml.otowbackend.controller.generate;
 
 import com.tml.otowbackend.core.anno.TokenRequire;
 import com.tml.otowbackend.engine.ai.result.FeaturePackage;
+import com.tml.otowbackend.engine.generator.funpack.FuncPackManager;
 import com.tml.otowbackend.engine.otow.SupportedLanguages;
 import com.tml.otowbackend.engine.tree.common.R;
 import com.tml.otowbackend.service.FeaturePackageService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
@@ -18,13 +20,18 @@ import java.util.Map;
  * 描述: 语言支持控制器
  * 负责获取支持的语言及其项目类型
  */
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @RequestMapping("/otow/support")
 @RestController
 @Validated
 public class SupportedLanguagesController {
 
-    private final FeaturePackageService featurePackageService;
+//    private final FeaturePackageService featurePackageService;
+    @Resource
+    private FeaturePackageService featurePackageService;
+//    private final FuncPackManager funcPackManager;
+    @Resource
+    private FuncPackManager funcPackManager;
 
     /**
      * 获取支持的语言及其项目类型
@@ -44,6 +51,6 @@ public class SupportedLanguagesController {
     @GetMapping("/feature")
     @TokenRequire
     public R<List<FeaturePackage>> getSupportedFeaturePackages() {
-        return featurePackageService.getSupportedFeaturePackages();
+        return R.success(funcPackManager.getSupportedFeaturePackages());
     }
 }
