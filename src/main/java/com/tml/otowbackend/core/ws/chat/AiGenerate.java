@@ -16,10 +16,10 @@ import javax.annotation.Resource;
 @Component
 public class AiGenerate {
 
-    @Resource(name="${ai.strategy}")
+    @Resource
     private ReturnGenerate aiGenerate;
 
-    @Resource(name = "${ai.stream-strategy}")
+    @Resource
     private StreamGenerate aiStreamGenerate;
 
     @Value("${ai.api-key}")
