@@ -52,3 +52,8 @@ oss:
   endpoint: ENC (hyEPeqCP7bT1bpoGaHsUuVI++mkbIKHNGG69MxjAjg9WpTYg9rPLjj57Hw9KmDLNQgOCt3Q/4yo=)
   stsExpire: 3600
   signedExpire: 5
+
+ai:
+  api-key: ${"API_KEY":ENC(phw1kwvm2u+VYf3VLPHVdJ2Qd0/4+nXpR9pA2r9dvhuHwJ6jM2HbUFmwZ2IMmQPX/S7r+nnLXgE=)}
+  strategy: ${"DEFAULT_STRATEGY":TongYi}
+  stream-strategy: ${"DEFAULT_STREAM_STRATEGY":TongYiStream}

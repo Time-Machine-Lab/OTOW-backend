@@ -8,7 +8,7 @@ import lombok.NonNull;
 import javax.validation.constraints.NotNull;
 
 /**
- * @Description
+ * @Description 金额上限
  * @Author welsir
  * @Date 2024/12/2 22:00
  */
@@ -17,12 +17,11 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 public class QueryProjectRequestDTO {
     private String name;
-    private String language;
-    private Integer max;
-    private Integer min;
+    private String codeLanguage;
+    private Integer amountMax;
+    private Integer amountMin;
     @NonNull
     private Integer limit;
     @NonNull
     private Integer page;
-
 }

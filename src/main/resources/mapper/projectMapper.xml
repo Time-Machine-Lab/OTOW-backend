@@ -6,20 +6,20 @@
     <select id="queryProjectPage" resultType="com.tml.otowbackend.pojo.DO.Project" parameterType="com.tml.otowbackend.pojo.DTO.QueryProjectRequestDTO">
         SELECT * FROM project
         WHERE 1=1
-        <if test="name != null">
+        <if test="name != null and name != ''">
             AND name LIKE CONCAT('%', #{name}, '%')
         </if>
-        <if test="language != null">
-            AND code_language = #{language}
+        <if test="codeLanguage != null and codeLanguage != ''">
+            AND code_language = #{codeLanguage}
         </if>
-        <if test="min != null and max != null">
-            AND price BETWEEN #{min} AND #{max}
+        <if test="amountMin != null and amountMax != null">
+            AND price BETWEEN #{amountMin} AND #{amountMax}
         </if>
-        <if test="min != null and max == null">
-            AND price &gt;= #{min}
+        <if test="amountMin != null and amountMax == null">
+            AND price &gt;= #{amountMin}
         </if>
-        <if test="max != null and min == null">
-            AND price &lt;= #{max}
+        <if test="amountMax != null and amountMin == null">
+            AND price &lt;= #{amountMax}
         </if>
         ORDER BY create_time DESC
         LIMIT #{limit} OFFSET #{page}
