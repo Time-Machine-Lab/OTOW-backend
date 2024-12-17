@@ -1,10 +1,12 @@
 package com.tml.otowbackend.engine.ai.core;
 
 import com.tml.otowbackend.engine.ai.operater.GenerateEntityOperation;
+import com.tml.otowbackend.engine.ai.operater.GenerateProjectDescriptionOperation;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.tml.otowbackend.constants.AIConstant.GENERATE_DESC;
 import static com.tml.otowbackend.constants.AIConstant.GENERATE_ENTITY;
 
 /**
@@ -19,6 +21,7 @@ public class AIOperationFactory {
     static {
         // 注册任务类型对应的操作
         operations.put(GENERATE_ENTITY, new GenerateEntityOperation());
+        operations.put(GENERATE_DESC, new GenerateProjectDescriptionOperation());
     }
 
     /**

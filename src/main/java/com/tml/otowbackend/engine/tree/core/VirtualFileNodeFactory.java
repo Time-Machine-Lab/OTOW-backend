@@ -21,7 +21,7 @@ public class VirtualFileNodeFactory {
      */
     public static VirtualFileNode createVirtualFileNode(File file) {
         String fileExtension = getFileExtension(file.getName());
-        String id = UUIDUtils.generateShortUUID();
+        String id = file.getPath();
         String fileType = fileExtension;
         long size = file.length();
 
@@ -35,7 +35,7 @@ public class VirtualFileNodeFactory {
             rawLines = FileContentReader.readFileContent(file, size);
         }
 
-        return new VirtualFileNode(id, file.getName(), fileType, size, rawLines);
+        return VirtualFileNode.createStart(id, file.getName(), fileType, size, rawLines);
     }
 
     /**

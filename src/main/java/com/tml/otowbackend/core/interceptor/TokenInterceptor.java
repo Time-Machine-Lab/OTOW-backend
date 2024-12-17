@@ -2,7 +2,7 @@ package com.tml.otowbackend.core.interceptor;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.tml.otowbackend.core.anno.TokenRequire;
-import com.tml.otowbackend.util.ThreadUtil;
+import com.tml.otowbackend.util.UserThread;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -32,8 +32,8 @@ public class TokenInterceptor implements HandlerInterceptor, Ordered {
                     return false;
                 }
                 String[] strs = tokenObject.split("\\|");
-                ThreadUtil.set("uid",strs[0]);
-                ThreadUtil.set("email",strs[1]);
+                UserThread.set("uid",strs[0]);
+                UserThread.set("email",strs[1]);
                 return true;
             }
         }
@@ -43,7 +43,7 @@ public class TokenInterceptor implements HandlerInterceptor, Ordered {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-        ThreadUtil.remove();
+        UserThread.remove();
     }
 
     @Override

@@ -125,7 +125,7 @@ public class CreateFramePackByZip {
 
     public static void main(String[] args) {
         String repoUrl = "https://github.com/LuckySheeps/Frame-Pack.git";  // GitHub仓库URL
-        String localPath = "F:\\桌面2\\demo\\directory2";  // 本地路径
+        String localPath = "D:\\filetest";  // 本地路径
         createFramePack(repoUrl,localPath);
         }
 }
