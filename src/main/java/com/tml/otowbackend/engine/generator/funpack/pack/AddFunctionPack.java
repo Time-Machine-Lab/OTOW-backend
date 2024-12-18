@@ -1,6 +1,7 @@
 package com.tml.otowbackend.engine.generator.funpack.pack;
 
 
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.tml.otowbackend.engine.ai.result.FeaturePackage;
 import com.tml.otowbackend.engine.generator.funpack.AbstrateFunctionPack;
@@ -38,7 +39,7 @@ public class AddFunctionPack extends AbstrateFunctionPack {
 
     // controller-post 的 添加
     private MetaMethod getAddMethod(){
-        ReqTemplate reqUser = new ReqTemplate(reqPackagePath, getParamString("className"));
+        ReqTemplate reqUser = new ReqTemplate(getParamString("prefix") + reqPackagePath, getParamString("className"));
         MetaMethodParam metaMethodParam = new MetaMethodParam(reqUser.getClassName(),reqUser.getAllPackagePath(), StringUtils.firstToLowerCase(reqUser.getClassName()));
         metaMethodParam.addAnnotations(List.of(REQUEST_BODY));
         String body = String.format("%s.%s(%s);", getParamString("classLower"), addServiceMethod, metaMethodParam.getName());
@@ -47,7 +48,7 @@ public class AddFunctionPack extends AbstrateFunctionPack {
 
     @Override
     protected void addMethodToService(ServiceTemplate service) {
-        ReqTemplate reqUser = new ReqTemplate(reqPackagePath, getParamString("className"));
+        ReqTemplate reqUser = new ReqTemplate(getParamString("prefix") + reqPackagePath, getParamString("className"));
         MetaMethodParam metaMethodParam = new MetaMethodParam(reqUser.getClassName(),reqUser.getAllPackagePath(), StringUtils.firstToLowerCase(reqUser.getClassName()));
         service.addMethods(addServiceMethod, List.of(metaMethodParam));
     }
@@ -55,9 +56,10 @@ public class AddFunctionPack extends AbstrateFunctionPack {
     @Override
     protected void addMethodToServiceImpl(ServiceImplTemplate serviceImplTemplate) {
         AddServiceMethodTemplate addServiceMethodTemplate = new AddServiceMethodTemplate(saveTemplateFilePath, getParamString("className"));
-        ReqTemplate reqUser = new ReqTemplate(reqPackagePath, getParamString("className"));
+        ReqTemplate reqUser = new ReqTemplate(getParamString("prefix") + reqPackagePath, getParamString("className"));
         MetaMethodParam metaMethodParam = new MetaMethodParam(reqUser.getClassName(), reqUser.getAllPackagePath(), StringUtils.firstToLowerCase(reqUser.getClassName()));
         MetaMethod metaMethod = new MetaMethod(addServiceMethod, List.of(metaMethodParam), engine.generate(addServiceMethodTemplate));
         serviceImplTemplate.addMethod(metaMethod);
+        serviceImplTemplate.addImportClazz(BeanUtil.class);
     }
 }

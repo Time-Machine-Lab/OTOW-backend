@@ -1,4 +1,5 @@
 package com.example.common;
+
 // 线程方法
 public class BaseContext {
 

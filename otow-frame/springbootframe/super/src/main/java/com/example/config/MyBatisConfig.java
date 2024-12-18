@@ -37,8 +37,6 @@ public class MyBatisConfig implements MetaObjectHandler {
         this.strictInsertFill(metaObject, "createTime", Date.class, new Date());
     }
 
-
-
     @Override
     public void updateFill(MetaObject metaObject) {
         this.strictUpdateFill(metaObject, "updateTime", Date.class, new Date());

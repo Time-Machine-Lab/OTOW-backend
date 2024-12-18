@@ -30,14 +30,12 @@ public class InitTemplate {
 
     public static String entityPackagePath = "model.entity";
     public static String controllerPackagePath = "controller";
+    public static String mapperPackagePath = "mapper";
+    public static String serviceImplPackagePath = "service.impl";
     public static String servicePackagePath = "service";
     public static String reqPackagePath = "model.req";
     public static String voPackagePath = "model.vo";
-    public static String mapperPackagePath = "mapper";
-    public static String serviceImplPackagePath = "service.impl";
-
     public static VelocityCodeEngine engine = VelocityCodeEngine.getCodeEngine();
-
 
     public String prefix;
     public FuncPackManager funcPackManager;
@@ -58,14 +56,7 @@ public class InitTemplate {
     private VOTemplate entityVOTemplate;
 
     public InitTemplate(String prefix, FuncPackManager funcPackManager, String className, String tableName, String describe, LinkedList<MetalField> fields, List<String> featureIds) {
-        this.prefix = prefix;
-        this.entityPackagePath = prefix + entityPackagePath;
-        this.servicePackagePath = prefix + servicePackagePath;
-        this.reqPackagePath = prefix + reqPackagePath;
-        this.voPackagePath = prefix + voPackagePath;
-        this.mapperPackagePath = prefix + mapperPackagePath;
-        this.serviceImplPackagePath = prefix + serviceImplPackagePath;
-        this.controllerPackagePath = prefix + controllerPackagePath;
+        this.prefix = prefix + ".";
         this.funcPackManager = funcPackManager;
         this.className = className;
         this.tableName = tableName;
@@ -94,7 +85,6 @@ public class InitTemplate {
     private String generateStringWithTemplate(VelocityOTOWTemplate template) {
         return engine.generate(template);
     }
-
     public String generateEntity() {
         return generateStringWithTemplate(entityTemplate);
     }
@@ -104,52 +94,49 @@ public class InitTemplate {
     public String generateEntityVO(){
         return generateStringWithTemplate(entityVOTemplate);
     }
-
     public String generateMapper() {
         return generateStringWithTemplate(mapperTemplate);
     }
-
     public String generateService() {
         return generateStringWithTemplate(serviceTemplate);
     }
-
     public String generateServiceImpl() {
         return generateStringWithTemplate(serviceImplTemplate);
     }
-
     public String generateController() {
         return generateStringWithTemplate(controllerTemplate);
     }
 
     // 根据给定的实体类名、字段生成实体模板
     private EntityTemplate getEntityTemplate() {
-        EntityTemplate entityTemplate = new EntityTemplate(entityPackagePath, className, tableName, describe);
+        EntityTemplate entityTemplate = new EntityTemplate(prefix + entityPackagePath, className, tableName, describe);
         entityTemplate.addModelFields(fields);
         return entityTemplate;
     }
 
     // 根据给定的实体类名、字段生成实体Req模板
     private ReqTemplate getEntityReqTemplate() {
-        ReqTemplate reqTemplate = new ReqTemplate(reqPackagePath,className);
+        ReqTemplate reqTemplate = new ReqTemplate(prefix + reqPackagePath,className);
         reqTemplate.addModelFields(fieldsReq);
         return reqTemplate;
     }
 
     // 根据给定的实体类名、字段生成实体VO模板
     private VOTemplate getEntityVOTemplate() {
-        VOTemplate voTemplate = new VOTemplate(voPackagePath,className);
+        VOTemplate voTemplate = new VOTemplate(prefix + voPackagePath, className);
         voTemplate.addModelFields(fieldsVO);
         return voTemplate;
     }
 
     private MapperTemplate getMapperTemplate() {
-        return new MapperTemplate(mapperPackagePath, className, entityTemplate);
+        return new MapperTemplate(prefix + mapperPackagePath, className, entityTemplate);
     }
 
     private ServiceTemplate getServiceTemplate() {
-        ServiceTemplate userService = new ServiceTemplate(servicePackagePath, className);
+        ServiceTemplate userService = new ServiceTemplate(prefix + servicePackagePath, className);
         for (String featureId : featureIds) {
             AbstrateFunctionPack pack = funcPackManager.getFunctionPackById(featureId);
+            pack.addParams("prefix", prefix);
             pack.addParams("className", className);
             pack.generateService(userService);
         }
@@ -157,22 +144,24 @@ public class InitTemplate {
     }
 
     private ServiceImplTemplate getServiceImplTemplate() {
-        ServiceImplTemplate serviceImplTemplate = new ServiceImplTemplate(serviceImplPackagePath, className, serviceTemplate);
+        ServiceImplTemplate serviceImplTemplate = new ServiceImplTemplate(prefix + serviceImplPackagePath, className, serviceTemplate);
         serviceImplTemplate.addMapper(mapperTemplate);
         for (String featureId : featureIds) {
             AbstrateFunctionPack pack = funcPackManager.getFunctionPackById(featureId);
             pack.addParams("className", className);
+            pack.addParams("prefix", prefix);
             pack.generateServiceImpl(serviceImplTemplate);
         }
         return serviceImplTemplate;
     }
 
     private ControllerTemplate getControllerTemplate() {
-        ControllerTemplate userController = new ControllerTemplate(controllerPackagePath, className, "/" + className.toLowerCase());
+        ControllerTemplate userController = new ControllerTemplate(prefix + controllerPackagePath, className, "/" + className.toLowerCase());
         userController.addService(serviceTemplate);
         String classLower = StringUtils.firstToLowerCase(serviceTemplate.getClassName());
         for (String featureId : featureIds) {
             AbstrateFunctionPack pack = funcPackManager.getFunctionPackById(featureId);
+            pack.addParams("prefix", prefix);
             pack.addParams("className", className);
             pack.addParams("classLower", classLower);
             pack.generateController(userController);

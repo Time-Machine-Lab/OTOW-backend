@@ -1,5 +1,6 @@
 package com.tml.otowbackend;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.tml.otowbackend.engine.ai.result.EntityClassDefinition;
 import com.tml.otowbackend.engine.generator.funpack.FuncPackManager;
 import com.tml.otowbackend.engine.generator.template.java.InitConfigTemplate;
@@ -13,6 +14,7 @@ import com.tml.otowbackend.util.CodeFormatterUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.BeanUtils;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -27,6 +29,8 @@ import static com.tml.otowbackend.util.CodeFormatterUtil.formatCodeList;
 @Slf4j
 public class GenerateTest {
 
+//        return BeanUtil.copyProperties(newUser, StudentInfoVO.class);
+
     @Resource
     FuncPackManager funcPackManager;
 
@@ -38,8 +42,7 @@ public class GenerateTest {
 
     @Test
     public void testGenerate() throws Exception {
-        String prefix = "com.example.";
-
+        String prefix = "com.example";
         String treeId = virtualFileService.initializeVirtualTree(PathUtils.getSpringbootPath(), null);
         SpringBootTreeTemplate template = new SpringBootTreeTemplate(virtualFileService, treeId);
         template.initializeTemplate();
@@ -50,7 +53,7 @@ public class GenerateTest {
                 "enable", true,
                 "url", "jdbc:mysql://127.0.0.1:3306/otow?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC",
                 "username", "root",
-                "password", "root"
+                "password", "twj369202865"
         ));
         applicationConfig.put("applicationName", "otow");
 
@@ -61,10 +64,10 @@ public class GenerateTest {
 
         Map<String, Object> pomConfigProperty = new HashMap<>();
         pomConfigProperty.put("name", "boot.version");
-        pomConfigProperty.put("value", "2.3.9.RELEASE");
+        pomConfigProperty.put("value", "2.6.6");
 
-        String systemName = "Otow";
-        InitConfigTemplate initConfigTemplate = new InitConfigTemplate(systemName, applicationConfig, pomConfigDependency, pomConfigProperty);
+        String systemName = "OTOW";
+        InitConfigTemplate initConfigTemplate = new InitConfigTemplate(prefix, systemName, applicationConfig, pomConfigDependency, pomConfigProperty);
 
         String generateApplication = initConfigTemplate.getGenerateApplication();
         template.example("OTOWApplication.java", formatCodeList(generateApplication));
@@ -99,6 +102,10 @@ public class GenerateTest {
                 template.serviceImpl(className + "ServiceImpl.java", formatCodeList(initTemplate.generateServiceImpl()));
 
                 template.controller(className + "Controller.java", formatCodeList(initTemplate.generateController()));
+
+                template.req(className + "Req.java", formatCodeList(initTemplate.generateEntityReq()));
+
+                template.vo(className + "VO.java", formatCodeList(initTemplate.generateEntityVO()));
             }
         }
 
@@ -166,7 +173,7 @@ public class GenerateTest {
         pomConfigProperty.put("value", "2.3.9.RELEASE");
 
         String systemName = "otow";
-        InitConfigTemplate initConfigTemplate = new InitConfigTemplate(systemName, applicationConfig, pomConfigDependency, pomConfigProperty);
+        InitConfigTemplate initConfigTemplate = new InitConfigTemplate("", systemName, applicationConfig, pomConfigDependency, pomConfigProperty);
         String generateApplication = initConfigTemplate.getGenerateApplication();
         System.out.println(generateApplication);
         System.out.println("==================================================================================");

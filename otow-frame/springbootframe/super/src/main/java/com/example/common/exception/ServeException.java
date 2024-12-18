@@ -1,5 +1,6 @@
 package com.example.common.exception;
 
+import com.example.common.RCode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

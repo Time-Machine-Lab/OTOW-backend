@@ -1,5 +1,6 @@
 package com.tml.otowbackend.engine.generator.template.java.method;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.tml.otowbackend.engine.generator.template.java.MethodTemplate;
 import com.tml.otowbackend.engine.generator.template.meta.MetaMethod;
 import org.apache.velocity.VelocityContext;
@@ -28,7 +29,7 @@ public class UpdateServiceMethodTemplate extends MethodTemplate {
     public VelocityContext getContext() {
         VelocityContext context = new VelocityContext();
         context.put("entityClassName",entityClassName);
-        context.put("entityClassNameLower",entityClassName.toLowerCase());
+        context.put("entityClassNameLower", StringUtils.firstToLowerCase(entityClassName));
         return context;
     }
 }

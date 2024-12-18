@@ -14,18 +14,14 @@ public class InitConfigTemplate {
 
     private static VelocityCodeEngine engine = VelocityCodeEngine.getCodeEngine();
 
-    private static final String entityPackagePath = "io.github.geniusay.velocity.generate";
-    private static final String servicePackagePath = "io.github.geniusay.velocity.generate.service";
-    private static final String reqPackagePath = "io.github.geniusay.velocity.generate.pojo.req";
-    private static final String mapperPackagePath = "io.github.geniusay.velocity.generate.mapper";
-    private static final String serviceImplPackagePath = "io.github.geniusay.velocity.generate.service.impl";
-
+    private String prefix;
     private String systemName;
     private Map<String, Object> applicationConfig;
     private Map<String, Object> pomConfigDependency;
     private Map<String, Object> pomConfigProperty;
 
-    public InitConfigTemplate( String systemName,Map<String, Object> applicationConfig,Map<String, Object> pomConfigDependency,Map<String, Object> pomConfigProperty){
+    public InitConfigTemplate(String prefix, String systemName, Map<String, Object> applicationConfig,Map<String, Object> pomConfigDependency,Map<String, Object> pomConfigProperty){
+        this.prefix = prefix;
         this.systemName = systemName;
         this.applicationConfig = applicationConfig;
         this.pomConfigDependency = pomConfigDependency;
@@ -33,8 +29,7 @@ public class InitConfigTemplate {
     }
 
     private String generateApplication(){
-        ApplicationTemplate applicationTemplate = new ApplicationTemplate(entityPackagePath,systemName);
-
+        ApplicationTemplate applicationTemplate = new ApplicationTemplate(prefix, systemName);
         String generate = engine.generate(applicationTemplate);
         return generate;
     }

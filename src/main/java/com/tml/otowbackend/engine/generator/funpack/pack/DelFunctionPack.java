@@ -21,6 +21,7 @@ import static com.tml.otowbackend.engine.generator.template.java.InitTemplate.re
 
 @Component
 public class DelFunctionPack extends AbstrateFunctionPack {
+
     public static final String deleteTemplateFilePath = "service.method.delete.java.vm";
     public static final String deleteServiceMethod = "delete";
 
@@ -37,7 +38,7 @@ public class DelFunctionPack extends AbstrateFunctionPack {
 
     // controller-delete 的 删除
     private MetaMethod getDeleteMethod(){
-        ReqTemplate reqUser = new ReqTemplate(reqPackagePath, "id");
+        ReqTemplate reqUser = new ReqTemplate(getParamString("prefix") + reqPackagePath, "id");
         MetaMethodParam metaMethodParam = new MetaMethodParam("Integer", null, "id");
         metaMethodParam.addAnnotations(List.of(Path_Variable));
         String body = String.format("%s.%s(%s);", getParamString("classLower"), deleteServiceMethod, "id");

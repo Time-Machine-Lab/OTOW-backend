@@ -73,6 +73,12 @@ public class MetaAnnotation extends ImportChecker implements Cloneable {
         this.addImportClazz(clazz);
     }
 
+    public MetaAnnotation(Class<?> clazz, String key, String param, String clazzPath) {
+        this.clazz = clazz.getSimpleName();
+        this.params.put(key, param);
+        this.addImportPath(clazzPath);
+    }
+
     /**
      * 构造一个不带参数的 MetaAnnotation。
      *

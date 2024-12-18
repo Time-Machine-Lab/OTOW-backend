@@ -1,2 +1,3 @@
 // Update method
-    ${entityClassNameLower}Mapper.save(${entityClassNameLower});
+    ${entityClassName}Entity ${entityClassNameLower} = BeanUtil.copyProperties(${entityClassNameLower}Req, ${entityClassName}Entity.class);
+    ${entityClassNameLower}Mapper.updateById(${entityClassNameLower});

@@ -1,5 +1,6 @@
 package com.tml.otowbackend.engine.generator.template.java.method;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.tml.otowbackend.engine.generator.template.java.MethodTemplate;
 import com.tml.otowbackend.engine.generator.template.meta.MetaMethod;
 import org.apache.velocity.VelocityContext;
@@ -26,7 +27,7 @@ public class DeleteServiceMethodTemplate extends MethodTemplate {
     @Override
     public VelocityContext getContext() {
         VelocityContext context = new VelocityContext();
-        context.put("entityClassName",entityClassName.toLowerCase());
+        context.put("entityClassName", StringUtils.firstToLowerCase(entityClassName));
         return context;
     }
 }

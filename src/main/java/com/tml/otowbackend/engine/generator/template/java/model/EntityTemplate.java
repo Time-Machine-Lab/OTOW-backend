@@ -22,6 +22,11 @@ public class EntityTemplate extends ClassTemplate {
         addAnnotation(new MetaAnnotation(TableName.class, tableName));
     }
 
+    public EntityTemplate(String packagePath, String className) {
+        super(packagePath, getEntityClassName(className));
+        addAnnotation(new MetaAnnotation(TableName.class, tableName));
+    }
+
     public void setTableName(String tableName) {
         this.tableName = tableName;
     }
@@ -29,11 +34,6 @@ public class EntityTemplate extends ClassTemplate {
 
     public static String getEntityClassName(String className){
         return className+"Entity";
-    }
-
-    @Override
-    public void initImports(){
-        addImportPath("com.baomidou.mybatisplus.annotation.*");
     }
 
     @Override

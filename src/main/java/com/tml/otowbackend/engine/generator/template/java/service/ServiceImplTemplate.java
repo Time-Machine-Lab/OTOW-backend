@@ -15,26 +15,23 @@ import java.util.Set;
 
 public class ServiceImplTemplate extends ClassTemplate {
 
-    private ServiceTemplate serviceTemplate;
     private Set<MapperTemplate> mappers = new HashSet<>();
     private List<MetaMethod> methods = new ArrayList<>();
 
-
     public ServiceImplTemplate(String packagePath, String className) {
-        super(packagePath, className+"ServiceImpl");
+        super(packagePath, className + "ServiceImpl");
     }
 
     public ServiceImplTemplate(String packagePath, String className, ServiceTemplate serviceTemplate) {
-        super(packagePath, className+"ServiceImpl");
+        super(packagePath, className + "ServiceImpl");
         setServiceTemplate(serviceTemplate);
     }
 
-    public void setServiceTemplate(ServiceTemplate serviceTemplate){
-        this.serviceTemplate = serviceTemplate;
+    public void setServiceTemplate(ServiceTemplate serviceTemplate) {
         this.addInterfaces(serviceTemplate.getClassName(), serviceTemplate.getAllPackagePath());
     }
 
-    public void addMapper(MapperTemplate mapperTemplate){
+    public void addMapper(MapperTemplate mapperTemplate) {
         this.mappers.add(mapperTemplate);
         String mapperClass = mapperTemplate.getClassName();
         String mapperPackage = mapperTemplate.getAllPackagePath();
@@ -45,7 +42,7 @@ public class ServiceImplTemplate extends ClassTemplate {
         this.addImportPath(mapperPackage);
     }
 
-    public void addMethod(MetaMethod method){
+    public void addMethod(MetaMethod method) {
         this.methods.add(method);
         super.addMethod(method);
     }
@@ -53,5 +50,9 @@ public class ServiceImplTemplate extends ClassTemplate {
     @Override
     public void initAnnotations() {
         addAnnotation(new MetaAnnotation(Service.class));
+    }
+
+    public void addClassImport(ClassTemplate classTemplate) {
+        addImportPath(classTemplate.getAllPackagePath());
     }
 }

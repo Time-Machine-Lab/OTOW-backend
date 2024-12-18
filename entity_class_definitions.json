@@ -1,0 +1,304 @@
+[ {
+  "className" : "Admin",
+  "cdesc" : "物业管理员",
+  "fields" : [ {
+    "fname" : "id",
+    "ftype" : "Integer",
+    "fdesc" : "管理员ID"
+  }, {
+    "fname" : "username",
+    "ftype" : "String",
+    "fdesc" : "用户名"
+  }, {
+    "fname" : "password",
+    "ftype" : "String",
+    "fdesc" : "密码"
+  }, {
+    "fname" : "name",
+    "ftype" : "String",
+    "fdesc" : "姓名"
+  }, {
+    "fname" : "phone",
+    "ftype" : "String",
+    "fdesc" : "电话"
+  } ],
+  "featureIds" : [ "1001", "1002", "1003", "1004" ]
+}, {
+  "className" : "Owner",
+  "cdesc" : "业主",
+  "fields" : [ {
+    "fname" : "id",
+    "ftype" : "Integer",
+    "fdesc" : "业主ID"
+  }, {
+    "fname" : "username",
+    "ftype" : "String",
+    "fdesc" : "用户名"
+  }, {
+    "fname" : "password",
+    "ftype" : "String",
+    "fdesc" : "密码"
+  }, {
+    "fname" : "name",
+    "ftype" : "String",
+    "fdesc" : "姓名"
+  }, {
+    "fname" : "phone",
+    "ftype" : "String",
+    "fdesc" : "电话"
+  }, {
+    "fname" : "address",
+    "ftype" : "String",
+    "fdesc" : "住址"
+  }, {
+    "fname" : "propertyFee",
+    "ftype" : "Double",
+    "fdesc" : "物业费"
+  } ],
+  "featureIds" : [ "1001", "1002", "1003", "1004" ]
+}, {
+  "className" : "MaintenanceWorker",
+  "cdesc" : "维修人员",
+  "fields" : [ {
+    "fname" : "id",
+    "ftype" : "Integer",
+    "fdesc" : "维修人员ID"
+  }, {
+    "fname" : "username",
+    "ftype" : "String",
+    "fdesc" : "用户名"
+  }, {
+    "fname" : "password",
+    "ftype" : "String",
+    "fdesc" : "密码"
+  }, {
+    "fname" : "name",
+    "ftype" : "String",
+    "fdesc" : "姓名"
+  }, {
+    "fname" : "phone",
+    "ftype" : "String",
+    "fdesc" : "电话"
+  }, {
+    "fname" : "specialty",
+    "ftype" : "String",
+    "fdesc" : "专业技能"
+  } ],
+  "featureIds" : [ "1001", "1002", "1003", "1004" ]
+}, {
+  "className" : "SecurityGuard",
+  "cdesc" : "保安人员",
+  "fields" : [ {
+    "fname" : "id",
+    "ftype" : "Integer",
+    "fdesc" : "保安人员ID"
+  }, {
+    "fname" : "username",
+    "ftype" : "String",
+    "fdesc" : "用户名"
+  }, {
+    "fname" : "password",
+    "ftype" : "String",
+    "fdesc" : "密码"
+  }, {
+    "fname" : "name",
+    "ftype" : "String",
+    "fdesc" : "姓名"
+  }, {
+    "fname" : "phone",
+    "ftype" : "String",
+    "fdesc" : "电话"
+  }, {
+    "fname" : "shift",
+    "ftype" : "String",
+    "fdesc" : "班次"
+  } ],
+  "featureIds" : [ "1001", "1002", "1003", "1004" ]
+}, {
+  "className" : "Cleaner",
+  "cdesc" : "清洁人员",
+  "fields" : [ {
+    "fname" : "id",
+    "ftype" : "Integer",
+    "fdesc" : "清洁人员ID"
+  }, {
+    "fname" : "username",
+    "ftype" : "String",
+    "fdesc" : "用户名"
+  }, {
+    "fname" : "password",
+    "ftype" : "String",
+    "fdesc" : "密码"
+  }, {
+    "fname" : "name",
+    "ftype" : "String",
+    "fdesc" : "姓名"
+  }, {
+    "fname" : "phone",
+    "ftype" : "String",
+    "fdesc" : "电话"
+  }, {
+    "fname" : "workArea",
+    "ftype" : "String",
+    "fdesc" : "工作区域"
+  } ],
+  "featureIds" : [ "1001", "1002", "1003", "1004" ]
+}, {
+  "className" : "Announcement",
+  "cdesc" : "社区公告",
+  "fields" : [ {
+    "fname" : "id",
+    "ftype" : "Integer",
+    "fdesc" : "公告ID"
+  }, {
+    "fname" : "title",
+    "ftype" : "String",
+    "fdesc" : "标题"
+  }, {
+    "fname" : "content",
+    "ftype" : "String",
+    "fdesc" : "内容"
+  }, {
+    "fname" : "publishDate",
+    "ftype" : "java.util.Date",
+    "fdesc" : "发布日期"
+  }, {
+    "fname" : "adminId",
+    "ftype" : "Integer",
+    "fdesc" : "发布人ID"
+  } ],
+  "featureIds" : [ "1001", "1002", "1003", "1004" ]
+}, {
+  "className" : "Complaint",
+  "cdesc" : "业主投诉",
+  "fields" : [ {
+    "fname" : "id",
+    "ftype" : "Integer",
+    "fdesc" : "投诉ID"
+  }, {
+    "fname" : "ownerId",
+    "ftype" : "Integer",
+    "fdesc" : "业主ID"
+  }, {
+    "fname" : "content",
+    "ftype" : "String",
+    "fdesc" : "投诉内容"
+  }, {
+    "fname" : "status",
+    "ftype" : "String",
+    "fdesc" : "处理状态"
+  }, {
+    "fname" : "submitDate",
+    "ftype" : "java.util.Date",
+    "fdesc" : "提交日期"
+  } ],
+  "featureIds" : [ "1001", "1002", "1003", "1004" ]
+}, {
+  "className" : "RepairRequest",
+  "cdesc" : "维修请求",
+  "fields" : [ {
+    "fname" : "id",
+    "ftype" : "Integer",
+    "fdesc" : "维修请求ID"
+  }, {
+    "fname" : "ownerId",
+    "ftype" : "Integer",
+    "fdesc" : "业主ID"
+  }, {
+    "fname" : "description",
+    "ftype" : "String",
+    "fdesc" : "问题描述"
+  }, {
+    "fname" : "status",
+    "ftype" : "String",
+    "fdesc" : "处理状态"
+  }, {
+    "fname" : "submitDate",
+    "ftype" : "java.util.Date",
+    "fdesc" : "提交日期"
+  }, {
+    "fname" : "assignedWorkerId",
+    "ftype" : "Integer",
+    "fdesc" : "分配的维修人员ID"
+  } ],
+  "featureIds" : [ "1001", "1002", "1003", "1004" ]
+}, {
+  "className" : "PropertyFeeBill",
+  "cdesc" : "物业费账单",
+  "fields" : [ {
+    "fname" : "id",
+    "ftype" : "Integer",
+    "fdesc" : "账单ID"
+  }, {
+    "fname" : "ownerId",
+    "ftype" : "Integer",
+    "fdesc" : "业主ID"
+  }, {
+    "fname" : "amount",
+    "ftype" : "Double",
+    "fdesc" : "金额"
+  }, {
+    "fname" : "dueDate",
+    "ftype" : "java.util.Date",
+    "fdesc" : "到期日期"
+  }, {
+    "fname" : "paymentStatus",
+    "ftype" : "String",
+    "fdesc" : "支付状态"
+  } ],
+  "featureIds" : [ "1001", "1002", "1003", "1004" ]
+}, {
+  "className" : "CommunityEvent",
+  "cdesc" : "社区活动",
+  "fields" : [ {
+    "fname" : "id",
+    "ftype" : "Integer",
+    "fdesc" : "活动ID"
+  }, {
+    "fname" : "title",
+    "ftype" : "String",
+    "fdesc" : "标题"
+  }, {
+    "fname" : "description",
+    "ftype" : "String",
+    "fdesc" : "描述"
+  }, {
+    "fname" : "startDate",
+    "ftype" : "java.util.Date",
+    "fdesc" : "开始日期"
+  }, {
+    "fname" : "endDate",
+    "ftype" : "java.util.Date",
+    "fdesc" : "结束日期"
+  }, {
+    "fname" : "organizerId",
+    "ftype" : "Integer",
+    "fdesc" : "组织者ID"
+  } ],
+  "featureIds" : [ "1001", "1002", "1003", "1004" ]
+}, {
+  "className" : "PublicFacility",
+  "cdesc" : "公共设施",
+  "fields" : [ {
+    "fname" : "id",
+    "ftype" : "Integer",
+    "fdesc" : "设施ID"
+  }, {
+    "fname" : "name",
+    "ftype" : "String",
+    "fdesc" : "名称"
+  }, {
+    "fname" : "location",
+    "ftype" : "String",
+    "fdesc" : "位置"
+  }, {
+    "fname" : "status",
+    "ftype" : "String",
+    "fdesc" : "状态"
+  }, {
+    "fname" : "lastMaintenanceDate",
+    "ftype" : "java.util.Date",
+    "fdesc" : "上次维护日期"
+  } ],
+  "featureIds" : [ "1001", "1002", "1003", "1004" ]
+} ]

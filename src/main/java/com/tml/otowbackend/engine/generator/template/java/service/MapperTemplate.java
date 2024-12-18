@@ -1,10 +1,10 @@
 package com.tml.otowbackend.engine.generator.template.java.service;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.mapper.Mapper;
 import com.tml.otowbackend.engine.generator.template.java.InterfaceTemplate;
 import com.tml.otowbackend.engine.generator.template.java.model.EntityTemplate;
 import com.tml.otowbackend.engine.generator.template.meta.MetaAnnotation;
+import org.apache.ibatis.annotations.Mapper;
 
 public class MapperTemplate extends InterfaceTemplate {
 

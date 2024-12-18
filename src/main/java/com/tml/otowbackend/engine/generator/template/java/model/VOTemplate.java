@@ -8,7 +8,7 @@ import static com.tml.otowbackend.constants.TemplateConstant.ENTITY_ANNOTATION;
 public class VOTemplate extends ClassTemplate {
 
     public VOTemplate(String packagePath, String className) {
-        super(packagePath, className+"VO");
+        super(packagePath, className + "VO");
     }
 
     @Override

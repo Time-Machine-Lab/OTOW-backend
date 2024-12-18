@@ -1,2 +1,3 @@
 // Find method
-    return ${entityClassNameLower}Mapper.findById(id).orElse(null);
+    ${entityClassName}Entity ${entityClassNameLower} = ${entityClassNameLower}Mapper.selectById(id);
+    return BeanUtil.copyProperties(${entityClassNameLower}, ${entityClassNameVO}.class);

@@ -143,7 +143,7 @@ public abstract class ClassTemplate extends JavaOTOWTemplate {
      *
      * @param clazz 需要导入的类
      */
-    protected void addImportClazz(Class<?> clazz) {
+    public void addImportClazz(Class<?> clazz) {
         if (ImportUtil.needsImport(clazz, packagePath)) {
             this.imports.add(clazz.getName());
         }

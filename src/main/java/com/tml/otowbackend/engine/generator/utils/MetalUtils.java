@@ -13,6 +13,6 @@ public class MetalUtils {
 
     public static MetaAnnotation getDescribe(String value) {
         if (StringUtils.isBlank(value)) value = "未知";
-        return new MetaAnnotation(Describe.class, "value", "\"" + value + "\"", Describe.class);
+        return new MetaAnnotation(Describe.class, "value", "\"" + value + "\"", "com.example.common.annotation.Describe");
     }
 }
