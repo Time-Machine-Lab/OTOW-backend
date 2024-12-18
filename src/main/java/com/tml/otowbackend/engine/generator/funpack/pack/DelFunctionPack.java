@@ -45,7 +45,8 @@ public class DelFunctionPack extends AbstrateFunctionPack {
 
     @Override
     protected void addMethodToService(ServiceTemplate service) {
-        service.addMethod(deleteServiceMethod, List.of((MetaMethodParam) getParam("metaMethodParam")));
+        MetaMethodParam metaMethodParam = new MetaMethodParam("Integer", "id");
+        service.addMethod(deleteServiceMethod, metaMethodParam);
     }
 
     // serviceImpl 的删除方法

@@ -221,7 +221,7 @@ public abstract class InterfaceTemplate extends JavaOTOWTemplate {
      *
      * @param metaMethod 接口方法
      */
-    public void addMethod(MetaMethod metaMethod) {
+    public void addMethods(MetaMethod metaMethod) {
         this.methods.add(metaMethod);
     }
 
@@ -231,9 +231,13 @@ public abstract class InterfaceTemplate extends JavaOTOWTemplate {
      * @param methodName 方法名
      * @param params 方法参数集合
      */
-    public void addMethod(String methodName, List<MetaMethodParam> params) {
+    public void addMethods(String methodName, List<MetaMethodParam> params) {
         MetaMethod metaMethod = new MetaMethod(methodName, params, "");
-        addMethod(metaMethod);
+        addMethods(metaMethod);
+    }
+    public void addMethod(String methodName, MetaMethodParam param) {
+        MetaMethod metaMethod = new MetaMethod(methodName, List.of(param), "");
+        addMethods(metaMethod);
     }
 
     /**

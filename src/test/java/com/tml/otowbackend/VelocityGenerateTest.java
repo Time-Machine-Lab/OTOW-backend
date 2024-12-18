@@ -7,8 +7,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.tml.otowbackend.engine.generator.engine.VelocityCodeEngine;
 import com.tml.otowbackend.engine.generator.template.java.ApplicationConfigTemplate;
-import com.tml.otowbackend.engine.generator.template.java.InitConfigTemplate;
-import com.tml.otowbackend.engine.generator.template.java.InitTemplate;
 import com.tml.otowbackend.engine.generator.template.java.PomConfigTemplate;
 import com.tml.otowbackend.engine.generator.template.java.method.AddServiceMethodTemplate;
 import com.tml.otowbackend.engine.generator.template.java.method.DeleteServiceMethodTemplate;
@@ -21,6 +19,7 @@ import com.tml.otowbackend.engine.generator.template.meta.MetaAnnotation;
 import com.tml.otowbackend.engine.generator.template.meta.MetaMethod;
 import com.tml.otowbackend.engine.generator.template.meta.MetaMethodParam;
 import com.tml.otowbackend.engine.generator.template.meta.MetalField;
+import com.tml.otowbackend.util.CodeFormatterUtil;
 import org.junit.Test;
 
 import java.util.*;
@@ -47,16 +46,6 @@ public class VelocityGenerateTest {
         return userEntity;
     }
 
-    private static ServiceTemplate getServiceTemplate() {
-        ServiceTemplate userService = new ServiceTemplate("io.github.geniusay.velocity.generate.service", "User");
-        EntityTemplate entityTemplate = getEntityTemplate();
-        String className = entityTemplate.getClassName();
-        userService.addMethod("insertUserInfo",List.of(
-            new MetaMethodParam(className, userService.getAllPackagePath(), className.toLowerCase())
-        ));
-        return userService;
-    }
-
     private static MetaMethod getPostMethod(){
         ServiceTemplate serviceTemplate = getServiceTemplate();
         ReqTemplate reqUser = new ReqTemplate("io.github.geniusay.velocity.generate.pojo.req", "User");
@@ -76,6 +65,13 @@ public class VelocityGenerateTest {
         System.out.println(generate);
     }
 
+    private static ServiceTemplate getServiceTemplate() {
+        ServiceTemplate userService = new ServiceTemplate("io.github.geniusay.velocity.generate.service", "User");
+        EntityTemplate entityTemplate = getEntityTemplate();
+        String className = entityTemplate.getClassName();
+        userService.addMethods("insertUserInfo", List.of(new MetaMethodParam(className, userService.getAllPackagePath(), className.toLowerCase())));
+        return userService;
+    }
 
     @Test
     public void generateController(){
@@ -85,7 +81,6 @@ public class VelocityGenerateTest {
         userController.addPostMethod(getPostMethod(),"/add/user");
         String generateController = engine.generate(userController);
         String generateService = engine.generate(userService);
-
         System.out.println(generateController);
         System.out.println(generateService);
     }
@@ -101,8 +96,9 @@ public class VelocityGenerateTest {
 
     @Test
     public void generateServiceImpl(){
+        ServiceTemplate serviceTemplate = getServiceTemplate();
+        System.out.println(CodeFormatterUtil.formatCode(engine.generate(serviceTemplate)));
         ServiceImplTemplate serviceImplTemplate = new ServiceImplTemplate("io.github.geniusay.velocity.generate.service.impl","User", getServiceTemplate());
-
         String generate = engine.generate(serviceImplTemplate);
         System.out.println(generate);
     }

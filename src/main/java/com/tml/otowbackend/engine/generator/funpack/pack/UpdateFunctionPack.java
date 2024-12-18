@@ -44,7 +44,7 @@ public class UpdateFunctionPack extends AbstrateFunctionPack {
 
     @Override
     protected void addMethodToService(ServiceTemplate service) {
-        service.addMethod(updateServiceMethod, List.of((MetaMethodParam) getParam("metaMethodParam")));
+        service.addMethods(updateServiceMethod, List.of((MetaMethodParam) getParam("metaMethodParam")));
     }
 
     @Override

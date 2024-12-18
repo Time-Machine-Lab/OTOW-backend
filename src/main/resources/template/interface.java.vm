@@ -11,13 +11,15 @@ package ${package};
 import $import;
 #end
 
-## 类注解
+## 接口注解
 #renderAnnotations($annotations)
-public interface ${className}#if($fatherClazz!="") extends ${fatherClazz}#end{
+public interface ${className}#if($fatherClazz!="") extends ${fatherClazz}#end {
 
+## 接口方法定义
 #foreach($method in $methods)
-
     #renderAnnotations($!method.annotations)
-    #if($method.isStatic)static#end $!method.returnRes ${method.methodName}(#foreach($entry in $!method.methodParams.entrySet())}$entry.value $entry.key#if($foreach.hasNext),#end#end);
+    #if($method.isStatic)static #end#if($method.isDefault)default #end$!method.returnRes ${method.methodName}(#foreach($param in $method.methodParams)#renderAnnotations($param.annotations)$param.clazz $param.name#if($foreach.hasNext), #end#end)#if($method.isStatic || $method.isDefault) {
+    $!method.methodBody}#else;
+#end
 #end
 }

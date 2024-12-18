@@ -45,7 +45,8 @@ public class SelectFunctionPack extends AbstrateFunctionPack {
 
     @Override
     protected void addMethodToService(ServiceTemplate service) {
-        service.addMethod(selectServiceMethod, List.of((MetaMethodParam) getParam("metaMethodParam")));
+        MetaMethodParam metaMethodParam = new MetaMethodParam("Integer", "id");
+        service.addMethod(selectServiceMethod, metaMethodParam);
     }
 
     // serviceImpl的查找方法

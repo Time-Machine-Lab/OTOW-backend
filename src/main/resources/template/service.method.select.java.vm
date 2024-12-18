@@ -1,4 +1,4 @@
 // Find method
-public ${entityClassName} findById(Long id) {
+public ${entityClassName} select(Long id) {
         return ${entityClassNameLower}Mapper.findById(id).orElse(null);
 }
