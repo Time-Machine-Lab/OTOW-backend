@@ -1,4 +1,4 @@
-package com.tml.otowbackend.pojo.DTO;
+package com.tml.otowbackend.pojo.VO;
 
 import com.tml.otowbackend.constants.CodeLanguage;
 import com.tml.otowbackend.pojo.DO.Project;
@@ -10,13 +10,13 @@ import lombok.NoArgsConstructor;
 /**
  * @Description
  * @Author welsir
- * @Date 2024/12/2 19:30
+ * @Date 2024/12/18 14:58
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class QueryProjectResponseDTO {
+public class QueryProjectResponseVO {
 
     private String id;
     private String name;
@@ -29,8 +29,8 @@ public class QueryProjectResponseDTO {
     private Integer viewNums;
     private Integer price;
 
-    public static QueryProjectResponseDTO convert(Project project){
-        return QueryProjectResponseDTO.builder()
+    public static QueryProjectResponseVO convert(Project project){
+        return QueryProjectResponseVO.builder()
                 .id(String.valueOf(project.getId()))
                 .name(project.getName())
                 .codeLanguage(CodeLanguage.queryLanguageByCode(project.getCodeLanguage()))
@@ -44,8 +44,8 @@ public class QueryProjectResponseDTO {
                 .build();
     }
 
-    public static QueryProjectResponseDTO convertWithoutDetail(Project project){
-        return QueryProjectResponseDTO.builder()
+    public static QueryProjectResponseVO convertWithoutDetail(Project project){
+        return QueryProjectResponseVO.builder()
                 .id(String.valueOf(project.getId()))
                 .name(project.getName())
                 .codeLanguage(CodeLanguage.queryLanguageByCode(project.getCodeLanguage()))

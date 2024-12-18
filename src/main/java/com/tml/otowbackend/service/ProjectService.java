@@ -1,9 +1,10 @@
 package com.tml.otowbackend.service;
 
 import com.tml.otowbackend.pojo.DTO.CreateProjectRequestDTO;
+import com.tml.otowbackend.pojo.DTO.QueryProjectPageResponseDTO;
 import com.tml.otowbackend.pojo.DTO.QueryProjectRequestDTO;
-import com.tml.otowbackend.pojo.DTO.QueryProjectResponseDTO;
 import com.tml.otowbackend.pojo.DTO.UpdateProjectRequestDTO;
+import com.tml.otowbackend.pojo.VO.QueryProjectResponseVO;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface ProjectService {
     void create(CreateProjectRequestDTO requestDTO);
     void update(UpdateProjectRequestDTO requestDTO);
     void removeById(String projectId);
-    List<QueryProjectResponseDTO> queryProject(QueryProjectRequestDTO requestDTO);
-    QueryProjectResponseDTO queryOne(String id);
+    QueryProjectPageResponseDTO queryProject(QueryProjectRequestDTO requestDTO);
+    QueryProjectResponseVO queryOne(String id);
     String download(String id);
 }
