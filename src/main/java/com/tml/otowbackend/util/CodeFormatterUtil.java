@@ -43,6 +43,10 @@ public class CodeFormatterUtil {
         return document.get();
     }
 
+    public static List<String> formatCodeList(String code) {
+        return splitCodeIntoLines(formatCode(code));
+    }
+
     /**
      * 将代码字符串切分成行，并保留空行
      *

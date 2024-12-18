@@ -1,5 +1,6 @@
-package com.tml.otowbackend.engine.generator.template.meta;
+package com.tml.otowbackend.engine.generator.utils;
 
+import com.tml.otowbackend.engine.generator.template.meta.MetaAnnotation;
 import com.tml.otowbackend.engine.sql.annotation.Describe;
 import org.apache.commons.lang.StringUtils;
 

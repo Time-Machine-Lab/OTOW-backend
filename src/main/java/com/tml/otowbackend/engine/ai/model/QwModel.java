@@ -31,7 +31,7 @@ public class QwModel implements AIModel {
     public String generate(String content) {
         try {
             // 构造请求体
-            HttpURLConnection connection = createConnection(content, true);
+            HttpURLConnection connection = createConnection(content);
 
             // 读取响应
             StringBuilder response = new StringBuilder();
@@ -52,14 +52,13 @@ public class QwModel implements AIModel {
         }
     }
 
-    private HttpURLConnection createConnection(String content, Boolean isStream) throws IOException {
+    private HttpURLConnection createConnection(String content) throws IOException {
         RequestBody requestBody = new RequestBody(
                 "qwen-plus",
                 new Message[]{
                         new Message("system", "You are an expert in java back-end programming"),
                         new Message("user", content)
-                },
-                isStream
+                }
         );
 
         Gson gson = new Gson();
@@ -97,12 +96,10 @@ public class QwModel implements AIModel {
     static class RequestBody {
         String model;
         Message[] messages;
-        Boolean stream;
 
-        public RequestBody(String model, Message[] messages, Boolean stream) {
+        public RequestBody(String model, Message[] messages) {
             this.model = model;
             this.messages = messages;
-            this.stream = stream;
         }
     }
 }

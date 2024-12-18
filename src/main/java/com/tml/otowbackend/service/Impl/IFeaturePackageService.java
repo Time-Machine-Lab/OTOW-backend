@@ -24,9 +24,8 @@ public class IFeaturePackageService implements FeaturePackageService {
      * @return 动态支持的功能包列表
      */
     @Override
-    public R<List<FeaturePackage>> getSupportedFeaturePackages() {
-        List<FeaturePackage> supportedFeaturePackages = funcPackManager.getSupportedFeaturePackages();
-        return R.success("获取支持的功能包列表成功", supportedFeaturePackages);
+    public List<FeaturePackage> getSupportedFeaturePackages() {
+        return funcPackManager.getSupportedFeaturePackages();
     }
 
     /**

@@ -12,7 +12,7 @@ public interface FeaturePackageService {
      *
      * @return 支持的功能包列表
      */
-    R<List<FeaturePackage>> getSupportedFeaturePackages();
+    List<FeaturePackage> getSupportedFeaturePackages();
 
     /**
      * 校验功能包列表是否合法

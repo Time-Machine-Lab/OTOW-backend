@@ -32,6 +32,9 @@ public class SpringBootTreeTemplate extends AbstractVirtualTreeTemplate {
         addFile("/", fileName, content);
     }
 
+    public void example(String fileName, List<String> content) {
+        addFile("example", fileName, content);
+    }
 
     public void controller(String fileName, List<String> content) {
         addFile("controller", fileName, content);
@@ -83,8 +86,11 @@ public class SpringBootTreeTemplate extends AbstractVirtualTreeTemplate {
 
     @Override
     public void buildFolderMappings() {
-        folderMappings.put("resources", "/src/main/java/resources");
+        folderMappings.put("resources", "/src/main/resources");
         folderMappings.put("/", "");
+
+        folderMappings.put("example", "/src/main/java/com/example");
+
         List<NodeVO> rootNodes  = virtualFileService.getChildrenNodes(treeId, "/src/main/java/com/example");
         // 遍历 rootNodes，逐一建立文件夹名称到 ID 的映射关系
         for (NodeVO node : rootNodes) {

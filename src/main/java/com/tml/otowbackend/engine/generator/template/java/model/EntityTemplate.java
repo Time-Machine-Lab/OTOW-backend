@@ -3,7 +3,7 @@ package com.tml.otowbackend.engine.generator.template.java.model;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.tml.otowbackend.engine.generator.template.java.ClassTemplate;
 import com.tml.otowbackend.engine.generator.template.meta.MetaAnnotation;
-import com.tml.otowbackend.engine.generator.template.meta.MetalUtils;
+import com.tml.otowbackend.engine.generator.utils.MetalUtils;
 
 import static com.tml.otowbackend.constants.TemplateConstant.ENTITY_ANNOTATION;
 

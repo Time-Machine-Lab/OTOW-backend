@@ -18,23 +18,19 @@ import java.util.List;
 @Slf4j
 public class TreeTest {
 
-    public static void main(String[] args) {
-        System.out.println(PathUtils.getSpringbootPath());
-    }
-
     @Resource
     private IVirtualFileService virtualFileService;
 
     @Test
     public void testSpringBootTemplate() {
         String treeId = virtualFileService.initializeVirtualTree(PathUtils.getSpringbootPath(), null);
-
         SpringBootTreeTemplate template = new SpringBootTreeTemplate(virtualFileService, treeId);
         template.initializeTemplate();
 
         template.controller("TestController.java", list1);
         template.serviceImpl("TestServiceImpl.java", list2);
         template.master("pom.xml", list3);
+        template.example("TestApplication.java", list1);
         virtualFileService.exportVirtualTree(treeId, "D:\\test");
     }
 

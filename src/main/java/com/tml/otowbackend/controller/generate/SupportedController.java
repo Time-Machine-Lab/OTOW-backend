@@ -47,6 +47,6 @@ public class SupportedController {
     @GetMapping("/feature")
     @TokenRequire
     public R<List<FeaturePackage>> getSupportedFeaturePackages() {
-        return featurePackageService.getSupportedFeaturePackages();
+        return R.success("获取支持的功能包列表成功", featurePackageService.getSupportedFeaturePackages());
     }
 }

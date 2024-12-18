@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.tml.otowbackend.engine.generator.template.meta.MetalUtils.getDescribe;
+import static com.tml.otowbackend.engine.generator.utils.MetalUtils.getDescribe;
 
 @NoArgsConstructor
 public class InitTemplate {
