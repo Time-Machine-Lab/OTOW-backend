@@ -1,6 +1,7 @@
 package com.tml.otowbackend;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.tml.otowbackend.engine.ai.result.EntityClassDefinition;
 import com.tml.otowbackend.engine.generator.funpack.FuncPackManager;
 import com.tml.otowbackend.engine.generator.template.java.InitConfigTemplate;
@@ -82,7 +83,7 @@ public class GenerateTest {
         if (entityClassDefinitions != null) {
             for (EntityClassDefinition definition : entityClassDefinitions) {
                 String className = definition.getClassName();
-                String tableName = className.toLowerCase();
+                String tableName = StringUtils.camelToUnderline(className);
                 String describe = definition.getCdesc();
 
                 LinkedList<MetalField> fields = new LinkedList<>();

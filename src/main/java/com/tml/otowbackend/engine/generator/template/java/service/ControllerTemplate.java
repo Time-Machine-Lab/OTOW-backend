@@ -1,4 +1,5 @@
 package com.tml.otowbackend.engine.generator.template.java.service;
+
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.tml.otowbackend.engine.generator.template.java.ClassTemplate;
 import com.tml.otowbackend.engine.generator.template.meta.MetaAnnotation;
@@ -33,19 +34,20 @@ public class ControllerTemplate extends ClassTemplate {
         addAnnotation(new MetaAnnotation(RequestMapping.class, urlPath));
     }
 
-    public static String getControllerClassName(String className){
-        return className+"Controller";
+    public static String getControllerClassName(String className) {
+        return className + "Controller";
     }
 
     public String getUrlPath() {
         return urlPath;
     }
 
-    public void setCommonResult(String commonResult,Class<?> clazz){
+    public void setCommonResult(String commonResult, Class<?> clazz) {
         this.commonResult = commonResult;
         addImportClazz(clazz);
     }
-    public void addService(ServiceTemplate serviceTemplate){
+
+    public void addService(ServiceTemplate serviceTemplate) {
         this.services.add(serviceTemplate);
         String serviceClass = serviceTemplate.getClassName();
         String servicePackage = serviceTemplate.getAllPackagePath();
@@ -56,27 +58,28 @@ public class ControllerTemplate extends ClassTemplate {
         this.addImportPath(servicePackage);
     }
 
-    public void addPostMethod(MetaMethod method, String path){
+    public void addPostMethod(MetaMethod method, String path) {
         method.addAnnotations(List.of(new MetaAnnotation(PostMapping.class, path)));
         this.addMethod(method);
     }
 
-    public void addGetMethod(MetaMethod method, String path){
+    public void addGetMethod(MetaMethod method, String path) {
         method.addAnnotations(List.of(new MetaAnnotation(GetMapping.class, path)));
         this.addMethod(method);
     }
 
-    public void addDeleteMethod(MetaMethod method, String path){
+    public void addDeleteMethod(MetaMethod method, String path) {
         method.addAnnotations(List.of(new MetaAnnotation(DeleteMapping.class, path)));
         this.addMethod(method);
     }
 
-    public void addMethod(MetaMethod method){
+    public void addMethod(MetaMethod method) {
         this.apiMethod.add(method);
         super.addMethod(method);
     }
+
     @Override
-    public void initAnnotations(){
+    public void initAnnotations() {
         addAnnotations(MetaAnnotation.convertByClazz(CONTROLLER_ANNOTATION));
     }
 }

@@ -156,7 +156,7 @@ public class InitTemplate {
     }
 
     private ControllerTemplate getControllerTemplate() {
-        ControllerTemplate userController = new ControllerTemplate(prefix + controllerPackagePath, className, "/" + className.toLowerCase());
+        ControllerTemplate userController = new ControllerTemplate(prefix + controllerPackagePath, className, "/" + StringUtils.firstToLowerCase(className));
         userController.addService(serviceTemplate);
         String classLower = StringUtils.firstToLowerCase(serviceTemplate.getClassName());
         for (String featureId : featureIds) {
