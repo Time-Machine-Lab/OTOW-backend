@@ -62,7 +62,7 @@ public class GenerateTest {
         pomConfigProperty.put("name", "boot.version");
         pomConfigProperty.put("value", "2.3.9.RELEASE");
 
-        String systemName = "otow";
+        String systemName = "Otow";
         InitConfigTemplate initConfigTemplate = new InitConfigTemplate(systemName, applicationConfig, pomConfigDependency, pomConfigProperty);
 
         String generateApplication = initConfigTemplate.getGenerateApplication();

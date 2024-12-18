@@ -105,15 +105,6 @@ public class SpringBootTreeTemplate extends AbstractVirtualTreeTemplate {
                     case "controller":
                         folderMappings.put("controller", node.getId());
                         break;
-                    case "exception":
-                        folderMappings.put("exception", node.getId());
-                        break;
-                    case "handler":
-                        folderMappings.put("handler", node.getId());
-                        break;
-                    case "interceptor":
-                        folderMappings.put("interceptor", node.getId());
-                        break;
                     case "mapper":
                         folderMappings.put("mapper", node.getId());
                         break;
@@ -127,6 +118,26 @@ public class SpringBootTreeTemplate extends AbstractVirtualTreeTemplate {
                         break;
                     case "utils":
                         folderMappings.put("utils", node.getId());
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        List<NodeVO> rootNodes1  = virtualFileService.getChildrenNodes(treeId, "/src/main/java/com/example/common");
+        // 遍历 rootNodes，逐一建立文件夹名称到 ID 的映射关系
+        for (NodeVO node : rootNodes) {
+            if ("folder".equals(node.getType())) {
+                switch (node.getName()) {
+                    case "exception":
+                        folderMappings.put("exception", node.getId());
+                        break;
+                    case "handler":
+                        folderMappings.put("handler", node.getId());
+                        break;
+                    case "interceptor":
+                        folderMappings.put("interceptor", node.getId());
                         break;
                     default:
                         break;

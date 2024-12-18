@@ -1,5 +1,7 @@
-package com.tml.otowbackend.core.config;
+package com.example.config;
 
+import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
@@ -11,6 +13,8 @@ import java.util.Date;
 
 @Component
 public class MyBatisConfig implements MetaObjectHandler {
+
+    Snowflake secondSnow = IdUtil.getSnowflake(1, 1);
 
     @Bean
     public MybatisPlusInterceptor paginationInterceptor(){
@@ -29,8 +33,7 @@ public class MyBatisConfig implements MetaObjectHandler {
 
     @Override
     public void insertFill(MetaObject metaObject) {
-        this.strictInsertFill(metaObject, "view_num", Integer.class, 0);
-        this.strictInsertFill(metaObject, "download_num", Integer.class, 0);
+        this.strictInsertFill(metaObject, "id", String.class, secondSnow.nextIdStr());
         this.strictInsertFill(metaObject, "createTime", Date.class, new Date());
     }
 

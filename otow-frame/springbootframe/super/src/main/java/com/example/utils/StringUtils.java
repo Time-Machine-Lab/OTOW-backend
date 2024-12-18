@@ -1,4 +1,4 @@
-package com.example.framepack.utils;
+package com.example.utils;
 
 import java.util.Arrays;
 import java.util.List;

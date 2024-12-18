@@ -1,7 +1,7 @@
-package com.example.framepack.config;
-
+package com.example.common;
 // 线程方法
 public class BaseContext {
+
     // 定义一个静态的 ThreadLocal 变量，用于存储线程相关的用户上下文数据
     private static final ThreadLocal<UserContext> userContextThreadLocal = new ThreadLocal<>();
 
