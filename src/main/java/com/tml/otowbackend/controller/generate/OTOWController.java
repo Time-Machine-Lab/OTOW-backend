@@ -35,8 +35,7 @@ public class OTOWController {
      */
     @PostMapping("/manageProject")
     @TokenRequire
-    public R<Long> manageProject(@RequestParam(required = false) Long projectId,
-                                 @RequestBody Map<String, Object> params) {
+    public R<Long> manageProject(@RequestParam(required = false) Long projectId, @RequestBody Map<String, Object> params) {
         return projectService.manageProject(projectId, params);
     }
 

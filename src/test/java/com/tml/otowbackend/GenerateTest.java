@@ -12,10 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OtowBackendApplication.class)
@@ -30,12 +27,12 @@ public class GenerateTest {
         String className = "User";
         String tableName = "user";
 
-        List<MetalField> fields = new ArrayList<>();
+        LinkedList<MetalField> fields = new LinkedList<>();
         fields.add(new MetalField("id", String.class));
-        fields.add(new MetalField("uid", String.class));
         fields.add(new MetalField("uid", String.class));
         fields.add(new MetalField("avatar", String.class));
         fields.add(new MetalField("cid", Integer.class));
+        fields.add(new MetalField("sex", Boolean.class));
 
         System.out.println("================================================================================");
         InitTemplate initTemplate = new InitTemplate(funcPackManager, className, tableName, fields, List.of("1001", "1002", "1003", "1004"));

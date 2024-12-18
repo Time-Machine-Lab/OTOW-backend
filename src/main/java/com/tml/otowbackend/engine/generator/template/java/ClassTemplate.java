@@ -7,10 +7,7 @@ import com.tml.otowbackend.engine.generator.template.meta.MetalField;
 import com.tml.otowbackend.util.ImportUtil;
 import org.apache.velocity.VelocityContext;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.tml.otowbackend.constants.TemplateConstant.CLASS_TEMPLATE_PATH;
@@ -38,7 +35,7 @@ public abstract class ClassTemplate extends JavaOTOWTemplate {
     /**
      * 类的成员变量集合。
      */
-    protected final Set<MetalField> metalFields = new HashSet<>();
+    protected final LinkedList<MetalField> metalFields = new LinkedList<>();
 
     /**
      * 类上添加的注解集合。
@@ -256,7 +253,7 @@ public abstract class ClassTemplate extends JavaOTOWTemplate {
      *
      * @return 类的成员变量集合
      */
-    public Set<MetalField> getModelFields() {
+    public LinkedList<MetalField> getModelFields() {
         return metalFields;
     }
 
@@ -266,8 +263,10 @@ public abstract class ClassTemplate extends JavaOTOWTemplate {
      * @param metalField 类成员变量
      */
     public void addModelField(MetalField metalField) {
-        addImportAndCheck(metalField);
-        this.metalFields.add(metalField);
+        if (!isDuplicate(metalField)) {
+            addImportAndCheck(metalField);
+            this.metalFields.add(metalField);
+        }
     }
 
     /**
@@ -276,8 +275,16 @@ public abstract class ClassTemplate extends JavaOTOWTemplate {
      * @param metalFields 类成员变量集合
      */
     public void addModelFields(List<MetalField> metalFields) {
-        addImportAndCheck(metalFields);
-        this.metalFields.addAll(metalFields);
+        for (MetalField field : metalFields) {
+            if (!isDuplicate(field)) {
+                addImportAndCheck(field);
+                this.metalFields.add(field);
+            }
+        }
+    }
+
+    private boolean isDuplicate(MetalField metalField) {
+        return this.metalFields.stream().anyMatch(existingField -> Objects.equals(existingField.getName(), metalField.getName()));
     }
 
     /**

@@ -19,6 +19,7 @@ import com.tml.otowbackend.engine.generator.template.meta.MetalField;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -35,7 +36,7 @@ public class InitTemplate {
     public FuncPackManager funcPackManager;
     public String className;
     public String tableName;
-    public List<MetalField> fields;
+    public LinkedList<MetalField> fields;
     public List<String> featureIds;
 
     private ServiceTemplate serviceTemplate;
@@ -44,7 +45,7 @@ public class InitTemplate {
     private MapperTemplate mapperTemplate;
     private EntityTemplate entityTemplate;
 
-    public InitTemplate(FuncPackManager funcPackManager, String className, String tableName, List<MetalField> fields, List<String> featureIds) {
+    public InitTemplate(FuncPackManager funcPackManager, String className, String tableName, LinkedList<MetalField> fields, List<String> featureIds) {
         this.funcPackManager = funcPackManager;
         this.className = className;
         this.tableName = tableName;
@@ -133,13 +134,14 @@ public class InitTemplate {
 
     // 加强判断
     private void judgeMetalField() {
-        MetaAnnotation fillAnnotation = new MetaAnnotation(TableField.class, "fill", "FieldFill.INSERT_UPDATE", FieldFill.class);
+        MetaAnnotation createTimeFill = new MetaAnnotation(TableField.class, "fill", "FieldFill.INSERT", FieldFill.class);
+        MetaAnnotation updateTimeFill = new MetaAnnotation(TableField.class, "fill", "FieldFill.INSERT_UPDATE", FieldFill.class);
         MetaAnnotation tableId = new MetaAnnotation(TableId.class);
         // 判断id 加入时间 逻辑删除
         for (MetalField metalField : fields) {
             // 判断是否是 id 字段，若是则添加 @TableId 注解 和 类型
             if (metalField.getName().equals("id")) {
-                metalField.addAnnotations(java.util.List.of(tableId));  // 添加 TableId 注解
+                metalField.addAnnotations(List.of(tableId));  // 添加 TableId 注解
                 metalField.setClazz("String");
             }
             // 判断是否有 类型 ，没有就添加为String
@@ -148,12 +150,12 @@ public class InitTemplate {
             }
         }
         // 添加 createTime、updateTime、逻辑删除字段（假设为 "deleted"）
-        MetalField createTime = new MetalField("createTime", Date.class, fillAnnotation);
-        MetalField updateTime = new MetalField("updateTime", Date.class, fillAnnotation);
-        MetalField deleted = new MetalField("deleted", String.class);
+        MetalField createTime = new MetalField("createTime", Date.class, createTimeFill);
+        MetalField updateTime = new MetalField("updateTime", Date.class, updateTimeFill);
+        MetalField deleted = new MetalField("deleteFlag", Boolean.class);
 
-        fields.add(createTime);
-        fields.add(updateTime);
-        fields.add(deleted);
+        fields.addLast(deleted);
+        fields.addLast(createTime);
+        fields.addLast(updateTime);
     }
 }
