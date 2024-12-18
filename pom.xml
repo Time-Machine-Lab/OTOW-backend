@@ -207,9 +207,9 @@
 
 <!--        代码格式化依赖-->
         <dependency>
-            <groupId>com.google.googlejavaformat</groupId>
-            <artifactId>google-java-format</artifactId>
-            <version>1.17.0</version> <!-- 请使用最新版本 -->
+            <groupId>org.eclipse.jdt</groupId>
+            <artifactId>org.eclipse.jdt.core</artifactId>
+            <version>3.32.0</version> <!-- 最新版本 -->
         </dependency>
 
     </dependencies>

@@ -1,8 +1,10 @@
 package com.tml.otowbackend.util;
 
-import com.google.googlejavaformat.java.Formatter;
-import com.google.googlejavaformat.java.FormatterException;
 import lombok.extern.slf4j.Slf4j;
+import org.eclipse.jdt.core.ToolFactory;
+import org.eclipse.jdt.core.formatter.CodeFormatter;
+import org.eclipse.jface.text.Document;
+import org.eclipse.text.edits.TextEdit;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,13 +25,22 @@ public class CodeFormatterUtil {
      * @return 格式化后的 Java 代码
      */
     public static String formatCode(String code) {
-        Formatter formatter = new Formatter();
-        try {
-            return formatter.formatSource(code);
-        } catch (FormatterException e) {
+        CodeFormatter formatter = ToolFactory.createCodeFormatter(null); // 使用默认配置
+        TextEdit edit = formatter.format(CodeFormatter.K_COMPILATION_UNIT, code, 0, code.length(), 0, null);
+
+        if (edit == null) {
             log.error("代码格式化失败");
             return code;
         }
+
+        Document document = new Document(code);
+        try {
+            edit.apply(document);
+        } catch (Exception e) {
+            log.error("代码格式化失败", e);
+            return code;
+        }
+        return document.get();
     }
 
     /**
