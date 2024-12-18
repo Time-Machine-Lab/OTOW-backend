@@ -2,15 +2,18 @@ package com.tml.otowbackend.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tml.otowbackend.constants.CodeLanguage;
 import com.tml.otowbackend.core.exception.ResultCode;
 import com.tml.otowbackend.core.exception.ServerException;
 import com.tml.otowbackend.mapper.ProjectMapper;
 import com.tml.otowbackend.pojo.DO.Project;
 import com.tml.otowbackend.pojo.DTO.CreateProjectRequestDTO;
+import com.tml.otowbackend.pojo.DTO.QueryProjectPageResponseDTO;
 import com.tml.otowbackend.pojo.DTO.QueryProjectRequestDTO;
-import com.tml.otowbackend.pojo.DTO.QueryProjectResponseDTO;
 import com.tml.otowbackend.pojo.DTO.UpdateProjectRequestDTO;
+import com.tml.otowbackend.pojo.VO.QueryProjectResponseVO;
 import com.tml.otowbackend.service.ProjectService;
 import com.tml.otowbackend.util.OSSUtil;
 import com.tml.otowbackend.util.UserThread;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -48,18 +52,24 @@ public class IProjectServiceImpl implements ProjectService {
         String uid = UserThread.getUid();
         Integer language = CodeLanguage.queryCodeByLanguage(requestDTO.getCodeLanguage());
         wrapper.eq(Project::getId,requestDTO.getId()).eq(Project::getShareUid,uid);
-        Optional.ofNullable(requestDTO.getCover())
-                .ifPresent(cover -> wrapper.set(Project::getCover, cover));
-        Optional.ofNullable(requestDTO.getDescription())
-                .ifPresent(description -> wrapper.set(Project::getDescription, description));
-        Optional.ofNullable(requestDTO.getIntroduce())
-                .ifPresent(introduce -> wrapper.set(Project::getIntroduce, introduce));
-        Optional.ofNullable(requestDTO.getPrice())
-                .ifPresent(price -> wrapper.set(Project::getPrice, price));
-        Optional.ofNullable(language)
-                .ifPresent(lang -> wrapper.set(Project::getCodeLanguage, lang));
-        Optional.ofNullable(requestDTO.getName())
-                .ifPresent(name -> wrapper.set(Project::getName, name));
+        if(!StringUtils.isBlank(requestDTO.getCover())){
+            wrapper.set(Project::getCover, requestDTO.getCover());
+        }
+        if(!StringUtils.isBlank(requestDTO.getDescription())){
+            wrapper.set(Project::getCover, requestDTO.getDescription());
+        }
+        if(!StringUtils.isBlank(requestDTO.getIntroduce())){
+            wrapper.set(Project::getIntroduce, requestDTO.getIntroduce());
+        }
+        if(!StringUtils.isBlank(requestDTO.getName())){
+            wrapper.set(Project::getName,requestDTO.getName());
+        }
+        if(Objects.nonNull(requestDTO.getCodeLanguage())){
+            wrapper.set(Project::getCodeLanguage, language);
+        }
+        if(Objects.nonNull(requestDTO.getPrice())){
+            wrapper.set(Project::getPrice, requestDTO.getPrice());
+        }
         projectMapper.update(null,wrapper);
     }
 
@@ -69,25 +79,37 @@ public class IProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<QueryProjectResponseDTO> queryProject(QueryProjectRequestDTO requestDTO) {
-        int limit = requestDTO.getLimit();
-        int page = requestDTO.getPage();
-        List<QueryProjectResponseDTO> resLists;
-        requestDTO.setLimit(Math.min(limit,DEFAULT_MAX_LIMIT));
-        requestDTO.setPage(page-1>=0?page:0);
+    public QueryProjectPageResponseDTO queryProject(QueryProjectRequestDTO requestDTO) {
+        int limit = Math.min((requestDTO.getLimit()),DEFAULT_MAX_LIMIT);
+        int page = Math.max(requestDTO.getPage() - 1, 0);
+        List<QueryProjectResponseVO> resLists;
+        LambdaUpdateWrapper<Project> wrapper = new LambdaUpdateWrapper<>();
+        if(!StringUtils.isBlank(requestDTO.getName())){
+            wrapper.like(Project::getName, requestDTO.getName());
+        }
+        if(!StringUtils.isBlank(requestDTO.getCodeLanguage())){
+            wrapper.eq(Project::getCodeLanguage,requestDTO.getCodeLanguage());
+        }
+        if(Objects.nonNull(requestDTO.getAmountMax())){
+            wrapper.le(Project::getPrice, requestDTO.getAmountMax());
+        }
+        if (Objects.nonNull(requestDTO.getAmountMin())) {
+            wrapper.ge(Project::getPrice, requestDTO.getAmountMin());
+        }
         try {
-            List<Project> projectPage = projectMapper.queryProjectPage(requestDTO);
-            resLists = projectPage.stream().map((QueryProjectResponseDTO::convertWithoutDetail)).collect(Collectors.toList());
-            return resLists;
+            Page<Project> projectPage = projectMapper.selectPage(new Page<>(page, limit), wrapper);
+            List<Project> records = projectPage.getRecords();
+            resLists = records.stream().map((QueryProjectResponseVO::convertWithoutDetail)).collect(Collectors.toList());
+            return QueryProjectPageResponseDTO.builder().total((int) projectPage.getTotal()).respList(resLists).build();
         }catch (RuntimeException e){
             throw new ServerException(ResultCode.QUERY_PROJECT_FAIL);
         }
     }
 
     @Override
-    public QueryProjectResponseDTO queryOne(String id) {
+    public QueryProjectResponseVO queryOne(String id) {
         Project one = projectMapper.selectOne(new QueryWrapper<Project>().eq("id", id));
-        return QueryProjectResponseDTO.convert(one);
+        return QueryProjectResponseVO.convert(one);
     }
 
     @Override
