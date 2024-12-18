@@ -43,7 +43,6 @@ public class GlobalExceptionHandle {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result<String> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
         log.error(e.getMessage());
-        // 获取校验错误信息
         return Result.error("400", Objects.requireNonNull(e.getBindingResult().getFieldError()).getDefaultMessage());
     }
 
