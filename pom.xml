@@ -205,6 +205,13 @@
             <version>1.4.0</version>
         </dependency>
 
+<!--        代码格式化依赖-->
+        <dependency>
+            <groupId>com.google.googlejavaformat</groupId>
+            <artifactId>google-java-format</artifactId>
+            <version>1.17.0</version> <!-- 请使用最新版本 -->
+        </dependency>
+
     </dependencies>
 
     <build>

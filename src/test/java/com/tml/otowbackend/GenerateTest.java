@@ -4,12 +4,12 @@ import com.tml.otowbackend.engine.generator.funpack.FuncPackManager;
 import com.tml.otowbackend.engine.generator.template.java.InitConfigTemplate;
 import com.tml.otowbackend.engine.generator.template.java.InitTemplate;
 import com.tml.otowbackend.engine.generator.template.meta.MetalField;
+import com.tml.otowbackend.util.CodeFormatterUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -35,21 +35,21 @@ public class GenerateTest {
         fields.add(new MetalField("uid", String.class));
         fields.add(new MetalField("uid", String.class));
         fields.add(new MetalField("avatar", String.class));
-        fields.add(new MetalField("cid", int.class));
+        fields.add(new MetalField("cid", Integer.class));
 
         System.out.println("================================================================================");
         InitTemplate initTemplate = new InitTemplate(funcPackManager, className, tableName, fields, List.of("1001", "1002", "1003", "1004"));
         initTemplate.initTemplate();
 
-        System.out.println(initTemplate.generateEntity());
+        System.out.println(CodeFormatterUtil.formatCode(initTemplate.generateEntity()));
         System.out.println("================================================================================");
-        System.out.println(initTemplate.generateMapper());
+        System.out.println(CodeFormatterUtil.formatCode(initTemplate.generateMapper()));
         System.out.println("================================================================================");
-        System.out.println(initTemplate.generateService());
+        System.out.println(CodeFormatterUtil.formatCode(initTemplate.generateService()));
         System.out.println("================================================================================");
-        System.out.println(initTemplate.generateServiceImpl());
+        System.out.println(CodeFormatterUtil.formatCode(initTemplate.generateServiceImpl()));
         System.out.println("================================================================================");
-        System.out.println(initTemplate.generateController());
+        System.out.println(CodeFormatterUtil.formatCode(initTemplate.generateController()));
     }
 
     @Test
