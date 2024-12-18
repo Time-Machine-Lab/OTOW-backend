@@ -1,5 +1,7 @@
 package com.tml.otowbackend.engine.generator.template.meta;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -70,7 +72,9 @@ public abstract class ImportChecker {
      * @param path 需要导入的类路径
      */
     protected void addImportPath(String path) {
-        this.importClazz.add(path);
+        if (!StringUtils.isBlank(path)) {
+            this.importClazz.add(path);
+        }
     }
 
     /**

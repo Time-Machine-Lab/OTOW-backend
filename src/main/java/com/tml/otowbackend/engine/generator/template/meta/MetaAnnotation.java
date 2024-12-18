@@ -17,7 +17,12 @@ import java.util.stream.Collectors;
  * @see ImportChecker
  */
 @Data
-public class MetaAnnotation extends ImportChecker {
+public class MetaAnnotation extends ImportChecker implements Cloneable {
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 
     /**
      * 注解的参数，存储为键值对，其中键是参数名，值是参数值。

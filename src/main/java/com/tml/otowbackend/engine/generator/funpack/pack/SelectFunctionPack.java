@@ -1,9 +1,12 @@
 package com.tml.otowbackend.engine.generator.funpack.pack;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.tml.otowbackend.engine.ai.result.FeaturePackage;
 import com.tml.otowbackend.engine.generator.funpack.AbstrateFunctionPack;
+import com.tml.otowbackend.engine.generator.template.java.method.AddServiceMethodTemplate;
 import com.tml.otowbackend.engine.generator.template.java.method.SelectServiceMethodTemplate;
 import com.tml.otowbackend.engine.generator.template.java.model.ReqTemplate;
+import com.tml.otowbackend.engine.generator.template.java.model.VOTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.ControllerTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.ServiceImplTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.ServiceTemplate;
@@ -14,8 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 import static com.tml.otowbackend.constants.TemplateConstant.Path_Variable;
-import static com.tml.otowbackend.engine.generator.template.java.InitTemplate.engine;
-import static com.tml.otowbackend.engine.generator.template.java.InitTemplate.reqPackagePath;
+import static com.tml.otowbackend.engine.generator.template.java.InitTemplate.*;
 
 @Component
 public class SelectFunctionPack extends AbstrateFunctionPack {
@@ -28,7 +30,6 @@ public class SelectFunctionPack extends AbstrateFunctionPack {
         return new FeaturePackage("1004", "查询实体类");
     }
 
-    // controller的删除方法
     @Override
     protected void addMethodToController(ControllerTemplate controller) {
         controller.addGetMethod(getSelectMethod(), "/get/{id}");
@@ -36,26 +37,30 @@ public class SelectFunctionPack extends AbstrateFunctionPack {
 
     // controller-get 的 查询
     private MetaMethod getSelectMethod(){
-        ReqTemplate reqUser = new ReqTemplate(reqPackagePath, "id");
-        MetaMethodParam metaMethodParam = new MetaMethodParam("Integer",reqUser.getAllPackagePath(), "id");
+        MetaMethodParam metaMethodParam = new MetaMethodParam("Integer",null, "id");
         metaMethodParam.addAnnotations(List.of(Path_Variable));
         String body = "return " + String.format("%s.%s(%s);", getParamString("classLower"), selectServiceMethod, "id");
         MetaMethod metaMethod = new MetaMethod(selectServiceMethod, List.of(metaMethodParam), body);
-        metaMethod.setReturnRes(getParamString("className"));
+        metaMethod.setReturnRes(new VOTemplate(voPackagePath, getParamString("className")));
         return metaMethod;
     }
+
 
     @Override
     protected void addMethodToService(ServiceTemplate service) {
         MetaMethodParam metaMethodParam = new MetaMethodParam("Integer", "id");
-        service.addMethod(selectServiceMethod, metaMethodParam);
+        MetaMethod metaMethod = new MetaMethod(selectServiceMethod, List.of(metaMethodParam));
+        metaMethod.setReturnRes(new VOTemplate(voPackagePath, getParamString("className")));
+        service.addMethods(metaMethod);
     }
 
     // serviceImpl的查找方法
     @Override
     protected void addMethodToServiceImpl(ServiceImplTemplate serviceImplTemplate) {
         SelectServiceMethodTemplate selectServiceMethodTemplate = new SelectServiceMethodTemplate(selectTemplateFilePath,getParamString("className"));
-        MetaMethod metaMethod = new MetaMethod(engine.generate(selectServiceMethodTemplate));
+        MetaMethodParam metaMethodParam = new MetaMethodParam("Integer",null, "id");
+        MetaMethod metaMethod = new MetaMethod(selectServiceMethod, List.of(metaMethodParam), engine.generate(selectServiceMethodTemplate));
+        metaMethod.setReturnRes(new VOTemplate(voPackagePath, getParamString("className")));
         serviceImplTemplate.addMethod(metaMethod);
     }
 }

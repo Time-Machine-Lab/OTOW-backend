@@ -19,7 +19,26 @@ import java.util.Objects;
  * @see MetaAnnotation
  */
 @Data
-public class MetalField extends ImportChecker {
+public class MetalField extends ImportChecker implements Cloneable {
+
+    @Override
+    protected Object clone() throws CloneNotSupportedException {
+        MetalField metalField = (MetalField) super.clone();
+        List<MetaAnnotation> list = new ArrayList<>();
+        for (MetaAnnotation annotation : annotations) {
+            list.add((MetaAnnotation) annotation.clone());
+        }
+        metalField.annotations = list;
+        return metalField;
+    }
+
+    public MetalField getClone() {
+        try {
+            return (MetalField) clone();
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * 成员变量的名称。

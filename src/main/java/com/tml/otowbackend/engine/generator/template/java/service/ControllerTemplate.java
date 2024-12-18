@@ -1,4 +1,5 @@
 package com.tml.otowbackend.engine.generator.template.java.service;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.tml.otowbackend.engine.generator.template.java.ClassTemplate;
 import com.tml.otowbackend.engine.generator.template.meta.MetaAnnotation;
 import com.tml.otowbackend.engine.generator.template.meta.MetaMethod;
@@ -48,7 +49,7 @@ public class ControllerTemplate extends ClassTemplate {
         this.services.add(serviceTemplate);
         String serviceClass = serviceTemplate.getClassName();
         String servicePackage = serviceTemplate.getAllPackagePath();
-        String serviceName = serviceClass.toLowerCase();
+        String serviceName = StringUtils.firstToLowerCase(serviceClass);
         MetalField service = new MetalField(serviceName, serviceClass);
         service.addAnnotations(List.of(new MetaAnnotation(Resource.class)));
         this.addModelField(service);

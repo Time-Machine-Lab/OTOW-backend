@@ -79,9 +79,9 @@ public class MetaMethodParam extends ImportChecker {
      * @param name 参数名称
      */
     public MetaMethodParam(String clazz, String classPath, String name) {
-        this.name = name;
         this.clazz = clazz;
         this.addImportPath(classPath);
+        this.name = name;
     }
 
     /**

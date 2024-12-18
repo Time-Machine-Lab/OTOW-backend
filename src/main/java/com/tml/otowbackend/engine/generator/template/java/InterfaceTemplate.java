@@ -222,6 +222,7 @@ public abstract class InterfaceTemplate extends JavaOTOWTemplate {
      * @param metaMethod 接口方法
      */
     public void addMethods(MetaMethod metaMethod) {
+        addImportAndCheck(metaMethod);
         this.methods.add(metaMethod);
     }
 

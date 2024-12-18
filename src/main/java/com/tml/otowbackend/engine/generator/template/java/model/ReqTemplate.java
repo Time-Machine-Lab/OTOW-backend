@@ -9,9 +9,8 @@ import static com.tml.otowbackend.constants.TemplateConstant.REQ_ANNOTATION;
 public class ReqTemplate extends ClassTemplate {
 
     public ReqTemplate(String packagePath, String className) {
-        super(packagePath, className+"Req");
+        super(packagePath, className + "Req");
     }
-
 
     @Override
     public void initAnnotations(){

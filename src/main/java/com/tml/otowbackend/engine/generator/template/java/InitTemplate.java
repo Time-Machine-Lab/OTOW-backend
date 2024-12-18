@@ -9,12 +9,13 @@ import com.tml.otowbackend.engine.generator.funpack.FuncPackManager;
 import com.tml.otowbackend.engine.generator.engine.VelocityCodeEngine;
 import com.tml.otowbackend.engine.generator.template.VelocityOTOWTemplate;
 import com.tml.otowbackend.engine.generator.template.java.model.EntityTemplate;
+import com.tml.otowbackend.engine.generator.template.java.model.ReqTemplate;
+import com.tml.otowbackend.engine.generator.template.java.model.VOTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.ControllerTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.MapperTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.ServiceImplTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.ServiceTemplate;
 import com.tml.otowbackend.engine.generator.template.meta.MetaAnnotation;
-import com.tml.otowbackend.engine.generator.template.meta.MetaMethodParam;
 import com.tml.otowbackend.engine.generator.template.meta.MetalField;
 import lombok.NoArgsConstructor;
 
@@ -27,19 +28,25 @@ import static com.tml.otowbackend.engine.generator.utils.MetalUtils.getDescribe;
 @NoArgsConstructor
 public class InitTemplate {
 
-    public static final String entityPackagePath = "io.github.geniusay.velocity.generate";
-    public static final String servicePackagePath = "io.github.geniusay.velocity.generate.service";
-    public static final String reqPackagePath = "io.github.geniusay.velocity.generate.pojo.req";
-    public static final String mapperPackagePath = "io.github.geniusay.velocity.generate.mapper";
-    public static final String serviceImplPackagePath = "io.github.geniusay.velocity.generate.service.impl";
+    public static String entityPackagePath = "model.entity";
+    public static String controllerPackagePath = "controller";
+    public static String servicePackagePath = "service";
+    public static String reqPackagePath = "model.req";
+    public static String voPackagePath = "model.vo";
+    public static String mapperPackagePath = "mapper";
+    public static String serviceImplPackagePath = "service.impl";
 
     public static VelocityCodeEngine engine = VelocityCodeEngine.getCodeEngine();
 
+
+    public String prefix;
     public FuncPackManager funcPackManager;
     public String className;
     public String tableName;
     public String describe;
-    public LinkedList<MetalField> fields;
+    public LinkedList<MetalField> fields = new LinkedList<>();
+    public LinkedList<MetalField> fieldsVO = new LinkedList<>();
+    public LinkedList<MetalField> fieldsReq = new LinkedList<>();
     public List<String> featureIds;
 
     private ServiceTemplate serviceTemplate;
@@ -47,8 +54,18 @@ public class InitTemplate {
     private ServiceImplTemplate serviceImplTemplate;
     private MapperTemplate mapperTemplate;
     private EntityTemplate entityTemplate;
+    private ReqTemplate entityReqTemplate;
+    private VOTemplate entityVOTemplate;
 
-    public InitTemplate(FuncPackManager funcPackManager, String className, String tableName, String describe, LinkedList<MetalField> fields, List<String> featureIds) {
+    public InitTemplate(String prefix, FuncPackManager funcPackManager, String className, String tableName, String describe, LinkedList<MetalField> fields, List<String> featureIds) {
+        this.prefix = prefix;
+        this.entityPackagePath = prefix + entityPackagePath;
+        this.servicePackagePath = prefix + servicePackagePath;
+        this.reqPackagePath = prefix + reqPackagePath;
+        this.voPackagePath = prefix + voPackagePath;
+        this.mapperPackagePath = prefix + mapperPackagePath;
+        this.serviceImplPackagePath = prefix + serviceImplPackagePath;
+        this.controllerPackagePath = prefix + controllerPackagePath;
         this.funcPackManager = funcPackManager;
         this.className = className;
         this.tableName = tableName;
@@ -58,8 +75,16 @@ public class InitTemplate {
     }
 
     public void initTemplate() {
+        //  将属性添加到新集合中 给req、VO使用
+        for (MetalField field : fields) {
+            MetalField clone = field.getClone();
+            fieldsReq.add(clone);
+            fieldsVO.add(clone);
+        }
         judgeMetalField();
         entityTemplate = getEntityTemplate();
+        entityReqTemplate = getEntityReqTemplate();
+        entityVOTemplate = getEntityVOTemplate();
         mapperTemplate = getMapperTemplate();
         serviceTemplate = getServiceTemplate();
         serviceImplTemplate = getServiceImplTemplate();
@@ -72,6 +97,12 @@ public class InitTemplate {
 
     public String generateEntity() {
         return generateStringWithTemplate(entityTemplate);
+    }
+    public String generateEntityReq(){
+        return generateStringWithTemplate(entityReqTemplate);
+    }
+    public String generateEntityVO(){
+        return generateStringWithTemplate(entityVOTemplate);
     }
 
     public String generateMapper() {
@@ -97,16 +128,29 @@ public class InitTemplate {
         return entityTemplate;
     }
 
+    // 根据给定的实体类名、字段生成实体Req模板
+    private ReqTemplate getEntityReqTemplate() {
+        ReqTemplate reqTemplate = new ReqTemplate(reqPackagePath,className);
+        reqTemplate.addModelFields(fieldsReq);
+        return reqTemplate;
+    }
+
+    // 根据给定的实体类名、字段生成实体VO模板
+    private VOTemplate getEntityVOTemplate() {
+        VOTemplate voTemplate = new VOTemplate(voPackagePath,className);
+        voTemplate.addModelFields(fieldsVO);
+        return voTemplate;
+    }
+
     private MapperTemplate getMapperTemplate() {
         return new MapperTemplate(mapperPackagePath, className, entityTemplate);
     }
 
     private ServiceTemplate getServiceTemplate() {
         ServiceTemplate userService = new ServiceTemplate(servicePackagePath, className);
-        MetaMethodParam metaMethodParam = new MetaMethodParam(className, userService.getAllPackagePath(), className.toLowerCase());
         for (String featureId : featureIds) {
             AbstrateFunctionPack pack = funcPackManager.getFunctionPackById(featureId);
-            pack.addParams("metaMethodParam", metaMethodParam);
+            pack.addParams("className", className);
             pack.generateService(userService);
         }
         return userService;
@@ -124,9 +168,9 @@ public class InitTemplate {
     }
 
     private ControllerTemplate getControllerTemplate() {
-        ControllerTemplate userController = new ControllerTemplate(entityPackagePath, className, "/" + className.toLowerCase());
+        ControllerTemplate userController = new ControllerTemplate(controllerPackagePath, className, "/" + className.toLowerCase());
         userController.addService(serviceTemplate);
-        String classLower = serviceTemplate.getClassName().toLowerCase();
+        String classLower = StringUtils.firstToLowerCase(serviceTemplate.getClassName());
         for (String featureId : featureIds) {
             AbstrateFunctionPack pack = funcPackManager.getFunctionPackById(featureId);
             pack.addParams("className", className);

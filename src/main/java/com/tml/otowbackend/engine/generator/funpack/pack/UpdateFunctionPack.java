@@ -1,7 +1,9 @@
 package com.tml.otowbackend.engine.generator.funpack.pack;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.tml.otowbackend.engine.ai.result.FeaturePackage;
 import com.tml.otowbackend.engine.generator.funpack.AbstrateFunctionPack;
+import com.tml.otowbackend.engine.generator.template.java.method.AddServiceMethodTemplate;
 import com.tml.otowbackend.engine.generator.template.java.method.UpdateServiceMethodTemplate;
 import com.tml.otowbackend.engine.generator.template.java.model.ReqTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.ControllerTemplate;
@@ -31,12 +33,12 @@ public class UpdateFunctionPack extends AbstrateFunctionPack {
     // controller的添加方法
     @Override
     protected void addMethodToController(ControllerTemplate controller) {
-        controller.addPostMethod(getUpdateMethod(), "/update/user");
+        controller.addPostMethod(getUpdateMethod(), "/update"+getParamString("className"));
     }
     // controller-post 的 更新
     private MetaMethod getUpdateMethod(){
         ReqTemplate reqUser = new ReqTemplate(reqPackagePath, getParamString("className"));
-        MetaMethodParam metaMethodParam = new MetaMethodParam(reqUser.getClassName(),reqUser.getAllPackagePath(), reqUser.getClassName().toLowerCase());
+        MetaMethodParam metaMethodParam = new MetaMethodParam(reqUser.getClassName(),reqUser.getAllPackagePath(), StringUtils.firstToLowerCase(reqUser.getClassName()));
         metaMethodParam.addAnnotations(List.of(REQUEST_BODY));
         String body = String.format("%s.%s(%s);", getParamString("classLower"), updateServiceMethod, metaMethodParam.getName());
         return new MetaMethod(updateServiceMethod, List.of(metaMethodParam), body);
@@ -44,13 +46,17 @@ public class UpdateFunctionPack extends AbstrateFunctionPack {
 
     @Override
     protected void addMethodToService(ServiceTemplate service) {
-        service.addMethods(updateServiceMethod, List.of((MetaMethodParam) getParam("metaMethodParam")));
+        ReqTemplate reqUser = new ReqTemplate(reqPackagePath, getParamString("className"));
+        MetaMethodParam metaMethodParam = new MetaMethodParam(reqUser.getClassName(),reqUser.getAllPackagePath(), StringUtils.firstToLowerCase(reqUser.getClassName()));
+        service.addMethods(updateServiceMethod, List.of(metaMethodParam));
     }
 
     @Override
     protected void addMethodToServiceImpl(ServiceImplTemplate serviceImplTemplate) {
+        ReqTemplate reqUser = new ReqTemplate(reqPackagePath, getParamString("className"));
+        MetaMethodParam metaMethodParam = new MetaMethodParam(reqUser.getClassName(),reqUser.getAllPackagePath(), StringUtils.firstToLowerCase(reqUser.getClassName()));
         UpdateServiceMethodTemplate updateServiceMethodTemplate = new UpdateServiceMethodTemplate(updateTemplateFilePath, getParamString("className"));
-        MetaMethod metaMethod = new MetaMethod(engine.generate(updateServiceMethodTemplate));
+        MetaMethod metaMethod = new MetaMethod(updateServiceMethod, List.of(metaMethodParam), engine.generate(updateServiceMethodTemplate));
         serviceImplTemplate.addMethod(metaMethod);
     }
 }

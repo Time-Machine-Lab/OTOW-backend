@@ -38,6 +38,7 @@ public class GenerateTest {
 
     @Test
     public void testGenerate() throws Exception {
+        String prefix = "com.example.";
 
         String treeId = virtualFileService.initializeVirtualTree(PathUtils.getSpringbootPath(), null);
         SpringBootTreeTemplate template = new SpringBootTreeTemplate(virtualFileService, treeId);
@@ -86,7 +87,7 @@ public class GenerateTest {
                     System.out.println(field);
                     fields.add(new MetalField(field.getFname(), TypeConverter.toDatabaseFriendlyType(field.getFtype()), getDescribe(field.getFdesc())));
                 }
-                InitTemplate initTemplate = new InitTemplate(funcPackManager, className, tableName, describe, fields, definition.getFeatureIds());
+                InitTemplate initTemplate = new InitTemplate(prefix, funcPackManager, className, tableName, describe, fields, definition.getFeatureIds());
                 initTemplate.initTemplate();
 
                 template.entity(className + "Entity.java", formatCodeList(initTemplate.generateEntity()));
@@ -106,6 +107,8 @@ public class GenerateTest {
 
     @Test
     public void generateInitTemplate() {
+        String prefix = "com.example.";
+
         String className = "User";
         String tableName = "user";
         String describe = "用户类";
@@ -118,10 +121,14 @@ public class GenerateTest {
         fields.add(new MetalField("sex", Boolean.class, getDescribe("用户性别")));
 
         System.out.println("================================================================================");
-        InitTemplate initTemplate = new InitTemplate(funcPackManager, className, tableName, describe, fields, List.of("1001", "1002", "1003", "1004"));
+        InitTemplate initTemplate = new InitTemplate(prefix, funcPackManager, className, tableName, describe, fields, List.of("1001", "1002", "1003", "1004"));
         initTemplate.initTemplate();
 
         System.out.println(CodeFormatterUtil.formatCode(initTemplate.generateEntity()));
+        System.out.println("================================================================================");
+        System.out.println(CodeFormatterUtil.formatCode(initTemplate.generateEntityReq()));
+        System.out.println("================================================================================");
+        System.out.println(CodeFormatterUtil.formatCode(initTemplate.generateEntityVO()));
         System.out.println("================================================================================");
         System.out.println(CodeFormatterUtil.formatCode(initTemplate.generateMapper()));
         System.out.println("================================================================================");

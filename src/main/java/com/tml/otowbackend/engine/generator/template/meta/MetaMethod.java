@@ -1,5 +1,6 @@
 package com.tml.otowbackend.engine.generator.template.meta;
 
+import com.tml.otowbackend.engine.generator.template.java.ClassTemplate;
 import lombok.Data;
 
 import java.util.ArrayList;
@@ -100,6 +101,12 @@ public class MetaMethod extends ImportChecker {
         addParams(params);
     }
 
+    public MetaMethod(String methodName, List<MetaMethodParam> params) {
+        this.methodName = methodName;
+        this.returnRes = "void";
+        addParams(params);
+    }
+
     /**
      * 构造一个 `MetaMethod` 对象，仅设置方法体。
      * 适用于直接渲染方法体时使用。
@@ -151,7 +158,8 @@ public class MetaMethod extends ImportChecker {
         return new MetaMethod(methodBody);
     }
 
-    public void setReturnRes(String returnRes) {
-        this.returnRes = returnRes;
+    public void setReturnRes(ClassTemplate classTemplate) {
+        addImportPath(classTemplate.getAllPackagePath());
+        this.returnRes = classTemplate.getClassName();
     }
 }

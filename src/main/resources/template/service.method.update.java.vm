@@ -1,4 +1,2 @@
 // Update method
-public void update(${entityClassName} ${entityClassNameLower}) {
     ${entityClassNameLower}Mapper.save(${entityClassNameLower});
-}

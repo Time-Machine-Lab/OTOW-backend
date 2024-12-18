@@ -1,5 +1,6 @@
 package com.tml.otowbackend.engine.generator.template.java.service;
 
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.tml.otowbackend.engine.generator.template.java.ClassTemplate;
 import com.tml.otowbackend.engine.generator.template.meta.MetaAnnotation;
 import com.tml.otowbackend.engine.generator.template.meta.MetaMethod;
@@ -37,7 +38,7 @@ public class ServiceImplTemplate extends ClassTemplate {
         this.mappers.add(mapperTemplate);
         String mapperClass = mapperTemplate.getClassName();
         String mapperPackage = mapperTemplate.getAllPackagePath();
-        String mapperName = mapperClass.toLowerCase();
+        String mapperName = StringUtils.firstToLowerCase(mapperClass);
         MetalField mapper = new MetalField(mapperName, mapperClass);
         mapper.addAnnotations(List.of(new MetaAnnotation(Resource.class)));
         this.addModelField(mapper);
@@ -45,7 +46,6 @@ public class ServiceImplTemplate extends ClassTemplate {
     }
 
     public void addMethod(MetaMethod method){
-//        System.out.println(method);
         this.methods.add(method);
         super.addMethod(method);
     }
