@@ -1,9 +1,9 @@
-package com.tml.otowbackend.engine.generator.funpack;
+package com.tml.otowbackend.engine.generator.funpack.pack;
 
 
 import com.tml.otowbackend.engine.ai.result.FeaturePackage;
+import com.tml.otowbackend.engine.generator.funpack.AbstrateFunctionPack;
 import com.tml.otowbackend.engine.generator.template.java.method.DeleteServiceMethodTemplate;
-import com.tml.otowbackend.engine.generator.template.java.method.UpdateServiceMethodTemplate;
 import com.tml.otowbackend.engine.generator.template.java.model.ReqTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.ControllerTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.ServiceImplTemplate;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 import static com.tml.otowbackend.constants.TemplateConstant.Path_Variable;
-import static com.tml.otowbackend.constants.TemplateConstant.REQUEST_BODY;
 import static com.tml.otowbackend.engine.generator.template.java.InitTemplate.engine;
 import static com.tml.otowbackend.engine.generator.template.java.InitTemplate.reqPackagePath;
 

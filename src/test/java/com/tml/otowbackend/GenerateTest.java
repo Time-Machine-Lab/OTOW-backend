@@ -19,7 +19,6 @@ import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OtowBackendApplication.class)
-//@WebAppConfiguration
 @Slf4j
 public class GenerateTest {
 
@@ -27,7 +26,7 @@ public class GenerateTest {
     FuncPackManager funcPackManager;
 
     @Test
-    public void generateInitTemplate(){
+    public void generateInitTemplate() {
         String className = "User";
         String tableName = "user";
 
@@ -38,37 +37,8 @@ public class GenerateTest {
         fields.add(new MetalField("avatar", String.class));
         fields.add(new MetalField("cid", int.class));
 
-        Map<String, Object> applicationConfig = new HashMap<>();
-        applicationConfig.put("port",8080);
-        applicationConfig.put("mysql",Map.of(
-                "enable", true,
-                "url", "jdbc:mysql://127.0.0.1:3306/otow?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC",
-                "username", "root",
-                "password", "root"
-        ));
-        applicationConfig.put("applicationName","otow");
-
-        Map<String, Object> pomConfigDependency = new HashMap<>();
-        pomConfigDependency.put("groupId","org.springframework.boot");
-        pomConfigDependency.put("artifactId","spring-boot-starter-test");
-        pomConfigDependency.put("version","${boot.version}");
-
-        Map<String, Object> pomConfigProperty = new HashMap<>();
-        pomConfigProperty.put("name", "boot.version");
-        pomConfigProperty.put("value", "2.3.9.RELEASE");
-
-        String systemName = "otow";
-        InitConfigTemplate initConfigTemplate = new InitConfigTemplate(systemName, applicationConfig, pomConfigDependency, pomConfigProperty);
-        String generateApplication = initConfigTemplate.getGenerateApplication();
-        System.out.println(generateApplication);
-        System.out.println("==================================================================================");
-        String generateApplicationConfig = initConfigTemplate.getGenerateApplicationConfig();
-//        System.out.println(generateApplicationConfig);
-        System.out.println("====================================================================================");
-        String generatePomConfig = initConfigTemplate.getGeneratePomConfig();
-//        System.out.println(generatePomConfig);
         System.out.println("================================================================================");
-        InitTemplate initTemplate = new InitTemplate(funcPackManager, className,tableName,fields,List.of("1001", "1002", "1003", "1004"));
+        InitTemplate initTemplate = new InitTemplate(funcPackManager, className, tableName, fields, List.of("1001", "1002", "1003", "1004"));
         initTemplate.initTemplate();
 
         System.out.println(initTemplate.generateEntity());
@@ -80,5 +50,38 @@ public class GenerateTest {
         System.out.println(initTemplate.generateServiceImpl());
         System.out.println("================================================================================");
         System.out.println(initTemplate.generateController());
+    }
+
+    @Test
+    public void generateInitConfigTemplate() {
+        Map<String, Object> applicationConfig = new HashMap<>();
+        applicationConfig.put("port", 8080);
+        applicationConfig.put("mysql", Map.of(
+                "enable", true,
+                "url", "jdbc:mysql://127.0.0.1:3306/otow?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC",
+                "username", "root",
+                "password", "root"
+        ));
+        applicationConfig.put("applicationName", "otow");
+
+        Map<String, Object> pomConfigDependency = new HashMap<>();
+        pomConfigDependency.put("groupId", "org.springframework.boot");
+        pomConfigDependency.put("artifactId", "spring-boot-starter-test");
+        pomConfigDependency.put("version", "${boot.version}");
+
+        Map<String, Object> pomConfigProperty = new HashMap<>();
+        pomConfigProperty.put("name", "boot.version");
+        pomConfigProperty.put("value", "2.3.9.RELEASE");
+
+        String systemName = "otow";
+        InitConfigTemplate initConfigTemplate = new InitConfigTemplate(systemName, applicationConfig, pomConfigDependency, pomConfigProperty);
+        String generateApplication = initConfigTemplate.getGenerateApplication();
+        System.out.println(generateApplication);
+        System.out.println("==================================================================================");
+        String generateApplicationConfig = initConfigTemplate.getGenerateApplicationConfig();
+        System.out.println(generateApplicationConfig);
+        System.out.println("====================================================================================");
+        String generatePomConfig = initConfigTemplate.getGeneratePomConfig();
+        System.out.println(generatePomConfig);
     }
 }

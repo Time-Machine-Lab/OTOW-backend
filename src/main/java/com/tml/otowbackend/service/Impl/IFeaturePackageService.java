@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @SuppressWarnings("all")
 @Service
-public class FeaturePackageServiceImpl implements FeaturePackageService {
+public class IFeaturePackageService implements FeaturePackageService {
 
     // 静态支持的功能包列表
     private static final List<FeaturePackage> SUPPORTED_FEATURE_PACKAGES = List.of(

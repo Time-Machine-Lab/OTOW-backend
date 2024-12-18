@@ -17,7 +17,7 @@ import java.util.List;
 import static com.tml.otowbackend.constants.ProjectConstants.ENTITY_CLASSES;
 
 @Service
-public class EntityClassServiceImpl implements EntityClassService {
+public class IEntityClassService implements EntityClassService {
 
     @Resource
     private OTOWCacheService cacheService;

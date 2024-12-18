@@ -18,7 +18,7 @@ import static com.tml.otowbackend.constants.AIConstant.GENERATE_DESC;
 import static com.tml.otowbackend.constants.ProjectConstants.*;
 
 @Service
-public class AIServiceImpl implements AIService {
+public class IAIService implements AIService {
 
     @Resource
     private OTOWCacheService cacheService;

@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 @Component
 public class FuncPackManager {
 
-    private Map<String, AbstrateFunctionPack> functionPackMap = new HashMap<>();
+    private final Map<String, AbstrateFunctionPack> functionPackMap = new HashMap<>();
 
     @Autowired
     public FuncPackManager(ApplicationContext applicationContext) {

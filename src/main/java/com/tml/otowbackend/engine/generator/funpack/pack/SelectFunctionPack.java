@@ -1,7 +1,7 @@
-package com.tml.otowbackend.engine.generator.funpack;
+package com.tml.otowbackend.engine.generator.funpack.pack;
 
 import com.tml.otowbackend.engine.ai.result.FeaturePackage;
-import com.tml.otowbackend.engine.generator.template.java.method.DeleteServiceMethodTemplate;
+import com.tml.otowbackend.engine.generator.funpack.AbstrateFunctionPack;
 import com.tml.otowbackend.engine.generator.template.java.method.SelectServiceMethodTemplate;
 import com.tml.otowbackend.engine.generator.template.java.model.ReqTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.ControllerTemplate;
@@ -18,7 +18,7 @@ import static com.tml.otowbackend.engine.generator.template.java.InitTemplate.en
 import static com.tml.otowbackend.engine.generator.template.java.InitTemplate.reqPackagePath;
 
 @Component
-public class SelectFunctionPack extends AbstrateFunctionPack  {
+public class SelectFunctionPack extends AbstrateFunctionPack {
     public static final String selectTemplateFilePath = "service.method.select.java.vm";
 
     public static final String selectServiceMethod = "select";
