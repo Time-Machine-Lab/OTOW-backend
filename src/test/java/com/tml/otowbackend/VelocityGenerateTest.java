@@ -31,7 +31,7 @@ public class VelocityGenerateTest {
 
     private static VelocityCodeEngine engine = VelocityCodeEngine.getCodeEngine();
     private static EntityTemplate getEntityTemplate() {
-        EntityTemplate userEntity = new EntityTemplate("io.github.geniusay.velocity.generate", "User", "user");
+        EntityTemplate userEntity = new EntityTemplate("io.github.geniusay.velocity.generate", "User", "user", "测试类");
 
         MetaAnnotation fillAnnotation = new MetaAnnotation(TableField.class, "fill", "FieldFill.INSERT_UPDATE", FieldFill.class);
         MetaAnnotation tableId = new MetaAnnotation(TableId.class);

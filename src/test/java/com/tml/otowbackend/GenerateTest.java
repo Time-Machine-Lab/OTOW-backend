@@ -4,6 +4,7 @@ import com.tml.otowbackend.engine.generator.funpack.FuncPackManager;
 import com.tml.otowbackend.engine.generator.template.java.InitConfigTemplate;
 import com.tml.otowbackend.engine.generator.template.java.InitTemplate;
 import com.tml.otowbackend.engine.generator.template.meta.MetalField;
+import com.tml.otowbackend.engine.generator.template.meta.MetalUtils;
 import com.tml.otowbackend.util.CodeFormatterUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -13,6 +14,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 import java.util.*;
+
+import static com.tml.otowbackend.engine.generator.template.meta.MetalUtils.getDescribe;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OtowBackendApplication.class)
@@ -26,16 +29,17 @@ public class GenerateTest {
     public void generateInitTemplate() {
         String className = "User";
         String tableName = "user";
+        String describe = "用户类";
 
         LinkedList<MetalField> fields = new LinkedList<>();
-        fields.add(new MetalField("id", String.class));
-        fields.add(new MetalField("uid", String.class));
-        fields.add(new MetalField("avatar", String.class));
-        fields.add(new MetalField("cid", Integer.class));
-        fields.add(new MetalField("sex", Boolean.class));
+        fields.add(new MetalField("id", String.class, getDescribe("用户ID")));
+        fields.add(new MetalField("uid", String.class, getDescribe("用户UID")));
+        fields.add(new MetalField("avatar", String.class, getDescribe("头像")));
+        fields.add(new MetalField("cid", Integer.class, getDescribe("用户CID")));
+        fields.add(new MetalField("sex", Boolean.class, getDescribe("用户性别")));
 
         System.out.println("================================================================================");
-        InitTemplate initTemplate = new InitTemplate(funcPackManager, className, tableName, fields, List.of("1001", "1002", "1003", "1004"));
+        InitTemplate initTemplate = new InitTemplate(funcPackManager, className, tableName, describe, fields, List.of("1001", "1002", "1003", "1004"));
         initTemplate.initTemplate();
 
         System.out.println(CodeFormatterUtil.formatCode(initTemplate.generateEntity()));

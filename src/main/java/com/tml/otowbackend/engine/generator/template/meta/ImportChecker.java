@@ -96,4 +96,7 @@ public abstract class ImportChecker {
             this.addImportPaths(param.getImports());
         }
     }
+    public void addImportCheckers(ImportChecker importChecker){
+        this.addImportPaths(importChecker.getImports());
+    }
 }

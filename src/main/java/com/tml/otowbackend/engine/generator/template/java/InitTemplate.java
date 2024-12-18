@@ -22,6 +22,8 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import static com.tml.otowbackend.engine.generator.template.meta.MetalUtils.getDescribe;
+
 @NoArgsConstructor
 public class InitTemplate {
 
@@ -36,6 +38,7 @@ public class InitTemplate {
     public FuncPackManager funcPackManager;
     public String className;
     public String tableName;
+    public String describe;
     public LinkedList<MetalField> fields;
     public List<String> featureIds;
 
@@ -45,10 +48,11 @@ public class InitTemplate {
     private MapperTemplate mapperTemplate;
     private EntityTemplate entityTemplate;
 
-    public InitTemplate(FuncPackManager funcPackManager, String className, String tableName, LinkedList<MetalField> fields, List<String> featureIds) {
+    public InitTemplate(FuncPackManager funcPackManager, String className, String tableName, String describe, LinkedList<MetalField> fields, List<String> featureIds) {
         this.funcPackManager = funcPackManager;
         this.className = className;
         this.tableName = tableName;
+        this.describe = describe;
         this.fields = fields;
         this.featureIds = featureIds;
     }
@@ -88,7 +92,7 @@ public class InitTemplate {
 
     // 根据给定的实体类名、字段生成实体模板
     private EntityTemplate getEntityTemplate() {
-        EntityTemplate entityTemplate = new EntityTemplate(entityPackagePath, className, tableName);
+        EntityTemplate entityTemplate = new EntityTemplate(entityPackagePath, className, tableName, describe);
         entityTemplate.addModelFields(fields);
         return entityTemplate;
     }
@@ -134,25 +138,31 @@ public class InitTemplate {
 
     // 加强判断
     private void judgeMetalField() {
-        MetaAnnotation createTimeFill = new MetaAnnotation(TableField.class, "fill", "FieldFill.INSERT", FieldFill.class);
-        MetaAnnotation updateTimeFill = new MetaAnnotation(TableField.class, "fill", "FieldFill.INSERT_UPDATE", FieldFill.class);
+
+        // 判断id 加入时间
         MetaAnnotation tableId = new MetaAnnotation(TableId.class);
-        // 判断id 加入时间 逻辑删除
         for (MetalField metalField : fields) {
             // 判断是否是 id 字段，若是则添加 @TableId 注解 和 类型
             if (metalField.getName().equals("id")) {
-                metalField.addAnnotations(List.of(tableId));  // 添加 TableId 注解
+                metalField.addAnnotation(tableId);  // 添加 TableId 注解
                 metalField.setClazz("String");
             }
-            // 判断是否有 类型 ，没有就添加为String
+            // 判断是否有类型 ，没有就添加为String
             if (StringUtils.isBlank(metalField.getClazz())) {
                 metalField.setClazz("String");
             }
         }
+
         // 添加 createTime、updateTime、逻辑删除字段（假设为 "deleted"）
+        MetaAnnotation createTimeFill = new MetaAnnotation(TableField.class, "fill", "FieldFill.INSERT", FieldFill.class);
+        MetaAnnotation updateTimeFill = new MetaAnnotation(TableField.class, "fill", "FieldFill.INSERT_UPDATE", FieldFill.class);
+
         MetalField createTime = new MetalField("createTime", Date.class, createTimeFill);
+        createTime.addAnnotation(getDescribe("创建时间"));
         MetalField updateTime = new MetalField("updateTime", Date.class, updateTimeFill);
+        updateTime.addAnnotation(getDescribe("更新时间"));
         MetalField deleted = new MetalField("deleteFlag", Boolean.class);
+        deleted.addAnnotation(getDescribe("删除标记"));
 
         fields.addLast(deleted);
         fields.addLast(createTime);

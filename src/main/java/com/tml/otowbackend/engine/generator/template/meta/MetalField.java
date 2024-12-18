@@ -101,6 +101,10 @@ public class MetalField extends ImportChecker {
         addImportCheckers(annotations);
         this.annotations.addAll(annotations);
     }
+    public void addAnnotation(MetaAnnotation annotations) {
+        addImportCheckers(annotations);
+        this.annotations.add(annotations);
+    }
 
     /**
      * 重写 `equals` 方法，通过成员变量名称比较两个 `MetalField` 对象是否相等。
