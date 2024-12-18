@@ -150,4 +150,8 @@ public class MetaMethod extends ImportChecker {
     public static MetaMethod justStringReinder(String methodBody) {
         return new MetaMethod(methodBody);
     }
+
+    public void setReturnRes(String returnRes) {
+        this.returnRes = returnRes;
+    }
 }

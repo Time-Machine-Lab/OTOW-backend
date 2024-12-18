@@ -39,8 +39,10 @@ public class SelectFunctionPack extends AbstrateFunctionPack {
         ReqTemplate reqUser = new ReqTemplate(reqPackagePath, "id");
         MetaMethodParam metaMethodParam = new MetaMethodParam("Integer",reqUser.getAllPackagePath(), "id");
         metaMethodParam.addAnnotations(List.of(Path_Variable));
-        String body = String.format("%s.%s(%s);", getParamString("classLower"), selectServiceMethod, "id");
-        return new MetaMethod(selectServiceMethod, List.of(metaMethodParam), body);
+        String body = "return " + String.format("%s.%s(%s);", getParamString("classLower"), selectServiceMethod, "id");
+        MetaMethod metaMethod = new MetaMethod(selectServiceMethod, List.of(metaMethodParam), body);
+        metaMethod.setReturnRes(getParamString("className"));
+        return metaMethod;
     }
 
     @Override
