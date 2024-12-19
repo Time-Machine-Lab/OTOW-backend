@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.tml.otowbackend.constants.CodeLanguage;
+import com.tml.otowbackend.constants.CodeLanguageEnum;
 import com.tml.otowbackend.core.exception.ResultCode;
 import com.tml.otowbackend.core.exception.ServerException;
 import com.tml.otowbackend.mapper.ProjectMapper;
@@ -21,9 +21,9 @@ import com.tml.otowbackend.util.UserThread;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -50,7 +50,7 @@ public class IProjectServiceImpl implements ProjectService {
     public void update(UpdateProjectRequestDTO requestDTO) {
         LambdaUpdateWrapper<Project> wrapper = new LambdaUpdateWrapper<>();
         String uid = UserThread.getUid();
-        Integer language = CodeLanguage.queryCodeByLanguage(requestDTO.getCodeLanguage());
+        Integer language = CodeLanguageEnum.queryCodeByLanguage(requestDTO.getCodeLanguage());
         wrapper.eq(Project::getId,requestDTO.getId()).eq(Project::getShareUid,uid);
         if(!StringUtils.isBlank(requestDTO.getCover())){
             wrapper.set(Project::getCover, requestDTO.getCover());
@@ -122,6 +122,15 @@ public class IProjectServiceImpl implements ProjectService {
             return ossUtil.getObjectURL(one.getDownloadUrl());
         }
         throw new ServerException(ResultCode.NOT_PURCHASE_RECORD);
+    }
+
+    @Override
+    public List<String> queryCodeLanguage() {
+        List<String> res = new ArrayList<>();
+        for (CodeLanguageEnum value : CodeLanguageEnum.values()) {
+            res.add(value.getLanguage());
+        }
+        return res;
     }
 
 }

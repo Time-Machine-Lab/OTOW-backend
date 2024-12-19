@@ -20,4 +20,5 @@ public interface ProjectService {
     QueryProjectPageResponseDTO queryProject(QueryProjectRequestDTO requestDTO);
     QueryProjectResponseVO queryOne(String id);
     String download(String id);
+    List<String> queryCodeLanguage();
 }

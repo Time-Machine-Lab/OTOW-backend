@@ -5,8 +5,6 @@ import com.tml.otowbackend.core.exception.ServerException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import javax.sql.rowset.serial.SerialException;
-
 /**
  * @Description
  * @Author welsir
@@ -14,17 +12,19 @@ import javax.sql.rowset.serial.SerialException;
  */
 @Getter
 @AllArgsConstructor
-public enum CodeLanguage {
+public enum CodeLanguageEnum {
 
-    JAVA("java",1),
-    GOLANG("go",2),
-    PYTHON("python",3);
+    JAVA("Java",1),
+    GOLANG("Go",2),
+    PYTHON("Python",3),
+    CPLUS("C++",4),
+    PHP("Php",5);
 
     private final String language;
     private final Integer code;
 
     public static Integer queryCodeByLanguage(String language){
-        for (CodeLanguage codeLanguage : CodeLanguage.values()) {
+        for (CodeLanguageEnum codeLanguage : CodeLanguageEnum.values()) {
             if (codeLanguage.getLanguage().equalsIgnoreCase(language)) {
                 return codeLanguage.getCode();
             }
@@ -33,7 +33,7 @@ public enum CodeLanguage {
     }
 
     public static String queryLanguageByCode(Integer code){
-        for (CodeLanguage codeLanguage : CodeLanguage.values()) {
+        for (CodeLanguageEnum codeLanguage : CodeLanguageEnum.values()) {
             if (codeLanguage.getCode().equals(code)) {
                 return codeLanguage.getLanguage();
             }

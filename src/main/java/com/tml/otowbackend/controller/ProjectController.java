@@ -1,6 +1,7 @@
 package com.tml.otowbackend.controller;
 
 import com.tml.otowbackend.core.anno.TokenRequire;
+import com.tml.otowbackend.pojo.DO.Project;
 import com.tml.otowbackend.pojo.DTO.CreateProjectRequestDTO;
 import com.tml.otowbackend.pojo.DTO.QueryProjectRequestDTO;
 import com.tml.otowbackend.pojo.DTO.UpdateProjectRequestDTO;
@@ -64,5 +65,8 @@ public class ProjectController {
         return Result.success(projectService.download(id));
     }
 
-
+    @GetMapping("/code/language")
+    public Result<?> queryCodeLanguage(){
+        return Result.success(projectService.queryCodeLanguage());
+    }
 }

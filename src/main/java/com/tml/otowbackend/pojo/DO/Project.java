@@ -2,7 +2,7 @@ package com.tml.otowbackend.pojo.DO;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.tml.otowbackend.constants.CodeLanguage;
+import com.tml.otowbackend.constants.CodeLanguageEnum;
 import com.tml.otowbackend.pojo.DTO.CreateProjectRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,7 +40,7 @@ public class Project {
     private LocalDate updateTime;
 
     public static Project convert(CreateProjectRequestDTO dto){
-        Integer language = CodeLanguage.queryCodeByLanguage(dto.getCodeLanguage());
+        Integer language = CodeLanguageEnum.queryCodeByLanguage(dto.getCodeLanguage());
         Project project = Project.builder().codeLanguage(language).build();
         BeanUtils.copyProperties(dto,project);
         return project;

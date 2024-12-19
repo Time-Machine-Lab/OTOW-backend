@@ -1,7 +1,5 @@
 package com.tml.otowbackend.pojo.DTO;
 
-import com.tml.otowbackend.constants.CodeLanguage;
-import com.tml.otowbackend.pojo.DO.Project;
 import com.tml.otowbackend.pojo.VO.QueryProjectResponseVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

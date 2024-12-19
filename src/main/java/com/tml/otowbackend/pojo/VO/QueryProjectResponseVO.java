@@ -1,6 +1,7 @@
 package com.tml.otowbackend.pojo.VO;
 
-import com.tml.otowbackend.constants.CodeLanguage;
+
+import com.tml.otowbackend.constants.CodeLanguageEnum;
 import com.tml.otowbackend.pojo.DO.Project;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,7 +34,7 @@ public class QueryProjectResponseVO {
         return QueryProjectResponseVO.builder()
                 .id(String.valueOf(project.getId()))
                 .name(project.getName())
-                .codeLanguage(CodeLanguage.queryLanguageByCode(project.getCodeLanguage()))
+                .codeLanguage(CodeLanguageEnum.queryLanguageByCode(project.getCodeLanguage()))
                 .cover(project.getCover())
                 .description(project.getDescription())
                 .introduce(project.getIntroduce())
@@ -48,7 +49,7 @@ public class QueryProjectResponseVO {
         return QueryProjectResponseVO.builder()
                 .id(String.valueOf(project.getId()))
                 .name(project.getName())
-                .codeLanguage(CodeLanguage.queryLanguageByCode(project.getCodeLanguage()))
+                .codeLanguage(CodeLanguageEnum.queryLanguageByCode(project.getCodeLanguage()))
                 .cover(project.getCover())
                 .downloadNums(project.getDownloadNum())
                 .viewNums(project.getViewNum())
