@@ -42,7 +42,6 @@ captcha:
     height: 40
     dot-size: 50
 
-
 oss:
   stsEndPoint: ENC(BScywrt4LG0IHIHqAZLDPm+UTkKuKNjXvk1y+61Aur6GfiSVpEWtB9Gk53SW/z0d)
   bucket: ENC(w0nA1+mA/gEoY2I2ZLR5243/vTc9GnrpMZnNAUUZyUT03xo+6sjfag==)
