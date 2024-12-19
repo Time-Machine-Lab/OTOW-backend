@@ -1,0 +1,17 @@
+    return new OpenAPI()
+            .info(new Info()
+                    // API 文档标题。
+                    .title("${title}")
+                    // API 文档版本号。
+                    .version("${version}")
+                    // 文档描述信息。
+                    .description("${description}")
+                    // 作者信息。
+                    .contact(new Contact()
+                            .name("${authorName}")
+                            .email("${authorEmail}")
+                            .url("${authorUrl}"))
+                    // 开源协议信息。
+                    .license(new License()
+                            .name("Apache 2.0")
+                            .url("http://www.apache.org/licenses/LICENSE-2.0.html")));

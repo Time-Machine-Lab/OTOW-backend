@@ -22,7 +22,6 @@ import static com.tml.otowbackend.engine.generator.core.ClassTemplateFactory.eng
 @Component
 public class UpdateFunctionPack extends AbstrateFunctionPack {
 
-    public static final String updateTemplateFilePath = "service.method.update.java.vm";
     public static final String updateServiceMethod = "update";
 
     @Override
@@ -52,7 +51,7 @@ public class UpdateFunctionPack extends AbstrateFunctionPack {
     protected void addMethodToServiceImpl(ServiceImplTemplate serviceImpl) {
         ReqTemplate reqUser = new ReqTemplate(getParam("prefix") + reqPackagePath, getParam("className"));
         MetaMethodParam metaMethodParam = new MetaMethodParam(reqUser.getClassName(),reqUser.getAllPackagePath(), StringUtils.firstToLowerCase(reqUser.getClassName()));
-        UpdateServiceMethodTemplate updateServiceMethodTemplate = new UpdateServiceMethodTemplate(updateTemplateFilePath, getParam("className"));
+        UpdateServiceMethodTemplate updateServiceMethodTemplate = new UpdateServiceMethodTemplate(getParam("className"));
         MetaMethod metaMethod = new MetaMethod(updateServiceMethod, List.of(metaMethodParam), engine.generate(updateServiceMethodTemplate));
         serviceImpl.addMethod(metaMethod);
         serviceImpl.addImportClazz(BeanUtil.class);

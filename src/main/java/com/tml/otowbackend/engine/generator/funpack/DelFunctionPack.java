@@ -19,7 +19,6 @@ import static com.tml.otowbackend.engine.generator.core.ClassTemplateFactory.eng
 @Component
 public class DelFunctionPack extends AbstrateFunctionPack {
 
-    public static final String deleteTemplateFilePath = "service.method.delete.java.vm";
     public static final String deleteServiceMethod = "delete";
 
     @Override
@@ -46,7 +45,7 @@ public class DelFunctionPack extends AbstrateFunctionPack {
     // serviceImpl 的删除方法
     @Override
     protected void addMethodToServiceImpl(ServiceImplTemplate serviceImpl) {
-        DeleteServiceMethodTemplate deleteServiceMethodTemplate = new DeleteServiceMethodTemplate(deleteTemplateFilePath, getParam("className"));
+        DeleteServiceMethodTemplate deleteServiceMethodTemplate = new DeleteServiceMethodTemplate(getParam("className"));
         MetaMethodParam metaMethodParam = new MetaMethodParam("Integer",null, "id");
         MetaMethod metaMethod = new MetaMethod(deleteServiceMethod, List.of(metaMethodParam), engine.generate(deleteServiceMethodTemplate));
         serviceImpl.addMethod(metaMethod);

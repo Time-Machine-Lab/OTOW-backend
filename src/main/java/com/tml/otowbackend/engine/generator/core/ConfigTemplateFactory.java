@@ -4,6 +4,8 @@ import com.tml.otowbackend.engine.generator.engine.VelocityCodeEngine;
 import com.tml.otowbackend.engine.generator.template.java.ApplicationYmlTemplate;
 import com.tml.otowbackend.engine.generator.template.java.PomConfigTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.ApplicationTemplate;
+import com.tml.otowbackend.engine.generator.template.java.service.ConfigTemplate;
+import com.tml.otowbackend.engine.generator.template.meta.MetaMethod;
 import lombok.Data;
 
 import java.util.Map;
@@ -26,6 +28,12 @@ public class ConfigTemplateFactory {
         return engine.generate(applicationTemplate);
     }
 
+    public String generateConfig(String prefix, String className, MetaMethod method){
+        ConfigTemplate configTemplate = new ConfigTemplate(prefix + ".config", className);
+        configTemplate.addBeanMethod(method);
+        return engine.generate(configTemplate);
+    }
+
     public String generateApplicationYml(){
         return engine.generate(ymlTemplate);
     }
@@ -43,6 +51,6 @@ public class ConfigTemplateFactory {
     }
 
     public void addPomProperties(Map<String, Object> pomConfigProperty){
-        pomConfigTemplate.addDependency(pomConfigProperty);
+        pomConfigTemplate.addProperties(pomConfigProperty);
     }
 }

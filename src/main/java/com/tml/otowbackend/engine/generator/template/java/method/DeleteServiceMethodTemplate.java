@@ -7,14 +7,11 @@ import org.apache.velocity.VelocityContext;
 
 //TODO serviceImpl删除实体方法模板完善
 public class DeleteServiceMethodTemplate extends MethodTemplate {
+
     private String entityClassName;
 
-    protected DeleteServiceMethodTemplate(String templateFilePath) {
-        super(templateFilePath);
-    }
-
-    public DeleteServiceMethodTemplate(String templateFilePath, String entityClassName) {
-        super(templateFilePath);
+    public DeleteServiceMethodTemplate(String entityClassName) {
+        super("service.method.delete.java.vm");
         this.entityClassName = entityClassName;
     }
 

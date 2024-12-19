@@ -11,6 +11,4 @@ public class ServiceTemplate extends InterfaceTemplate {
     public static String getServiceClassName(String className){
         return className+"Service";
     }
-
-
 }

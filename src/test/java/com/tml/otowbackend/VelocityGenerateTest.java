@@ -114,7 +114,7 @@ public class VelocityGenerateTest {
     // service 的增加方法
     @Test
     public void generateAddService(){
-        AddServiceMethodTemplate addServiceMethodTemplate = new AddServiceMethodTemplate("service.method.save.java.vm","User");
+        AddServiceMethodTemplate addServiceMethodTemplate = new AddServiceMethodTemplate("User");
 
         String generate = engine.generate(addServiceMethodTemplate);
         System.out.println(generate);
@@ -123,7 +123,7 @@ public class VelocityGenerateTest {
     // service的删除方法
     @Test
     public void generateDeleteService(){
-        DeleteServiceMethodTemplate deleteServiceMethodTemplate = new DeleteServiceMethodTemplate("service.method.delete.java.vm","User");
+        DeleteServiceMethodTemplate deleteServiceMethodTemplate = new DeleteServiceMethodTemplate("User");
 
         String generate = engine.generate(deleteServiceMethodTemplate);
         System.out.println(generate);
@@ -132,7 +132,7 @@ public class VelocityGenerateTest {
     // service的查找方法
     @Test
     public void generateSelectService(){
-        SelectServiceMethodTemplate selectServiceMethodTemplate = new SelectServiceMethodTemplate("service.method.select.java.vm","User");
+        SelectServiceMethodTemplate selectServiceMethodTemplate = new SelectServiceMethodTemplate("User");
 
         String generate = engine.generate(selectServiceMethodTemplate);
         System.out.println(generate);
@@ -141,7 +141,7 @@ public class VelocityGenerateTest {
     // service的更新方法
     @Test
     public void generateUpdateService(){
-        UpdateServiceMethodTemplate updateServiceMethodTemplate = new UpdateServiceMethodTemplate("service.method.update.java.vm","User");
+        UpdateServiceMethodTemplate updateServiceMethodTemplate = new UpdateServiceMethodTemplate("User");
 
         String generate = engine.generate(updateServiceMethodTemplate);
         System.out.println(generate);

@@ -11,11 +11,11 @@ public class MapperTemplate extends InterfaceTemplate {
     private EntityTemplate entityTemplate;
 
     public MapperTemplate(String packagePath, String className) {
-        super(packagePath, className+"Mapper");
+        super(packagePath, className + "Mapper");
     }
 
     public MapperTemplate(String packagePath, String className, EntityTemplate entityTemplate) {
-        super(packagePath, className+"Mapper");
+        super(packagePath, className + "Mapper");
         setEntityTemplate(entityTemplate);
     }
 

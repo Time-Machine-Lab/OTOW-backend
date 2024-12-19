@@ -11,18 +11,14 @@ public class AddServiceMethodTemplate extends MethodTemplate {
 
     private String entityClassName;
 
-    public AddServiceMethodTemplate(String templateFilePath) {
-        super(templateFilePath);
-    }
-    public AddServiceMethodTemplate(String templateFilePath, String entityClassName) {
-        super(templateFilePath);
+    public AddServiceMethodTemplate(String entityClassName) {
+        super("service.method.save.java.vm");
         this.entityClassName = entityClassName;
     }
 
     @Override
     public MetaMethod generateMethod() {
-        MetaMethod metaMethod = MetaMethod.justStringReinder(generateMethodBody());
-        return metaMethod;
+        return MetaMethod.justStringReinder(generateMethodBody());
     }
 
     @Override

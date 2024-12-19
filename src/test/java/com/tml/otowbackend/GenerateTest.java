@@ -5,11 +5,17 @@ import com.tml.otowbackend.engine.ai.result.EntityClassDefinition;
 import com.tml.otowbackend.engine.generator.core.FunctionPackManager;
 import com.tml.otowbackend.engine.generator.core.ConfigTemplateFactory;
 import com.tml.otowbackend.engine.generator.core.ClassTemplateFactory;
+import com.tml.otowbackend.engine.generator.template.java.method.AddServiceMethodTemplate;
+import com.tml.otowbackend.engine.generator.template.java.method.SwaggerMethodTemplate;
+import com.tml.otowbackend.engine.generator.template.java.model.ReqTemplate;
+import com.tml.otowbackend.engine.generator.template.meta.MetaMethod;
+import com.tml.otowbackend.engine.generator.template.meta.MetaMethodParam;
 import com.tml.otowbackend.engine.generator.template.meta.MetalField;
 import com.tml.otowbackend.engine.generator.utils.TypeConverter;
 import com.tml.otowbackend.engine.tree.service.IVirtualFileService;
 import com.tml.otowbackend.engine.tree.template.SpringBootTreeTemplate;
 import com.tml.otowbackend.engine.tree.utils.PathUtils;
+import com.tml.otowbackend.pojo.DTO.SwaggerInfo;
 import com.tml.otowbackend.util.CodeFormatterUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -20,6 +26,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.annotation.Resource;
 import java.util.*;
 
+import static com.tml.otowbackend.engine.generator.core.ClassTemplateFactory.engine;
+import static com.tml.otowbackend.engine.generator.core.ClassTemplateFactory.reqPackagePath;
 import static com.tml.otowbackend.engine.generator.utils.MetalUtils.getDescribe;
 import static com.tml.otowbackend.util.CodeFormatterUtil.formatCodeList;
 import static org.apache.naming.SelectorContext.prefix;
@@ -70,6 +78,12 @@ public class GenerateTest {
         template.example("OTOWApplication.java", formatCodeList(configTemplateFactory.generateApplication(prefix, "OTOW")));
         template.resources("application.yml", formatCodeList(configTemplateFactory.generateApplicationYml()));
         template.master("pom.xml", formatCodeList(configTemplateFactory.generatePomConfig()));
+
+
+        SwaggerInfo swaggerInfo = SwaggerInfo.builder().title("社区物业管理系统").version("1.0.0").description("社区物业管理系统用于提升社区物业管理和服务效率")
+                .authorName("Genius").authorEmail("969025903@qq.com").authorUrl("https://github.com/Geniusay").build();
+        String swagger = configTemplateFactory.generateConfig(prefix, "Swagger", new SwaggerMethodTemplate(swaggerInfo).generateMethod());
+        template.config("SwaggerConfig.java", formatCodeList(swagger));
 
         List<EntityClassDefinition> entityClassDefinitions = AIGenerateTest.readEntityClassDefinitionsFromFile(filePath);
         if (entityClassDefinitions != null) {

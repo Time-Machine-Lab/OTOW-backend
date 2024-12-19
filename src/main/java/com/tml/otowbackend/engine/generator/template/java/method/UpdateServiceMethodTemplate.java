@@ -10,12 +10,8 @@ public class UpdateServiceMethodTemplate extends MethodTemplate {
 
     private String entityClassName;
 
-    protected UpdateServiceMethodTemplate(String templateFilePath) {
-        super(templateFilePath);
-    }
-
-    public UpdateServiceMethodTemplate(String templateFilePath, String entityClassName) {
-        super(templateFilePath);
+    public UpdateServiceMethodTemplate(String entityClassName) {
+        super("service.method.update.java.vm");
         this.entityClassName = entityClassName;
     }
 

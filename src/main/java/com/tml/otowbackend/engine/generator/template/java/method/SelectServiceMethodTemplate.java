@@ -7,17 +7,14 @@ import org.apache.velocity.VelocityContext;
 
 //TODO serviceImpl搜索实体方法模板完善
 public class SelectServiceMethodTemplate extends MethodTemplate {
+
     private String entityClassName;
 
-    protected SelectServiceMethodTemplate(String templateFilePath) {
-        super(templateFilePath);
-    }
-
-
-    public SelectServiceMethodTemplate(String templateFilePath, String entityClassName) {
-        super(templateFilePath);
+    public SelectServiceMethodTemplate(String entityClassName) {
+        super("service.method.select.java.vm");
         this.entityClassName = entityClassName;
     }
+
     @Override
     public MetaMethod generateMethod() {
         MetaMethod metaMethod = MetaMethod.justStringReinder(generateMethodBody());

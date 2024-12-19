@@ -21,7 +21,6 @@ import static com.tml.otowbackend.engine.generator.core.ClassTemplateFactory.*;
 @Component
 public class SelectFunctionPack extends AbstrateFunctionPack {
 
-    public static final String selectTemplateFilePath = "service.method.select.java.vm";
     public static final String selectServiceMethod = "select";
 
     @Override
@@ -50,7 +49,7 @@ public class SelectFunctionPack extends AbstrateFunctionPack {
     // serviceImpl的查找方法
     @Override
     protected void addMethodToServiceImpl(ServiceImplTemplate serviceImpl) {
-        SelectServiceMethodTemplate selectServiceMethodTemplate = new SelectServiceMethodTemplate(selectTemplateFilePath, getParam("className"));
+        SelectServiceMethodTemplate selectServiceMethodTemplate = new SelectServiceMethodTemplate(getParam("className"));
         MetaMethodParam metaMethodParam = new MetaMethodParam("Integer", null, "id");
         MetaMethod metaMethod = new MetaMethod(selectServiceMethod, List.of(metaMethodParam), engine.generate(selectServiceMethodTemplate));
         metaMethod.setReturnRes(new VOTemplate(getParam("prefix") + voPackagePath, getParam("className")));

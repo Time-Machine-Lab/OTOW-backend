@@ -22,7 +22,6 @@ import static com.tml.otowbackend.engine.generator.core.ClassTemplateFactory.*;
 @Component
 public class AddFunctionPack extends AbstrateFunctionPack {
 
-    public static final String saveTemplateFilePath = "service.method.save.java.vm";
     public static final String addServiceMethod = "save";
 
     @Override
@@ -50,7 +49,7 @@ public class AddFunctionPack extends AbstrateFunctionPack {
 
     @Override
     protected void addMethodToServiceImpl(ServiceImplTemplate serviceImpl) {
-        AddServiceMethodTemplate addServiceMethodTemplate = new AddServiceMethodTemplate(saveTemplateFilePath, getParam("className"));
+        AddServiceMethodTemplate addServiceMethodTemplate = new AddServiceMethodTemplate(getParam("className"));
         ReqTemplate reqUser = new ReqTemplate(getParam("prefix") + reqPackagePath, getParam("className"));
         MetaMethodParam metaMethodParam = new MetaMethodParam(reqUser.getClassName(), reqUser.getAllPackagePath(), StringUtils.firstToLowerCase(reqUser.getClassName()));
         MetaMethod metaMethod = new MetaMethod(addServiceMethod, List.of(metaMethodParam), engine.generate(addServiceMethodTemplate));

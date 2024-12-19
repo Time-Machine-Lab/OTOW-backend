@@ -101,6 +101,12 @@ public class MetaMethod extends ImportChecker {
         addParams(params);
     }
 
+    public MetaMethod(String methodName, String methodBody) {
+        this.methodName = methodName;
+        this.returnRes = "void";
+        this.methodBody = methodBody;
+    }
+
     public MetaMethod(String methodName, List<MetaMethodParam> params) {
         this.methodName = methodName;
         this.returnRes = "void";
@@ -161,5 +167,10 @@ public class MetaMethod extends ImportChecker {
     public void setReturnRes(ClassTemplate classTemplate) {
         addImportPath(classTemplate.getAllPackagePath());
         this.returnRes = classTemplate.getClassName();
+    }
+
+    public void setReturnRes(Class<?> clazz) {
+        addImportClazz(clazz);
+        this.returnRes = clazz.getSimpleName();
     }
 }

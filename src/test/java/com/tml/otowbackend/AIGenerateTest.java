@@ -57,7 +57,7 @@ public class AIGenerateTest {
                 "数据以图表形式呈现，例如直方图、饼状图等；（4）系统界面友好、操作便捷、具有较好的健壮性；（5）需要在1000条以上记录条件下进行测试；（6）引入智能算法进行不良反" +
                 "应数据的聚类分析和趋势预测，提高数据分析的精确度和预测能力。");
 
-        projectOutline.put("complexity", "简单");
+        projectOutline.put("complexity", "复杂");
 
         // 构造功能包列表
         List<FeaturePackage> featurePackages = featurePackageService.getSupportedFeaturePackages();
