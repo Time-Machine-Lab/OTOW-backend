@@ -1,11 +1,9 @@
-package com.tml.otowbackend.engine.generator.funpack.pack;
+package com.tml.otowbackend.engine.generator.funpack;
 
 
 import com.tml.otowbackend.engine.ai.result.FeaturePackage;
-import com.tml.otowbackend.engine.generator.funpack.AbstrateFunctionPack;
+import com.tml.otowbackend.engine.generator.core.AbstrateFunctionPack;
 import com.tml.otowbackend.engine.generator.template.java.method.DeleteServiceMethodTemplate;
-import com.tml.otowbackend.engine.generator.template.java.method.SelectServiceMethodTemplate;
-import com.tml.otowbackend.engine.generator.template.java.model.ReqTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.ControllerTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.ServiceImplTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.ServiceTemplate;
@@ -16,8 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 import static com.tml.otowbackend.constants.TemplateConstant.Path_Variable;
-import static com.tml.otowbackend.engine.generator.template.java.InitTemplate.engine;
-import static com.tml.otowbackend.engine.generator.template.java.InitTemplate.reqPackagePath;
+import static com.tml.otowbackend.engine.generator.core.ClassTemplateFactory.engine;
 
 @Component
 public class DelFunctionPack extends AbstrateFunctionPack {
@@ -33,16 +30,11 @@ public class DelFunctionPack extends AbstrateFunctionPack {
     // controller的删除方法
     @Override
     protected void addMethodToController(ControllerTemplate controller) {
-        controller.addDeleteMethod(getDeleteMethod(), "/delete/{id}");
-    }
-
-    // controller-delete 的 删除
-    private MetaMethod getDeleteMethod(){
-        ReqTemplate reqUser = new ReqTemplate(getParamString("prefix") + reqPackagePath, "id");
-        MetaMethodParam metaMethodParam = new MetaMethodParam("Integer", null, "id");
+        MetaMethodParam metaMethodParam = new MetaMethodParam(Integer.class, "id");
         metaMethodParam.addAnnotations(List.of(Path_Variable));
-        String body = String.format("%s.%s(%s);", getParamString("classLower"), deleteServiceMethod, "id");
-        return new MetaMethod(deleteServiceMethod, List.of(metaMethodParam), body);
+        String body = String.format("%s.%s(%s);", getParam("serviceName"), deleteServiceMethod, "id");
+        MetaMethod metaMethod = new MetaMethod(deleteServiceMethod, List.of(metaMethodParam), body);
+        controller.addDeleteMethod(metaMethod, "/delete/{id}");
     }
 
     @Override
@@ -53,11 +45,10 @@ public class DelFunctionPack extends AbstrateFunctionPack {
 
     // serviceImpl 的删除方法
     @Override
-    protected void addMethodToServiceImpl(ServiceImplTemplate serviceImplTemplate) {
-        DeleteServiceMethodTemplate deleteServiceMethodTemplate = new DeleteServiceMethodTemplate(deleteTemplateFilePath, getParamString("className"));
+    protected void addMethodToServiceImpl(ServiceImplTemplate serviceImpl) {
+        DeleteServiceMethodTemplate deleteServiceMethodTemplate = new DeleteServiceMethodTemplate(deleteTemplateFilePath, getParam("className"));
         MetaMethodParam metaMethodParam = new MetaMethodParam("Integer",null, "id");
         MetaMethod metaMethod = new MetaMethod(deleteServiceMethod, List.of(metaMethodParam), engine.generate(deleteServiceMethodTemplate));
-        serviceImplTemplate.addMethod(metaMethod);
+        serviceImpl.addMethod(metaMethod);
     }
-
 }

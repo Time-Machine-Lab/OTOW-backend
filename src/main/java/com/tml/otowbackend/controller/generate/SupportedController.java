@@ -2,18 +2,15 @@ package com.tml.otowbackend.controller.generate;
 
 import com.tml.otowbackend.core.anno.TokenRequire;
 import com.tml.otowbackend.engine.ai.result.FeaturePackage;
-import com.tml.otowbackend.engine.generator.funpack.FuncPackManager;
 import com.tml.otowbackend.engine.otow.SupportedLanguages;
 import com.tml.otowbackend.engine.tree.common.R;
 import com.tml.otowbackend.service.FeaturePackageService;
-import com.tml.otowbackend.service.Impl.IFeaturePackageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 

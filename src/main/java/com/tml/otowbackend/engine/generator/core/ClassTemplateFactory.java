@@ -1,11 +1,9 @@
-package com.tml.otowbackend.engine.generator.template.java;
+package com.tml.otowbackend.engine.generator.core;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import com.tml.otowbackend.engine.generator.funpack.AbstrateFunctionPack;
-import com.tml.otowbackend.engine.generator.funpack.FuncPackManager;
 import com.tml.otowbackend.engine.generator.engine.VelocityCodeEngine;
 import com.tml.otowbackend.engine.generator.template.VelocityOTOWTemplate;
 import com.tml.otowbackend.engine.generator.template.java.model.EntityTemplate;
@@ -26,7 +24,7 @@ import java.util.List;
 import static com.tml.otowbackend.engine.generator.utils.MetalUtils.getDescribe;
 
 @NoArgsConstructor
-public class InitTemplate {
+public class ClassTemplateFactory {
 
     public static String entityPackagePath = "model.entity";
     public static String controllerPackagePath = "controller";
@@ -38,7 +36,7 @@ public class InitTemplate {
     public static VelocityCodeEngine engine = VelocityCodeEngine.getCodeEngine();
 
     public String prefix;
-    public FuncPackManager funcPackManager;
+    public FunctionPackManager functionPackManager;
     public String className;
     public String tableName;
     public String describe;
@@ -55,9 +53,9 @@ public class InitTemplate {
     private ReqTemplate entityReqTemplate;
     private VOTemplate entityVOTemplate;
 
-    public InitTemplate(String prefix, FuncPackManager funcPackManager, String className, String tableName, String describe, LinkedList<MetalField> fields, List<String> featureIds) {
+    public ClassTemplateFactory(String prefix, FunctionPackManager functionPackManager, String className, String tableName, String describe, LinkedList<MetalField> fields, List<String> featureIds) {
         this.prefix = prefix + ".";
-        this.funcPackManager = funcPackManager;
+        this.functionPackManager = functionPackManager;
         this.className = className;
         this.tableName = tableName;
         this.describe = describe;
@@ -66,13 +64,12 @@ public class InitTemplate {
     }
 
     public void initTemplate() {
-        //  将属性添加到新集合中 给req、VO使用
         for (MetalField field : fields) {
             MetalField clone = field.getClone();
             fieldsReq.add(clone);
             fieldsVO.add(clone);
         }
-        judgeMetalField();
+        enhanceMetalField(fields);
         entityTemplate = getEntityTemplate();
         entityReqTemplate = getEntityReqTemplate();
         entityVOTemplate = getEntityVOTemplate();
@@ -85,43 +82,47 @@ public class InitTemplate {
     private String generateStringWithTemplate(VelocityOTOWTemplate template) {
         return engine.generate(template);
     }
+
     public String generateEntity() {
         return generateStringWithTemplate(entityTemplate);
     }
-    public String generateEntityReq(){
+
+    public String generateEntityReq() {
         return generateStringWithTemplate(entityReqTemplate);
     }
-    public String generateEntityVO(){
+
+    public String generateEntityVO() {
         return generateStringWithTemplate(entityVOTemplate);
     }
+
     public String generateMapper() {
         return generateStringWithTemplate(mapperTemplate);
     }
+
     public String generateService() {
         return generateStringWithTemplate(serviceTemplate);
     }
+
     public String generateServiceImpl() {
         return generateStringWithTemplate(serviceImplTemplate);
     }
+
     public String generateController() {
         return generateStringWithTemplate(controllerTemplate);
     }
 
-    // 根据给定的实体类名、字段生成实体模板
     private EntityTemplate getEntityTemplate() {
         EntityTemplate entityTemplate = new EntityTemplate(prefix + entityPackagePath, className, tableName, describe);
         entityTemplate.addModelFields(fields);
         return entityTemplate;
     }
 
-    // 根据给定的实体类名、字段生成实体Req模板
     private ReqTemplate getEntityReqTemplate() {
-        ReqTemplate reqTemplate = new ReqTemplate(prefix + reqPackagePath,className);
+        ReqTemplate reqTemplate = new ReqTemplate(prefix + reqPackagePath, className);
         reqTemplate.addModelFields(fieldsReq);
         return reqTemplate;
     }
 
-    // 根据给定的实体类名、字段生成实体VO模板
     private VOTemplate getEntityVOTemplate() {
         VOTemplate voTemplate = new VOTemplate(prefix + voPackagePath, className);
         voTemplate.addModelFields(fieldsVO);
@@ -134,44 +135,43 @@ public class InitTemplate {
 
     private ServiceTemplate getServiceTemplate() {
         ServiceTemplate userService = new ServiceTemplate(prefix + servicePackagePath, className);
-        for (String featureId : featureIds) {
-            AbstrateFunctionPack pack = funcPackManager.getFunctionPackById(featureId);
+        featureIds.forEach(featureId -> {
+            AbstrateFunctionPack pack = functionPackManager.getFunctionPackById(featureId);
             pack.addParams("prefix", prefix);
             pack.addParams("className", className);
-            pack.generateService(userService);
-        }
+            pack.handleService(userService);
+        });
         return userService;
     }
 
     private ServiceImplTemplate getServiceImplTemplate() {
         ServiceImplTemplate serviceImplTemplate = new ServiceImplTemplate(prefix + serviceImplPackagePath, className, serviceTemplate);
         serviceImplTemplate.addMapper(mapperTemplate);
-        for (String featureId : featureIds) {
-            AbstrateFunctionPack pack = funcPackManager.getFunctionPackById(featureId);
+        featureIds.forEach(featureId -> {
+            AbstrateFunctionPack pack = functionPackManager.getFunctionPackById(featureId);
             pack.addParams("className", className);
             pack.addParams("prefix", prefix);
-            pack.generateServiceImpl(serviceImplTemplate);
-        }
+            pack.handleServiceImpl(serviceImplTemplate);
+        });
         return serviceImplTemplate;
     }
 
     private ControllerTemplate getControllerTemplate() {
         ControllerTemplate userController = new ControllerTemplate(prefix + controllerPackagePath, className, "/" + StringUtils.firstToLowerCase(className));
         userController.addService(serviceTemplate);
-        String classLower = StringUtils.firstToLowerCase(serviceTemplate.getClassName());
-        for (String featureId : featureIds) {
-            AbstrateFunctionPack pack = funcPackManager.getFunctionPackById(featureId);
+        String serviceName = StringUtils.firstToLowerCase(serviceTemplate.getClassName());
+        featureIds.forEach(featureId -> {
+            AbstrateFunctionPack pack = functionPackManager.getFunctionPackById(featureId);
             pack.addParams("prefix", prefix);
             pack.addParams("className", className);
-            pack.addParams("classLower", classLower);
-            pack.generateController(userController);
-        }
+            pack.addParams("serviceName", serviceName);
+            pack.handleController(userController);
+        });
         return userController;
     }
 
     // 加强判断
-    private void judgeMetalField() {
-
+    private void enhanceMetalField(LinkedList<MetalField> fields) {
         // 判断id 加入时间
         MetaAnnotation tableId = new MetaAnnotation(TableId.class);
         for (MetalField metalField : fields) {

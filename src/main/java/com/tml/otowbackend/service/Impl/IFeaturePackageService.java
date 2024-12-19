@@ -1,10 +1,9 @@
 package com.tml.otowbackend.service.Impl;
 
 import com.tml.otowbackend.engine.ai.result.FeaturePackage;
-import com.tml.otowbackend.engine.generator.funpack.FuncPackManager;
+import com.tml.otowbackend.engine.generator.core.FunctionPackManager;
 import com.tml.otowbackend.engine.tree.common.ServeException;
 import com.tml.otowbackend.service.FeaturePackageService;
-import com.tml.otowbackend.engine.tree.common.R;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 @Service
 public class IFeaturePackageService implements FeaturePackageService {
 
-    private final FuncPackManager funcPackManager;
+    private final FunctionPackManager functionPackManager;
 
     /**
      * 获取支持的功能包列表
@@ -25,7 +24,7 @@ public class IFeaturePackageService implements FeaturePackageService {
      */
     @Override
     public List<FeaturePackage> getSupportedFeaturePackages() {
-        return funcPackManager.getSupportedFeaturePackages();
+        return functionPackManager.getSupportedFeaturePackages();
     }
 
     /**
@@ -39,7 +38,7 @@ public class IFeaturePackageService implements FeaturePackageService {
         }
 
         // 获取功能包 ID 的集合
-        Set<String> supportedFeatureIds = funcPackManager.getSupportedFeaturePackages().stream().map(FeaturePackage::getId).collect(Collectors.toSet());
+        Set<String> supportedFeatureIds = functionPackManager.getSupportedFeaturePackages().stream().map(FeaturePackage::getId).collect(Collectors.toSet());
 
         // 校验每个功能包 ID 是否在支持的集合中
         for (String featureId : featureIds) {
