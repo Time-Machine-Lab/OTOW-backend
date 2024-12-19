@@ -12,6 +12,8 @@ import com.tml.otowbackend.engine.generator.template.meta.MetaMethod;
 import com.tml.otowbackend.engine.generator.template.meta.MetaMethodParam;
 import com.tml.otowbackend.engine.generator.template.meta.MetalField;
 import com.tml.otowbackend.engine.generator.utils.TypeConverter;
+import com.tml.otowbackend.engine.sql.EntityInfo;
+import com.tml.otowbackend.engine.sql.SQLManager;
 import com.tml.otowbackend.engine.tree.service.IVirtualFileService;
 import com.tml.otowbackend.engine.tree.template.SpringBootTreeTemplate;
 import com.tml.otowbackend.engine.tree.utils.PathUtils;
@@ -26,6 +28,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.annotation.Resource;
 import java.util.*;
 
+import static com.tml.otowbackend.constants.DatabaseConstant.DB_NAME_PREFIX;
 import static com.tml.otowbackend.engine.generator.core.ClassTemplateFactory.engine;
 import static com.tml.otowbackend.engine.generator.core.ClassTemplateFactory.reqPackagePath;
 import static com.tml.otowbackend.engine.generator.utils.MetalUtils.getDescribe;
@@ -45,46 +48,14 @@ public class GenerateTest {
     @Resource
     private IVirtualFileService virtualFileService;
 
-
     @Test
-    public void testGenerate() throws Exception {
+    public void testGenerateAll() throws Exception {
         String prefix = "com.example";
         String treeId = virtualFileService.initializeVirtualTree(PathUtils.getSpringbootPath(), null);
         SpringBootTreeTemplate template = new SpringBootTreeTemplate(virtualFileService, treeId);
         template.initializeTemplate();
 
-        ConfigTemplateFactory configTemplateFactory = new ConfigTemplateFactory();
-
-        Map<String, Object> pomConfigDependency = new HashMap<>();
-        pomConfigDependency.put("groupId", "org.springframework.boot");
-        pomConfigDependency.put("artifactId", "spring-boot-starter-test");
-        pomConfigDependency.put("version", "${boot.version}");
-        configTemplateFactory.addPomDependency(pomConfigDependency);
-
-        Map<String, Object> pomConfigProperty = new HashMap<>();
-        pomConfigProperty.put("name", "boot.version");
-        pomConfigProperty.put("value", "2.6.6");
-        configTemplateFactory.addPomProperties(pomConfigProperty);
-
-        configTemplateFactory.addYml("port", 8080);
-        configTemplateFactory.addYml("mysql", Map.of(
-                "enable", true,
-                "url", "jdbc:mysql://127.0.0.1:3306/otow?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC",
-                "username", "root",
-                "password", "twj369202865"
-        ));
-        configTemplateFactory.addYml("applicationName", "otow");
-
-        template.example("OTOWApplication.java", formatCodeList(configTemplateFactory.generateApplication(prefix, "OTOW")));
-        template.resources("application.yml", formatCodeList(configTemplateFactory.generateApplicationYml()));
-        template.master("pom.xml", formatCodeList(configTemplateFactory.generatePomConfig()));
-
-
-        SwaggerInfo swaggerInfo = SwaggerInfo.builder().title("社区物业管理系统").version("1.0.0").description("社区物业管理系统用于提升社区物业管理和服务效率")
-                .authorName("Genius").authorEmail("969025903@qq.com").authorUrl("https://github.com/Geniusay").build();
-        String swagger = configTemplateFactory.generateConfig(prefix, "Swagger", new SwaggerMethodTemplate(swaggerInfo).generateMethod());
-        template.config("SwaggerConfig.java", formatCodeList(swagger));
-
+        // 生成主体类
         List<EntityClassDefinition> entityClassDefinitions = AIGenerateTest.readEntityClassDefinitionsFromFile(filePath);
         if (entityClassDefinitions != null) {
             for (EntityClassDefinition definition : entityClassDefinitions) {
@@ -115,6 +86,53 @@ public class GenerateTest {
                 template.vo(className + "VO.java", formatCodeList(classTemplateFactory.generateEntityVO()));
             }
         }
+
+        // 生成数据库文件
+        String dbName = DB_NAME_PREFIX + "test_db"; // 数据库名称
+        String ip = "127.0.0.1";
+        String importUrl = "jdbc:mysql://" + ip + ":3306/" + "?useSSL=false&serverTimezone=UTC";
+        String dbUrl = "jdbc:mysql://" + ip + ":3306/" + dbName + "?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC";
+        String username = "root"; // 数据库用户名
+        String password = "369202865"; // 数据库密码
+        assert entityClassDefinitions != null;
+        List<EntityInfo> entityInfos = EntityInfo.buildEntityInfoList(entityClassDefinitions);
+        String sql = SQLManager.generateSQLFromEntities(entityInfos, dbName);
+
+        template.master(dbName + ".sql", formatCodeList(sql));
+
+        // 是否导入到数据库中
+        SQLManager.importSQLToDatabase(importUrl, username, password, sql);
+
+        // 生成配置文件
+        ConfigTemplateFactory configTemplateFactory = new ConfigTemplateFactory();
+        Map<String, Object> pomConfigDependency = new HashMap<>();
+        pomConfigDependency.put("groupId", "org.springframework.boot");
+        pomConfigDependency.put("artifactId", "spring-boot-starter-test");
+        pomConfigDependency.put("version", "${boot.version}");
+        configTemplateFactory.addPomDependency(pomConfigDependency);
+
+        Map<String, Object> pomConfigProperty = new HashMap<>();
+        pomConfigProperty.put("name", "boot.version");
+        pomConfigProperty.put("value", "2.6.6");
+        configTemplateFactory.addPomProperties(pomConfigProperty);
+
+        configTemplateFactory.addYml("port", 8080);
+        configTemplateFactory.addYml("mysql", Map.of(
+                "enable", true,
+                "url", dbUrl,
+                "username", username,
+                "password", password
+        ));
+        configTemplateFactory.addYml("applicationName", "otow");
+
+        template.example("OTOWApplication.java", formatCodeList(configTemplateFactory.generateApplication(prefix, "OTOW")));
+        template.resources("application.yml", formatCodeList(configTemplateFactory.generateApplicationYml()));
+        template.master("pom.xml", formatCodeList(configTemplateFactory.generatePomConfig()));
+
+        SwaggerInfo swaggerInfo = SwaggerInfo.builder().title("社区物业管理系统").version("1.0.0").description("社区物业管理系统用于提升社区物业管理和服务效率")
+                .authorName("Genius").authorEmail("969025903@qq.com").authorUrl("https://github.com/Geniusay").build();
+        String swagger = configTemplateFactory.generateConfig(prefix, "Swagger", new SwaggerMethodTemplate(swaggerInfo).generateMethod());
+        template.config("SwaggerConfig.java", formatCodeList(swagger));
 
         virtualFileService.exportVirtualTree(treeId, "D:\\test");
     }
