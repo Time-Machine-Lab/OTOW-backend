@@ -11,6 +11,7 @@ import com.tml.otowbackend.engine.generator.template.java.service.ServiceImplTem
 import com.tml.otowbackend.engine.generator.template.java.service.ServiceTemplate;
 import com.tml.otowbackend.engine.generator.template.meta.MetaMethod;
 import com.tml.otowbackend.engine.generator.template.meta.MetaMethodParam;
+import com.tml.otowbackend.engine.generator.utils.MetalUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class SelectFunctionPack extends AbstrateFunctionPack {
         String body = "return " + String.format("%s.%s(%s);", getParam("serviceName"), selectServiceMethod, "id");
         MetaMethod metaMethod = new MetaMethod(selectServiceMethod, List.of(metaMethodParam), body);
         metaMethod.setReturnRes(new VOTemplate(getParam("prefix") + voPackagePath, getParam("className")));
+        metaMethod.addAnnotation(MetalUtils.getSwaggerOperation("根据 ID 查询" + getParam("classDesc") + "信息"));
         controller.addGetMethod(metaMethod, "/get/{id}");
     }
 

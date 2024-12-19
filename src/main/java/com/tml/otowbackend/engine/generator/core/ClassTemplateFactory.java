@@ -157,7 +157,7 @@ public class ClassTemplateFactory {
     }
 
     private ControllerTemplate getControllerTemplate() {
-        ControllerTemplate userController = new ControllerTemplate(prefix + controllerPackagePath, className, "/" + StringUtils.firstToLowerCase(className));
+        ControllerTemplate userController = new ControllerTemplate(prefix + controllerPackagePath, className, "/" + StringUtils.firstToLowerCase(className), describe);
         userController.addService(serviceTemplate);
         String serviceName = StringUtils.firstToLowerCase(serviceTemplate.getClassName());
         featureIds.forEach(featureId -> {
@@ -165,6 +165,7 @@ public class ClassTemplateFactory {
             pack.addParams("prefix", prefix);
             pack.addParams("className", className);
             pack.addParams("serviceName", serviceName);
+            pack.addParams("classDesc", describe);
             pack.handleController(userController);
         });
         return userController;

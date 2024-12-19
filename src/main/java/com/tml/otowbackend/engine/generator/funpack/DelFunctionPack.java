@@ -9,6 +9,7 @@ import com.tml.otowbackend.engine.generator.template.java.service.ServiceImplTem
 import com.tml.otowbackend.engine.generator.template.java.service.ServiceTemplate;
 import com.tml.otowbackend.engine.generator.template.meta.MetaMethod;
 import com.tml.otowbackend.engine.generator.template.meta.MetaMethodParam;
+import com.tml.otowbackend.engine.generator.utils.MetalUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class DelFunctionPack extends AbstrateFunctionPack {
         metaMethodParam.addAnnotations(List.of(Path_Variable));
         String body = String.format("%s.%s(%s);", getParam("serviceName"), deleteServiceMethod, "id");
         MetaMethod metaMethod = new MetaMethod(deleteServiceMethod, List.of(metaMethodParam), body);
+        metaMethod.addAnnotation(MetalUtils.getSwaggerOperation("删除" + getParam("classDesc")));
         controller.addDeleteMethod(metaMethod, "/delete/{id}");
     }
 

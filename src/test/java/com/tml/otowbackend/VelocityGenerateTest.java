@@ -75,7 +75,7 @@ public class VelocityGenerateTest {
 
     @Test
     public void generateController(){
-        ControllerTemplate userController = new ControllerTemplate("io.github.geniusay.velocity.generate", "User", "/user");
+        ControllerTemplate userController = new ControllerTemplate("io.github.geniusay.velocity.generate", "User", "/user", "");
         ServiceTemplate userService = getServiceTemplate();
         userController.addService(userService);
         userController.addPostMethod(getPostMethod(),"/add/user");

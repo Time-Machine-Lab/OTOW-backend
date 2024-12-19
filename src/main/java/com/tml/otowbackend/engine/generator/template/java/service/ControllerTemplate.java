@@ -5,6 +5,7 @@ import com.tml.otowbackend.engine.generator.template.java.ClassTemplate;
 import com.tml.otowbackend.engine.generator.template.meta.MetaAnnotation;
 import com.tml.otowbackend.engine.generator.template.meta.MetaMethod;
 import com.tml.otowbackend.engine.generator.template.meta.MetalField;
+import com.tml.otowbackend.engine.generator.utils.MetalUtils;
 import lombok.Getter;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,10 +29,11 @@ public class ControllerTemplate extends ClassTemplate {
 
     private List<MetaMethod> apiMethod = new ArrayList<>();
 
-    public ControllerTemplate(String packagePath, String className, String urlPath) {
+    public ControllerTemplate(String packagePath, String className, String urlPath, String desc) {
         super(packagePath, getControllerClassName(className));
         this.urlPath = urlPath;
         addAnnotation(new MetaAnnotation(RequestMapping.class, urlPath));
+        addAnnotation(MetalUtils.getSwaggerTag(className, desc));
     }
 
     public static String getControllerClassName(String className) {

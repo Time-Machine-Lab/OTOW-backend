@@ -134,6 +134,11 @@ public class MetaMethod extends ImportChecker {
         this.annotations.addAll(annotations);
     }
 
+    public void addAnnotation(MetaAnnotation annotation) {
+        addImportCheckers(annotation);
+        this.annotations.add(annotation);
+    }
+
     /**
      * 添加方法参数列表。
      *

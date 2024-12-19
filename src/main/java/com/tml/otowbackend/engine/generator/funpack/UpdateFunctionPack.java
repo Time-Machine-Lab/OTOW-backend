@@ -11,6 +11,7 @@ import com.tml.otowbackend.engine.generator.template.java.service.ServiceImplTem
 import com.tml.otowbackend.engine.generator.template.java.service.ServiceTemplate;
 import com.tml.otowbackend.engine.generator.template.meta.MetaMethod;
 import com.tml.otowbackend.engine.generator.template.meta.MetaMethodParam;
+import com.tml.otowbackend.engine.generator.utils.MetalUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class UpdateFunctionPack extends AbstrateFunctionPack {
         metaMethodParam.addAnnotations(List.of(REQUEST_BODY));
         String body = String.format("%s.%s(%s);", getParam("serviceName"), updateServiceMethod, metaMethodParam.getName());
         MetaMethod metaMethod = new MetaMethod(updateServiceMethod, List.of(metaMethodParam), body);
+        metaMethod.addAnnotation(MetalUtils.getSwaggerOperation("更新" + getParam("classDesc") + "信息"));
         controller.addPostMethod(metaMethod, "/update"+ getParam("className"));
     }
 

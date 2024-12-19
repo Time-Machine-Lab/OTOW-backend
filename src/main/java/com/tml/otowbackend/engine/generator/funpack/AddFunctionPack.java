@@ -12,6 +12,7 @@ import com.tml.otowbackend.engine.generator.template.java.service.ServiceImplTem
 import com.tml.otowbackend.engine.generator.template.java.service.ServiceTemplate;
 import com.tml.otowbackend.engine.generator.template.meta.MetaMethod;
 import com.tml.otowbackend.engine.generator.template.meta.MetaMethodParam;
+import com.tml.otowbackend.engine.generator.utils.MetalUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -32,12 +33,14 @@ public class AddFunctionPack extends AbstrateFunctionPack {
     // controller的添加方法
     @Override
     protected void addMethodToController(ControllerTemplate controller) {
-        ReqTemplate reqUser = new ReqTemplate(getParam("prefix") + reqPackagePath, getParam("className"));
+        String className = getParam("className");
+        ReqTemplate reqUser = new ReqTemplate(getParam("prefix") + reqPackagePath, className);
         MetaMethodParam metaMethodParam = new MetaMethodParam(reqUser.getClassName(),reqUser.getAllPackagePath(), StringUtils.firstToLowerCase(reqUser.getClassName()));
         metaMethodParam.addAnnotations(List.of(REQUEST_BODY));
         String body = String.format("%s.%s(%s);", getParam("serviceName"), addServiceMethod, metaMethodParam.getName());
         MetaMethod metaMethod = new MetaMethod(addServiceMethod, List.of(metaMethodParam), body);
-        controller.addPostMethod(metaMethod, "/add" + getParam("className"));
+        metaMethod.addAnnotation(MetalUtils.getSwaggerOperation("添加新" + getParam("classDesc")));
+        controller.addPostMethod(metaMethod, "/add" + className);
     }
 
     @Override
