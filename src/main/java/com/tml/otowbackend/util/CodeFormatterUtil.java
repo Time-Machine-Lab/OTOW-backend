@@ -9,6 +9,8 @@ import org.eclipse.text.edits.TextEdit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+//Uncaught ReferenceError: Cannot access 'DirectoryItem' before initialization
+//    at DirectoryItem.vue:77:28
 
 /**
  * 描述: 代码格式化工具类
