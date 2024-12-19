@@ -78,6 +78,7 @@ public class IProjectServiceImpl implements ProjectService {
         projectMapper.deleteById(projectId);
     }
 
+
     @Override
     public QueryProjectPageResponseDTO queryProject(QueryProjectRequestDTO requestDTO) {
         int limit = Math.min((requestDTO.getLimit()),DEFAULT_MAX_LIMIT);
