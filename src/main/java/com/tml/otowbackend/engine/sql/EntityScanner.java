@@ -6,16 +6,20 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.tml.otowbackend.engine.sql.annotation.DefaultValue;
 import com.tml.otowbackend.engine.sql.annotation.TransientField;
 
+import java.io.File;
 import java.lang.reflect.Field;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 描述:
+ *
  * @author suifeng
  * 日期: 2024/12/12
  */
-public class EntityProcessor {
+public class EntityScanner {
 
     /**
      * 获取实体类的字段信息
@@ -68,5 +72,54 @@ public class EntityProcessor {
             fields.add(fieldInfo);
         }
         return fields;
+    }
+
+    /**
+     * 根据包名扫描实体类并生成实体信息列表
+     *
+     * @param packageName 包名
+     * @return 实体信息列表
+     */
+    public static List<EntityInfo> buildFromPackage(String packageName) {
+        List<Class<?>> entityClasses = EntityScanner.scanEntities(packageName);
+        List<EntityInfo> entities = new ArrayList<>();
+
+        for (Class<?> clazz : entityClasses) {
+            String tableName = NameConverter.getTableName(clazz);
+            List<FieldInfo> fields = getFields(clazz);
+            entities.add(new EntityInfo(tableName, "", fields));
+        }
+
+        return entities;
+    }
+
+    /**
+     * 扫描指定包下的所有类
+     *
+     * @param packageName 包名
+     * @return 类的列表
+     */
+    public static List<Class<?>> scanEntities(String packageName) {
+        List<Class<?>> classes = new ArrayList<>();
+        String path = packageName.replace(".", "/");
+        URL resource = Thread.currentThread().getContextClassLoader().getResource(path);
+
+        if (resource == null) {
+            throw new RuntimeException("包路径不存在: " + packageName);
+        }
+
+        File directory = new File(resource.getFile());
+        for (File file : Objects.requireNonNull(directory.listFiles())) {
+            if (file.getName().endsWith(".class")) {
+                try {
+                    String className = packageName + "." + file.getName().replace(".class", "");
+                    classes.add(Class.forName(className));
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException("类加载失败: " + file.getName(), e);
+                }
+            }
+        }
+
+        return classes;
     }
 }

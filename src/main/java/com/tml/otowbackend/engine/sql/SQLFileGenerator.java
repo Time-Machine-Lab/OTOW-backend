@@ -1,5 +1,5 @@
 package com.tml.otowbackend.engine.sql;
-import com.tml.otowbackend.util.EntityScanner;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
@@ -26,47 +26,40 @@ public class SQLFileGenerator {
     }
 
     /**
-     * 组合建库语句和建表语句
-     *
-     * @param packageName 实体类所在的包名
-     * @param dbName      数据库名称
+     * 根据实体信息列表生成完整的 SQL 脚本
+     * @param entities 实体信息列表
+     * @param dbName 数据库名称
      * @return 完整的 SQL 脚本
      */
-    public static String generateDatabaseSQL(String packageName, String dbName) {
-        List<Class<?>> entityClasses = EntityScanner.scanEntities(packageName);
-
+    public static String generateDatabaseSQL(List<EntityInfo> entities, String dbName) {
         StringBuilder sql = new StringBuilder();
         sql.append("CREATE DATABASE IF NOT EXISTS ").append(NameConverter.escapeName(dbName)).append(";\n");
         sql.append("USE ").append(NameConverter.escapeName(dbName)).append(";\n\n");
 
-        for (Class<?> entityClass : entityClasses) {
-            sql.append(generateCreateTableSQL(entityClass)).append("\n\n");
+        for (EntityInfo entity : entities) {
+            sql.append(generateCreateTableSQL(entity)).append("\n\n");
         }
 
         return sql.toString();
     }
 
     /**
-     * 生成单个表的建表 SQL
-     *
-     * @param clazz 实体类的 Class 对象
+     * 根据单个实体信息生成建表语句
+     * @param entity 实体信息
      * @return 建表 SQL
      */
-    public static String generateCreateTableSQL(Class<?> clazz) {
-        String tableName = NameConverter.getTableName(clazz);
+    public static String generateCreateTableSQL(EntityInfo entity) {
         StringBuilder sql = new StringBuilder();
-        sql.append("CREATE TABLE ").append(NameConverter.escapeName(tableName)).append(" (\n");
+        sql.append("CREATE TABLE ").append(NameConverter.escapeName(entity.getTableName())).append(" (\n");
 
-        EntityProcessor.getFields(clazz).forEach(field -> {
+        for (FieldInfo field : entity.getFields()) {
             sql.append("  ").append(NameConverter.escapeName(field.getColumnName()))
                     .append(" ").append(field.getColumnType());
 
-            // 默认值
             if (field.getDefaultValue() != null) {
                 sql.append(" DEFAULT '").append(field.getDefaultValue()).append("'");
             }
 
-            // 主键
             if (field.isPrimaryKey()) {
                 if (field.isAutoIncrement()) {
                     sql.append(" AUTO_INCREMENT");
@@ -74,22 +67,27 @@ public class SQLFileGenerator {
                 sql.append(" PRIMARY KEY");
             }
 
-            // 非空约束
             if (field.isNotNull()) {
                 sql.append(" NOT NULL");
             }
 
-            // 注释
             if (field.getComment() != null) {
                 sql.append(" COMMENT '").append(field.getComment()).append("'");
             }
 
             sql.append(",\n");
-        });
+        }
 
         // 去掉最后一个逗号
         sql.setLength(sql.length() - 2);
-        sql.append("\n);");
+        sql.append("\n)");
+
+        // 添加表注释
+        if (entity.getTableComment() != null && !entity.getTableComment().isEmpty()) {
+            sql.append(" COMMENT='").append(entity.getTableComment()).append("表").append("'");
+        }
+
+        sql.append(";");
 
         return sql.toString();
     }
