@@ -1,11 +1,10 @@
 package com.tml.otowbackend;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.tml.otowbackend.engine.ai.result.EntityClassDefinition;
-import com.tml.otowbackend.engine.generator.funpack.FuncPackManager;
-import com.tml.otowbackend.engine.generator.template.java.InitConfigTemplate;
-import com.tml.otowbackend.engine.generator.template.java.InitTemplate;
+import com.tml.otowbackend.engine.generator.core.FunctionPackManager;
+import com.tml.otowbackend.engine.generator.core.ConfigTemplateFactory;
+import com.tml.otowbackend.engine.generator.core.ClassTemplateFactory;
 import com.tml.otowbackend.engine.generator.template.meta.MetalField;
 import com.tml.otowbackend.engine.generator.utils.TypeConverter;
 import com.tml.otowbackend.engine.tree.service.IVirtualFileService;
@@ -15,7 +14,6 @@ import com.tml.otowbackend.util.CodeFormatterUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.BeanUtils;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -24,16 +22,15 @@ import java.util.*;
 
 import static com.tml.otowbackend.engine.generator.utils.MetalUtils.getDescribe;
 import static com.tml.otowbackend.util.CodeFormatterUtil.formatCodeList;
+import static org.apache.naming.SelectorContext.prefix;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = OtowBackendApplication.class)
 @Slf4j
 public class GenerateTest {
 
-//        return BeanUtil.copyProperties(newUser, StudentInfoVO.class);
-
     @Resource
-    FuncPackManager funcPackManager;
+    FunctionPackManager functionPackManager;
 
     String filePath = "entity_class_definitions.json";
 
@@ -48,36 +45,31 @@ public class GenerateTest {
         SpringBootTreeTemplate template = new SpringBootTreeTemplate(virtualFileService, treeId);
         template.initializeTemplate();
 
-        Map<String, Object> applicationConfig = new HashMap<>();
-        applicationConfig.put("port", 8080);
-        applicationConfig.put("mysql", Map.of(
-                "enable", true,
-                "url", "jdbc:mysql://127.0.0.1:3306/otow?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC",
-                "username", "root",
-                "password", "twj369202865"
-        ));
-        applicationConfig.put("applicationName", "otow");
+        ConfigTemplateFactory configTemplateFactory = new ConfigTemplateFactory();
 
         Map<String, Object> pomConfigDependency = new HashMap<>();
         pomConfigDependency.put("groupId", "org.springframework.boot");
         pomConfigDependency.put("artifactId", "spring-boot-starter-test");
         pomConfigDependency.put("version", "${boot.version}");
+        configTemplateFactory.addPomDependency(pomConfigDependency);
 
         Map<String, Object> pomConfigProperty = new HashMap<>();
         pomConfigProperty.put("name", "boot.version");
         pomConfigProperty.put("value", "2.6.6");
+        configTemplateFactory.addPomProperties(pomConfigProperty);
 
-        String systemName = "OTOW";
-        InitConfigTemplate initConfigTemplate = new InitConfigTemplate(prefix, systemName, applicationConfig, pomConfigDependency, pomConfigProperty);
+        configTemplateFactory.addYml("port", 8080);
+        configTemplateFactory.addYml("mysql", Map.of(
+                "enable", true,
+                "url", "jdbc:mysql://127.0.0.1:3306/otow?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=UTC",
+                "username", "root",
+                "password", "twj369202865"
+        ));
+        configTemplateFactory.addYml("applicationName", "otow");
 
-        String generateApplication = initConfigTemplate.getGenerateApplication();
-        template.example("OTOWApplication.java", formatCodeList(generateApplication));
-
-        String generateApplicationConfig = initConfigTemplate.getGenerateApplicationConfig();
-        template.resources("application.yml", formatCodeList(generateApplicationConfig));
-
-        String generatePomConfig = initConfigTemplate.getGeneratePomConfig();
-        template.master("pom.xml", formatCodeList(generatePomConfig));
+        template.example("OTOWApplication.java", formatCodeList(configTemplateFactory.generateApplication(prefix, "OTOW")));
+        template.resources("application.yml", formatCodeList(configTemplateFactory.generateApplicationYml()));
+        template.master("pom.xml", formatCodeList(configTemplateFactory.generatePomConfig()));
 
         List<EntityClassDefinition> entityClassDefinitions = AIGenerateTest.readEntityClassDefinitionsFromFile(filePath);
         if (entityClassDefinitions != null) {
@@ -91,22 +83,22 @@ public class GenerateTest {
                     System.out.println(field);
                     fields.add(new MetalField(field.getFname(), TypeConverter.toDatabaseFriendlyType(field.getFtype()), getDescribe(field.getFdesc())));
                 }
-                InitTemplate initTemplate = new InitTemplate(prefix, funcPackManager, className, tableName, describe, fields, definition.getFeatureIds());
-                initTemplate.initTemplate();
+                ClassTemplateFactory classTemplateFactory = new ClassTemplateFactory(prefix, functionPackManager, className, tableName, describe, fields, definition.getFeatureIds());
+                classTemplateFactory.initTemplate();
 
-                template.entity(className + "Entity.java", formatCodeList(initTemplate.generateEntity()));
+                template.entity(className + "Entity.java", formatCodeList(classTemplateFactory.generateEntity()));
 
-                template.mapper(className + "Mapper.java", formatCodeList(initTemplate.generateMapper()));
+                template.mapper(className + "Mapper.java", formatCodeList(classTemplateFactory.generateMapper()));
 
-                template.service(className + "Service.java", formatCodeList(initTemplate.generateService()));
+                template.service(className + "Service.java", formatCodeList(classTemplateFactory.generateService()));
 
-                template.serviceImpl(className + "ServiceImpl.java", formatCodeList(initTemplate.generateServiceImpl()));
+                template.serviceImpl(className + "ServiceImpl.java", formatCodeList(classTemplateFactory.generateServiceImpl()));
 
-                template.controller(className + "Controller.java", formatCodeList(initTemplate.generateController()));
+                template.controller(className + "Controller.java", formatCodeList(classTemplateFactory.generateController()));
 
-                template.req(className + "Req.java", formatCodeList(initTemplate.generateEntityReq()));
+                template.req(className + "Req.java", formatCodeList(classTemplateFactory.generateEntityReq()));
 
-                template.vo(className + "VO.java", formatCodeList(initTemplate.generateEntityVO()));
+                template.vo(className + "VO.java", formatCodeList(classTemplateFactory.generateEntityVO()));
             }
         }
 
@@ -129,27 +121,27 @@ public class GenerateTest {
         fields.add(new MetalField("sex", Boolean.class, getDescribe("用户性别")));
 
         System.out.println("================================================================================");
-        InitTemplate initTemplate = new InitTemplate(prefix, funcPackManager, className, tableName, describe, fields, List.of("1001", "1002", "1003", "1004"));
-        initTemplate.initTemplate();
+        ClassTemplateFactory classTemplateFactory = new ClassTemplateFactory(prefix, functionPackManager, className, tableName, describe, fields, List.of("1001", "1002", "1003", "1004"));
+        classTemplateFactory.initTemplate();
 
-        System.out.println(CodeFormatterUtil.formatCode(initTemplate.generateEntity()));
+        System.out.println(CodeFormatterUtil.formatCode(classTemplateFactory.generateEntity()));
         System.out.println("================================================================================");
-        System.out.println(CodeFormatterUtil.formatCode(initTemplate.generateEntityReq()));
+        System.out.println(CodeFormatterUtil.formatCode(classTemplateFactory.generateEntityReq()));
         System.out.println("================================================================================");
-        System.out.println(CodeFormatterUtil.formatCode(initTemplate.generateEntityVO()));
+        System.out.println(CodeFormatterUtil.formatCode(classTemplateFactory.generateEntityVO()));
         System.out.println("================================================================================");
-        System.out.println(CodeFormatterUtil.formatCode(initTemplate.generateMapper()));
+        System.out.println(CodeFormatterUtil.formatCode(classTemplateFactory.generateMapper()));
         System.out.println("================================================================================");
-        System.out.println(CodeFormatterUtil.formatCode(initTemplate.generateService()));
+        System.out.println(CodeFormatterUtil.formatCode(classTemplateFactory.generateService()));
         System.out.println("================================================================================");
-        System.out.println(CodeFormatterUtil.formatCode(initTemplate.generateServiceImpl()));
+        System.out.println(CodeFormatterUtil.formatCode(classTemplateFactory.generateServiceImpl()));
         System.out.println("================================================================================");
 
         System.out.println("没格式化：" );
-        System.out.println(initTemplate.generateController());
+        System.out.println(classTemplateFactory.generateController());
         System.out.println();
         System.out.println("格式化：" );
-        System.out.println(CodeFormatterUtil.formatCode(initTemplate.generateController()));
+        System.out.println(CodeFormatterUtil.formatCode(classTemplateFactory.generateController()));
     }
 
     @Test
@@ -174,14 +166,14 @@ public class GenerateTest {
         pomConfigProperty.put("value", "2.3.9.RELEASE");
 
         String systemName = "otow";
-        InitConfigTemplate initConfigTemplate = new InitConfigTemplate("", systemName, applicationConfig, pomConfigDependency, pomConfigProperty);
-        String generateApplication = initConfigTemplate.getGenerateApplication();
+        ConfigTemplateFactory configTemplateFactory = new ConfigTemplateFactory();
+        String generateApplication = configTemplateFactory.generateApplication(prefix, "OTOW");
         System.out.println(generateApplication);
         System.out.println("==================================================================================");
-        String generateApplicationConfig = initConfigTemplate.getGenerateApplicationConfig();
+        String generateApplicationConfig = configTemplateFactory.generateApplicationYml();
         System.out.println(generateApplicationConfig);
         System.out.println("====================================================================================");
-        String generatePomConfig = initConfigTemplate.getGeneratePomConfig();
+        String generatePomConfig = configTemplateFactory.generatePomConfig();
         System.out.println(generatePomConfig);
     }
 }

@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.tml.otowbackend.engine.generator.engine.VelocityCodeEngine;
-import com.tml.otowbackend.engine.generator.template.java.ApplicationConfigTemplate;
+import com.tml.otowbackend.engine.generator.template.java.ApplicationYmlTemplate;
 import com.tml.otowbackend.engine.generator.template.java.PomConfigTemplate;
 import com.tml.otowbackend.engine.generator.template.java.method.AddServiceMethodTemplate;
 import com.tml.otowbackend.engine.generator.template.java.method.DeleteServiceMethodTemplate;
@@ -160,7 +160,7 @@ public class VelocityGenerateTest {
                 "applicationName","otow"
         );
         String s = JSONObject.toJSONString(config);
-        ApplicationConfigTemplate configTemplate = new ApplicationConfigTemplate(JSONObject.parseObject(s));
+        ApplicationYmlTemplate configTemplate = new ApplicationYmlTemplate(JSONObject.parseObject(s));
         String generate = engine.generate(configTemplate);
         System.out.println(generate);
     }

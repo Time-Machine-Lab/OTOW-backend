@@ -1,13 +1,10 @@
-package com.tml.otowbackend.engine.generator.funpack.pack;
+package com.tml.otowbackend.engine.generator.funpack;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.tml.otowbackend.engine.ai.result.FeaturePackage;
-import com.tml.otowbackend.engine.generator.funpack.AbstrateFunctionPack;
-import com.tml.otowbackend.engine.generator.template.java.method.AddServiceMethodTemplate;
+import com.tml.otowbackend.engine.generator.core.AbstrateFunctionPack;
 import com.tml.otowbackend.engine.generator.template.java.method.SelectServiceMethodTemplate;
 import com.tml.otowbackend.engine.generator.template.java.model.EntityTemplate;
-import com.tml.otowbackend.engine.generator.template.java.model.ReqTemplate;
 import com.tml.otowbackend.engine.generator.template.java.model.VOTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.ControllerTemplate;
 import com.tml.otowbackend.engine.generator.template.java.service.ServiceImplTemplate;
@@ -19,12 +16,12 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 import static com.tml.otowbackend.constants.TemplateConstant.Path_Variable;
-import static com.tml.otowbackend.engine.generator.template.java.InitTemplate.*;
+import static com.tml.otowbackend.engine.generator.core.ClassTemplateFactory.*;
 
 @Component
 public class SelectFunctionPack extends AbstrateFunctionPack {
-    public static final String selectTemplateFilePath = "service.method.select.java.vm";
 
+    public static final String selectTemplateFilePath = "service.method.select.java.vm";
     public static final String selectServiceMethod = "select";
 
     @Override
@@ -34,37 +31,31 @@ public class SelectFunctionPack extends AbstrateFunctionPack {
 
     @Override
     protected void addMethodToController(ControllerTemplate controller) {
-        controller.addGetMethod(getSelectMethod(), "/get/{id}");
-    }
-
-    // controller-get 的 查询
-    private MetaMethod getSelectMethod() {
         MetaMethodParam metaMethodParam = new MetaMethodParam("Integer", null, "id");
         metaMethodParam.addAnnotations(List.of(Path_Variable));
-        String body = "return " + String.format("%s.%s(%s);", getParamString("classLower"), selectServiceMethod, "id");
+        String body = "return " + String.format("%s.%s(%s);", getParam("serviceName"), selectServiceMethod, "id");
         MetaMethod metaMethod = new MetaMethod(selectServiceMethod, List.of(metaMethodParam), body);
-        metaMethod.setReturnRes(new VOTemplate(getParamString("prefix") + voPackagePath, getParamString("className")));
-        return metaMethod;
+        metaMethod.setReturnRes(new VOTemplate(getParam("prefix") + voPackagePath, getParam("className")));
+        controller.addGetMethod(metaMethod, "/get/{id}");
     }
-
 
     @Override
     protected void addMethodToService(ServiceTemplate service) {
         MetaMethodParam metaMethodParam = new MetaMethodParam("Integer", "id");
         MetaMethod metaMethod = new MetaMethod(selectServiceMethod, List.of(metaMethodParam));
-        metaMethod.setReturnRes(new VOTemplate(getParamString("prefix") + voPackagePath, getParamString("className")));
+        metaMethod.setReturnRes(new VOTemplate(getParam("prefix") + voPackagePath, getParam("className")));
         service.addMethods(metaMethod);
     }
 
     // serviceImpl的查找方法
     @Override
-    protected void addMethodToServiceImpl(ServiceImplTemplate serviceImplTemplate) {
-        SelectServiceMethodTemplate selectServiceMethodTemplate = new SelectServiceMethodTemplate(selectTemplateFilePath, getParamString("className"));
+    protected void addMethodToServiceImpl(ServiceImplTemplate serviceImpl) {
+        SelectServiceMethodTemplate selectServiceMethodTemplate = new SelectServiceMethodTemplate(selectTemplateFilePath, getParam("className"));
         MetaMethodParam metaMethodParam = new MetaMethodParam("Integer", null, "id");
         MetaMethod metaMethod = new MetaMethod(selectServiceMethod, List.of(metaMethodParam), engine.generate(selectServiceMethodTemplate));
-        metaMethod.setReturnRes(new VOTemplate(getParamString("prefix") + voPackagePath, getParamString("className")));
-        serviceImplTemplate.addMethod(metaMethod);
-        serviceImplTemplate.addClassImport(new EntityTemplate(getParamString("prefix") + entityPackagePath, getParamString("className")));
-        serviceImplTemplate.addImportClazz(BeanUtil.class);
+        metaMethod.setReturnRes(new VOTemplate(getParam("prefix") + voPackagePath, getParam("className")));
+        serviceImpl.addMethod(metaMethod);
+        serviceImpl.addClassImport(new EntityTemplate(getParam("prefix") + entityPackagePath, getParam("className")));
+        serviceImpl.addImportClazz(BeanUtil.class);
     }
 }

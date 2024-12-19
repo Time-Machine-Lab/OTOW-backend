@@ -9,6 +9,4 @@ spring:
     username: ${config.mysql.username}
     password: ${config.mysql.password}
 #end
-  application:
-    name: ${applicationName}
 

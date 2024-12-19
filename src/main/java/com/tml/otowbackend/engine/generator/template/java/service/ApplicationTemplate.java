@@ -8,11 +8,11 @@ import static com.tml.otowbackend.constants.TemplateConstant.SPRING_BOOT_APPLICA
 public class ApplicationTemplate extends ClassTemplate {
 
     public ApplicationTemplate(String packagePath, String className) {
-        super(packagePath, className+"Application");
+        super(packagePath, className + "Application");
         initMethod();
     }
 
-    public void initMethod(){
+    public void initMethod() {
         ApplicationMethodTemplate methodTemplate = new ApplicationMethodTemplate(className);
         this.addMethod(methodTemplate.generateMethod());
     }

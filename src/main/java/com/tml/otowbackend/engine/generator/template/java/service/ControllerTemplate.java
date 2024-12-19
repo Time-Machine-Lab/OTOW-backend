@@ -5,6 +5,7 @@ import com.tml.otowbackend.engine.generator.template.java.ClassTemplate;
 import com.tml.otowbackend.engine.generator.template.meta.MetaAnnotation;
 import com.tml.otowbackend.engine.generator.template.meta.MetaMethod;
 import com.tml.otowbackend.engine.generator.template.meta.MetalField;
+import lombok.Getter;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,9 +21,8 @@ import static com.tml.otowbackend.constants.TemplateConstant.CONTROLLER_ANNOTATI
 
 public class ControllerTemplate extends ClassTemplate {
 
+    @Getter
     private String urlPath;
-
-    private String commonResult;
 
     private Set<ServiceTemplate> services = new HashSet<>();
 
@@ -38,12 +38,7 @@ public class ControllerTemplate extends ClassTemplate {
         return className + "Controller";
     }
 
-    public String getUrlPath() {
-        return urlPath;
-    }
-
     public void setCommonResult(String commonResult, Class<?> clazz) {
-        this.commonResult = commonResult;
         addImportClazz(clazz);
     }
 
