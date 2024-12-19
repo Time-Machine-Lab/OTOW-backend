@@ -26,7 +26,7 @@ spring:
     password: ${REDIS_PASSWORD:ENC(w3YMEo8SvokoWSpmfutV70AO7TBsYuChGTdmc1kzeLiq0+kTllBLdw==)}
 
   application:
-    name: genius-blog-main
+    name: otow-server
 
 assistant:
   service:

@@ -81,7 +81,7 @@ public class IProjectServiceImpl implements ProjectService {
     @Override
     public QueryProjectPageResponseDTO queryProject(QueryProjectRequestDTO requestDTO) {
         int limit = Math.min((requestDTO.getLimit()),DEFAULT_MAX_LIMIT);
-        int page = Math.max(requestDTO.getPage() - 1, 0);
+        int page = Math.max(requestDTO.getPage(), 1);
         List<QueryProjectResponseVO> resLists;
         LambdaUpdateWrapper<Project> wrapper = new LambdaUpdateWrapper<>();
         if(!StringUtils.isBlank(requestDTO.getName())){
