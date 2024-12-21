@@ -51,6 +51,8 @@ public class QueryProjectResponseVO {
                 .name(project.getName())
                 .codeLanguage(CodeLanguageEnum.queryLanguageByCode(project.getCodeLanguage()))
                 .cover(project.getCover())
+                .description("")
+                .introduce("")
                 .downloadNums(project.getDownloadNum())
                 .viewNums(project.getViewNum())
                 .price(project.getPrice())

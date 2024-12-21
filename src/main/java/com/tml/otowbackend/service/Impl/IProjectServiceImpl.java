@@ -101,7 +101,7 @@ public class IProjectServiceImpl implements ProjectService {
         try {
             Page<Project> projectPage = projectMapper.selectPage(new Page<>(page, limit), wrapper);
             List<Project> records = projectPage.getRecords();
-            resLists = records.stream().map((QueryProjectResponseVO::convert)).collect(Collectors.toList());
+            resLists = records.stream().map((QueryProjectResponseVO::convertWithoutDetail)).collect(Collectors.toList());
             return QueryProjectPageResponseDTO.builder().total((int) projectPage.getTotal()).respList(resLists).build();
         }catch (RuntimeException e){
             throw new ServerException(ResultCode.QUERY_PROJECT_FAIL);
