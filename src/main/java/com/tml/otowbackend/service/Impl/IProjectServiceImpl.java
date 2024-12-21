@@ -83,14 +83,13 @@ public class IProjectServiceImpl implements ProjectService {
     public QueryProjectPageResponseDTO queryProject(QueryProjectRequestDTO requestDTO) {
         int limit = Math.min((requestDTO.getLimit()),DEFAULT_MAX_LIMIT);
         int page = Math.max(requestDTO.getPage(), 1);
-        Integer LanguageCode = CodeLanguageEnum.queryCodeByLanguage(requestDTO.getCodeLanguage());
         List<QueryProjectResponseVO> resLists;
         LambdaUpdateWrapper<Project> wrapper = new LambdaUpdateWrapper<>();
         if(!StringUtils.isBlank(requestDTO.getName())){
             wrapper.like(Project::getName, requestDTO.getName());
         }
         if(!StringUtils.isBlank(requestDTO.getCodeLanguage())){
-            wrapper.eq(Project::getCodeLanguage,LanguageCode);
+            wrapper.eq(Project::getCodeLanguage,CodeLanguageEnum.queryCodeByLanguage(requestDTO.getCodeLanguage()));
         }
         if(Objects.nonNull(requestDTO.getAmountMax())){
             wrapper.le(Project::getPrice, requestDTO.getAmountMax());
